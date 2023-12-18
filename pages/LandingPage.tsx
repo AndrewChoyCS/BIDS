@@ -18,40 +18,52 @@ import React from "react";
 
 export default function LandingPage () {
     return (
-        <View style={styles.eventsContainer}>
-            {/*Header*/}
-            <View style={styles.eventHeader}>
-                <Text style={styles.eventTitle}>Events</Text>
+        <ScrollView style={styles.pageContainer}>
+            <View style={styles.eventsContainer}>
+                {/*Header*/}
+                <View style={styles.eventHeader}>
+                    <Text style={styles.eventTitle}>Events</Text>
+                </View>
+                <EventCard
+                    name="TKE"
+                    location="32421 Berk"
+                    img={require("../Images/tke.jpeg")}
+                    ratings={1.8}
+                />
+                <EventCard
+                    name="Jupiter"
+                    location="DownTown Berkeley" 
+                    img={require("../Images/dtberk.jpeg")}
+                    ratings={4.7}
+                />
+                <EventCard
+                    name="La Casa Parker"
+                    location="2221 Parker St."
+                    img={require("../Images/parker.jpeg")}
+                    ratings={100.0}
+                />
             </View>
-            <EventCard
-            name="TKE"
-            location="32421 Berk"
-            img={require("../Images/tke.jpeg")}
-            ratings={1.8}
-          />
-          <EventCard
-            name="Jupiter"
-            location="DownTown Berkeley" 
-            img={require("../Images/dtberk.jpeg")}
-            ratings={4.7}
-          />
-
-        </View>
+        </ScrollView>
 
     )
 }
 
 const styles = StyleSheet.create({
+    pageContainer: {
+      backgroundColor: "#000000", // Replace with your desired background color
+    },
     eventsContainer: {
-        marginTop: 10,
+      marginTop: 30,
+      paddingHorizontal: 16,
+      paddingVertical: 16,
     },
     eventHeader: {
-        flexDirection: "row",
-        justifyContent: "space-between",
+      justifyContent: "space-between",
     },
     eventTitle: {
-        fontWeight: 'bold',
-        fontSize: 20,
-    }
-
-});
+      fontWeight: 'bold',
+      fontSize: 50,
+      color: '#6d0670',
+      textAlign: 'center',
+    },
+  });

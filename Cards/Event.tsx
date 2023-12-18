@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
   container: {
     marginVertical: 15,
     width: "100%",
+    backgroundColor: "#b3b1b1"
   },
   img: {
     borderTopLeftRadius: 10,

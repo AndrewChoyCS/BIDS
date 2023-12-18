@@ -11,8 +11,8 @@ const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
 const MainStack = () => (
-  <Stack.Navigator initialRouteName="LandingPage">
-    <Stack.Screen name="LandingPage" component={LandingPage} options={{ headerShown: false }}/>
+  <Stack.Navigator initialRouteName="LandingPage" screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="LandingPage" component={LandingPage} />
   </Stack.Navigator>
 );
 
@@ -20,7 +20,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Drawer.Navigator initialRouteName="MainStack">
-        <Drawer.Screen name="MainStack" component={MainStack} />
+        <Drawer.Screen name="MainStack" component={MainStack}/>
         {/* Add additional screens as needed */}
       </Drawer.Navigator>
     </NavigationContainer>

@@ -11,7 +11,6 @@ import {
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import { COLORS } from "../utils";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
-import { useNavigation } from "@react-navigation/native"; // Import useNavigation hook
 
 
 type Props = {
@@ -19,9 +18,12 @@ type Props = {
   location: string;
   name: string;
   ratings: number;
+  theme: string;
+  date: string
+  bid: boolean
 };
 
-const EventCard = ({ img, location, name, ratings }: Props) => {
+const EventCard = ({ img, location, name, ratings, theme, date, bid }: Props) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const openModal = () => {
@@ -52,9 +54,13 @@ const EventCard = ({ img, location, name, ratings }: Props) => {
           </View>
         </View>
       </View>
-
+      
+      {/*This is when you click on the event  */}
       <Modal animationType="slide" transparent={false} visible={modalVisible}>
         <View style={styles.modalContainer}>
+          <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
+            <MaterialCommunityIcons name="close" size={30} color="#FF0000" />
+          </TouchableOpacity>
           <Image source={img} style={styles.modalImg} resizeMode="contain"/>
           <Text style={styles.modalTitle}>{name}</Text>
           <View style={styles.ratings}>
@@ -67,19 +73,23 @@ const EventCard = ({ img, location, name, ratings }: Props) => {
             <Entypo name="dot-single" size={20} color={"#ffffff"} />
             <Text style={styles.locationTextInModel}>{location}</Text>
           </View>
-          <Text style={styles.themeText}>Theme: Thongs and Bongs</Text>
-          <Text style={styles.themeText}>Bids: No</Text>
+          <Text style={styles.themeText}>Time: {date}</Text>
+          <Text style={styles.themeText}>Theme: {theme}</Text>
+          {bid ? /*This renders bids required#*/
+          (<Text style={styles.themeText}>Bids Required: Yes</Text>):
+          (<Text style={styles.themeText}>Bids Required: No</Text>)}
+          <Text style={styles.themeText}></Text>
           
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.button} onPress={closeModal}>
+            <TouchableOpacity style={[styles.button, {marginRight: 10}]} onPress={closeModal}>
               <MaterialCommunityIcons name="check" size={30} color="#4CAF50" />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={closeModal}>
+            <TouchableOpacity style={[styles.button, {marginLeft: 10}]} onPress={closeModal}>
               <MaterialCommunityIcons name="close" size={30} color="#FF0000" />
             </TouchableOpacity>
           </View>
 
-          <Button title="Close" onPress={closeModal} />
+          {/* <Button title="Close" onPress={closeModal} /> */}
         </View>
       </Modal>
     </TouchableWithoutFeedback>
@@ -118,10 +128,12 @@ const styles = StyleSheet.create({
   ratings: {
     flexDirection: "row",
     alignItems: "center",
+    
   },
   ratingsText: {
     color: COLORS.primary,
     marginLeft: 5,
+    fontSize: 18
   },
   locationText: {
     color: "#fcece3",
@@ -147,11 +159,12 @@ const styles = StyleSheet.create({
   },
   locationTextInModel: {
     color: "#85b79d",
+    fontSize: 18
   },
   themeText: {
     fontSize: 16,
     color: "#85b79d",
-    marginBottom: 20,
+    marginBottom: 5,
   },
   buttonContainer: {
     flexDirection: "row",
@@ -161,10 +174,16 @@ const styles = StyleSheet.create({
   button: {
     alignItems: "center",
     justifyContent: "center",
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    borderWidth: 2,
+    width: 150,
+    height: 75,
+    borderRadius: 50,
+    borderWidth: 3,
     borderColor: "#fff",
+  },  
+  closeButton: {
+    position: "absolute",
+    top: 50,
+    left: 20,
+    zIndex: 1,
   },
 });

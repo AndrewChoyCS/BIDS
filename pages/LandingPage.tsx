@@ -29,24 +29,36 @@ export default function LandingPage () {
                     location="32421 Berk"
                     img={require("../Images/tke.jpeg")}
                     ratings={1.8}
+                    theme="White Lies"
+                    bid={true}
+                    date="10pm"
                 />
                 <EventCard
                     name="Jupiter"
                     location="DownTown Berkeley" 
                     img={require("../Images/dtberk.jpeg")}
                     ratings={4.7}
+                    theme="Willy Wonka "
+                    bid = {true}
+                    date="10pm"
                 />
                 <EventCard
                     name="La Casa Parker"
                     location="2221 Parker St."
                     img={require("../Images/parker.jpeg")}
                     ratings={100.0}
+                    theme="I love parker"
+                    bid = {false}
+                    date="11am"
                 />
                 <EventCard
                     name="La Casa Parker"
                     location="2221 Parker St."
                     img={require("../Images/parker.jpeg")}
                     ratings={100.0}
+                    theme="merps and derps"
+                    bid = {false}
+                    date="10pm"
                 />
                 {/* <EventCard
                     name="La Casa Parker"

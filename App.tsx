@@ -1,28 +1,51 @@
-import 'react-native-gesture-handler'
-import { StatusBar } from 'expo-status-bar';
+import 'react-native-gesture-handler';
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import LandingPage from './pages/LandingPage'; // Import your LandingPage component
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import LandingPage from "./pages/LandingPage";
+import CreatePage from "./pages/CreatePage";
+import FriendPage from "./pages/FriendPage";
+import InvitePage from "./pages/InvitePage";
+import PhotoPage from "./pages/PhotoPage";
+
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
+const Tab = createBottomTabNavigator();
 
 const MainStack = () => (
   <Stack.Navigator initialRouteName="LandingPage" screenOptions={{ headerShown: false }}>
     <Stack.Screen name="LandingPage" component={LandingPage} />
+    {/* Add additional screens for MainStack as needed */}
   </Stack.Navigator>
+);
+
+const TabNavigator = () => (
+  <Tab.Navigator screenOptions={{ headerShown: false }}>
+    <Tab.Screen name="Events" component={LandingPage} />
+    <Tab.Screen name="Friends" component={FriendPage}/>
+    <Tab.Screen name="Create" component={CreatePage}/>
+    <Tab.Screen name="Invites" component={InvitePage}/>
+    <Tab.Screen name="Photos" component={PhotoPage}/>
+
+    {/* Add additional screens for the bottom tab navigation as needed */}
+  </Tab.Navigator>
+);
+
+const DrawerNavigator = () => (
+  <Drawer.Navigator initialRouteName="TabNavigator">
+    <Drawer.Screen name="TabNavigator" component={TabNavigator} />
+    {/* Add additional screens for the drawer navigation as needed */}
+  </Drawer.Navigator>
 );
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Drawer.Navigator initialRouteName="MainStack">
-        <Drawer.Screen name="MainStack" component={MainStack}/>
-        {/* Add additional screens as needed */}
-      </Drawer.Navigator>
+      <DrawerNavigator />
     </NavigationContainer>
   );
 }

@@ -22,7 +22,7 @@ export default function LandingPage () {
             <View style={styles.eventsContainer}>
                 {/*Header*/}
                 <View style={styles.eventHeader}>
-                    <Text style={styles.eventTitle}>Events</Text>
+                    {/* <Text style={styles.eventTitle}>Events</Text> */}
                 </View>
                 <EventCard
                     name="TKE"
@@ -74,7 +74,7 @@ export default function LandingPage () {
 
 const styles = StyleSheet.create({
     pageContainer: {
-      backgroundColor: "#000000", // Replace with your desired background color
+      backgroundColor: "#83fccd", // Replace with your desired background color
     },
     eventsContainer: {
       marginTop: 30,
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     eventTitle: {
       fontWeight: 'bold',
       fontSize: 50,
-      color: '#6d0670',
+      color: '#2C514C',
       textAlign: 'center',
     },
   });

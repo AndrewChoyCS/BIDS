@@ -8,8 +8,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import LandingPage from "./pages/LandingPage";
 import CreatePage from "./pages/CreatePage";
 import FriendPage from "./pages/FriendPage";
-import InvitePage from "./pages/InvitePage";
 import PhotoPage from "./pages/PhotoPage";
+import InvitePage from './pages/InvitePage';
 
 
 const Stack = createStackNavigator();
@@ -42,11 +42,21 @@ const DrawerNavigator = () => (
   </Drawer.Navigator>
 );
 
+const events = [
+  {
+    id: 1,
+    eventName: 'Party Time',
+    organizerName: 'The Goat Noemi',
+    organizerProfilePic: 'https://example.com/john-doe-profile.jpg',
+  },
+];
+
 export default function App() {
-  return (
+  return (    
     <NavigationContainer>
       <DrawerNavigator />
     </NavigationContainer>
+
   );
 }
 

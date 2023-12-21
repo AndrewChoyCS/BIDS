@@ -31,7 +31,7 @@ const CustomDrawerContent = (props) => (
 );
 
 const TabNavigator = () => (
-  <Tab.Navigator screenOptions={{ headerShown: false }}>
+  <Tab.Navigator screenOptions={{ headerShown: false }} sceneContainerStyle={styles.tabContainer}>
     <Tab.Screen name="Events" component={LandingPage} />
     <Tab.Screen name="Friends" component={FriendPage}/>
     <Tab.Screen name="Create" component={CreatePage}/>
@@ -52,6 +52,17 @@ const DrawerNavigator = () => (
         drawerLabel: ({ focused }) => (
           <Text style={[styles.drawerItemLabel, focused ? { fontWeight: 'bold' } : null]}>
             Home
+          </Text>
+        ),
+      }}
+    />
+    <Drawer.Screen
+      name="My Events"
+      component={ProfilePage}
+      options={{
+        drawerLabel: ({ focused }) => (
+          <Text style={[styles.drawerItemLabel, focused ? { fontWeight: 'bold' } : null]}>
+            My Events
           </Text>
         ),
       }}
@@ -89,6 +100,7 @@ const DrawerNavigator = () => (
         ),
       }}
     />
+    
   </Drawer.Navigator>
 );
 
@@ -121,6 +133,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#7d12ff',
   },
+  tabContainer: {
+    // backgroundColor: "#0A0A08"
+  }
 });
 
 

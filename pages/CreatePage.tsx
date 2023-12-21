@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
   },
   disabledButton: {
-    backgroundColor: COLORS.tertiary,
+    backgroundColor: "#bfbfbf",
   },
   buttonText: {
     color: 'white',

@@ -5,4 +5,5 @@ export const COLORS = {
     darkGray: "#4A4B4D",
     primary: "#fc6011",
     white: "#fff",
+    neonBlack: "#0A0A08"
   };

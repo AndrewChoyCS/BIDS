@@ -104,11 +104,6 @@ const styles = StyleSheet.create({
     width: "100%",
     borderRadius: 10,
     overflow: "hidden",
-    elevation: 5, // For shadow on Android
-    shadowColor: 'black', // For shadow on iOS
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    backgroundColor: COLORS.white, // Set a background color
   },
   img: {
     borderTopLeftRadius: 10,
@@ -145,7 +140,7 @@ const styles = StyleSheet.create({
     color: "#fcece3",
   },
   modalContainer: {
-    backgroundColor: "#16302b", // Adjust the background color
+    backgroundColor: "#0A0A08", // Adjust the background color
     flex: 1,
     justifyContent: "center",
     alignItems: "center",

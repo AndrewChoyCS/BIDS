@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 
+
 interface Event {
   id: number;
   eventName: string;
@@ -29,7 +30,7 @@ const InvitePage: React.FC<InvitePageProps> = ({ events = [] }) => {
   const hardcodedEvent3: Event = {
     id: 3,
     eventName: 'Minecraft Bed Wars Lan Event',
-    organizerName: 'One of us Gaming',
+    organizerName: 'One of us Gaming feat. Minimize and avelman',
     organizerProfilePic: "../Images/parker.jpeg",
   };
 
@@ -50,10 +51,10 @@ const InvitePage: React.FC<InvitePageProps> = ({ events = [] }) => {
           <Image source={{ uri: event.organizerProfilePic }} style={styles.profilePic} />
           <View style={styles.responseButtons}>
             <TouchableOpacity onPress={() => handleResponse(event.id, 'yes')} style={[styles.responseButton, styles.yesButton]}>
-              <Text style={styles.buttonText}>Yes</Text>
+              <Text style={styles.buttonText}>Going</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => handleResponse(event.id, 'no')} style={[styles.responseButton, styles.noButton]}>
-              <Text style={styles.buttonText}>No</Text>
+              <Text style={styles.buttonText}>Not Going</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -65,7 +66,7 @@ const InvitePage: React.FC<InvitePageProps> = ({ events = [] }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: "#0A0A08",
     padding: 10,
   },
   eventCard: {
@@ -74,10 +75,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 16,
     margin: 8,
-    backgroundColor: '#ffffff',
-    borderRadius: 8,
+    backgroundColor: '#7d12ff',
+    borderRadius: 16,
     elevation: 3, // For shadow on Android
-    shadowColor: 'black', // For shadow on iOS
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
   },
@@ -85,13 +86,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   eventName: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 4,
+    color: '#fff',
   },
   organizerText: {
     fontSize: 14,
-    color: '#666',
+    color: "#eeeade",
   },
   profilePic: {
     width: 50,
@@ -104,21 +106,22 @@ const styles = StyleSheet.create({
   },
   responseButton: {
     padding: 10,
-    borderRadius: 5,
+    borderRadius: 8,
   },
   yesButton: {
-    backgroundColor: 'green',
+    backgroundColor: '#228B22',
     marginLeft: 10,
   },
   noButton: {
-    backgroundColor: 'red',
+    backgroundColor: '#ff0000',
     marginLeft: 10,
   },
   buttonText: {
-    color: 'white',
+    color: '#fff',
     fontWeight: 'bold',
     textAlign: 'center',
   },
 });
+
 
 export default InvitePage;

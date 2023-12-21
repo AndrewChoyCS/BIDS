@@ -2,6 +2,14 @@ import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
+const COLORS = {
+  primary: '#000000',
+  secondary: '#7d12ff',
+  tertiary: '#ab20fd',
+  accent: '#200589',
+  background: '#fbf8fd',
+};
+
 const TextInputBox = ({ placeholder, onChangeText }) => {
   const [text, setText] = useState('');
 
@@ -127,13 +135,14 @@ export default function CreatePage() {
 const styles = StyleSheet.create({
   pageContainer: {
     flex: 1,
-    backgroundColor: '#f0f0f0',
+    // backgroundColor: COLORS.background,
+    backgroundColor: "#0A0A08"
   },
   titleContainer: {
     margin: 20,
   },
   titleText: {
-    color: '#4CAF50',
+    color: COLORS.secondary,
     fontSize: 34,
     fontWeight: '600',
     textAlign: 'center',
@@ -143,13 +152,13 @@ const styles = StyleSheet.create({
   },
   textInput: {
     height: 50,
-    backgroundColor: '#ffffff',
+    backgroundColor: COLORS.background,
     marginBottom: 15,
     paddingHorizontal: 15,
     borderRadius: 25,
     fontSize: 16,
     elevation: 2,
-    shadowColor: '#000',
+    shadowColor: COLORS.primary,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
@@ -160,27 +169,27 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     borderRadius: 25,
     fontSize: 16,
-    backgroundColor: '#ffffff',
-    shadowColor: '#000',
+    backgroundColor: COLORS.background,
+    shadowColor: COLORS.primary,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
     marginVertical: 10,
   },
   createButton: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: COLORS.secondary,
     paddingVertical: 12,
     borderRadius: 25,
     width: '100%',
     alignItems: 'center',
     marginTop: 20,
-    shadowColor: '#000',
+    shadowColor: COLORS.primary,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
   },
   disabledButton: {
-    backgroundColor: '#A9A9A9',
+    backgroundColor: COLORS.tertiary,
   },
   buttonText: {
     color: 'white',
@@ -191,11 +200,11 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     marginVertical: 10,
     padding: 15,
-    backgroundColor: '#ffffff',
+    backgroundColor: COLORS.background,
     borderRadius: 10,
     borderWidth: 0.5,
-    borderColor: '#d3d3d3',
-    shadowColor: '#000',
+    borderColor: COLORS.primary,
+    shadowColor: COLORS.primary,
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.2,
     shadowRadius: 1,
@@ -203,7 +212,7 @@ const styles = StyleSheet.create({
   dateTimePickerLabel: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
+    color: COLORS.primary,
   },
   dateTimePicker: {
     flex: 1,
@@ -213,7 +222,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   sectionHeader: {
-    backgroundColor: '#cccccc',
+    backgroundColor: COLORS.secondary,
     paddingVertical: 8,
     paddingHorizontal: 15,
     borderTopLeftRadius: 10,
@@ -222,10 +231,10 @@ const styles = StyleSheet.create({
   sectionHeaderText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#ffffff',
+    color: COLORS.background,
   },
   dateTimeContainer: {
-    backgroundColor: '#ffffff',
+    backgroundColor: COLORS.background,
     paddingVertical: 8,
     paddingHorizontal: 15,
     borderBottomLeftRadius: 10,
@@ -234,4 +243,4 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  });
+});

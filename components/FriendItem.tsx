@@ -47,9 +47,10 @@ const styles = StyleSheet.create({
   },
   name: {
     fontWeight: 'bold',
+    color: "#ab20fd"
   },
   status: {
-    color: 'grey',
+    color: 'white',
   },
 });
 

@@ -74,7 +74,7 @@ export default function LandingPage () {
 
 const styles = StyleSheet.create({
     pageContainer: {
-      backgroundColor: "#83fccd", // Replace with your desired background color
+      backgroundColor: "black", // Replace with your desired background color
     },
     eventsContainer: {
       marginTop: 30,

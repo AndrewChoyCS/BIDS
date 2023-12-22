@@ -11,6 +11,7 @@ import FriendPage from "./pages/FriendPage";
 import PhotoPage from "./pages/PhotoPage";
 import InvitePage from './pages/InvitePage';
 import ProfilePage from "./pages/ProfilePage";
+import MyOrganizationsPage from "./pages/MyOrganizationsPage"; //test
 import MyEventsPage from "./pages/MyEventsPage";
 import { View, Text} from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -70,7 +71,7 @@ const DrawerNavigator = () => (
     />
     <Drawer.Screen
       name="My Organizations"
-      component={ProfilePage}
+      component={MyOrganizationsPage}
       options={{
         drawerLabel: ({ focused }) => (
           <Text style={[styles.drawerItemLabel, focused ? { fontWeight: 'bold' } : null]}>

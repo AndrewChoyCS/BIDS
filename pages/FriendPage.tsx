@@ -52,7 +52,8 @@ const FriendPage: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    backgroundColor: "#0A0A08"
+    backgroundColor: "#0A0A08",
+    padding: 10
   },
   friendText: {
     color: "#200589"

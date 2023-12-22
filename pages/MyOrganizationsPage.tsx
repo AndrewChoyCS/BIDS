@@ -119,7 +119,7 @@ const MyOrganizationsPage = () => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#f4f4f4', // or use a global background color if needed
+    backgroundColor: '#f4f4f4',
   },
   container: {
     flex: 1,

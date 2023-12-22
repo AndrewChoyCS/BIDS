@@ -1,29 +1,22 @@
-import React, { useState } from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet, Modal } from 'react-native';
+import React, { useState, createContext, useContext, } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Modal } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import EventModel from '../components/EventModel';
 
-  // img: any;
-  // location: string;
-  // name: string;
-  // ratings: number;
-  // theme: string;
-  // date: string
-  // bid: boolean
 
-//The commented attributes should be the required ones for this to work
 interface Event {
   id: number;
   eventName: string;
   organizerName: string;
   organizerProfilePic: string;
-  editMode: boolean; 
-  buttonPressed: number; 
-  //0 will be default when no button is pressed
-  //1 when user is going therefore switch styling sheet for the event box to have neon green borders
-  //2 when user is not going therefore switch styling sheet for the event box to have neon Red borders
-  //Back to 0 when user clicks edit resvp
+  editMode: boolean;
+  buttonPressed: number;
+  location: string;
+  ratings: number;
+  theme: string;
+  date: string;
+  bid: boolean;
 }
-
 
 const hardcodedEvent: Event = {
   id: 1,
@@ -32,6 +25,11 @@ const hardcodedEvent: Event = {
   organizerProfilePic: "../Images/parker.jpeg",
   editMode: false,
   buttonPressed: 0,
+  ratings: 3.2,
+  theme: "willy wonka",
+  date: "Monday",
+  bid: true,
+  location: "home"
 };
 
 const hardcodedEvent2: Event = {
@@ -41,7 +39,13 @@ const hardcodedEvent2: Event = {
   organizerProfilePic: "../Images/parker.jpeg",
   editMode: false,
   buttonPressed: 0,
+  ratings: 3.2,
+  theme: "willy wonka",
+  date: "Monday",
+  bid: true,
+  location: "joe mama house",
 };
+
 const hardcodedEvent3: Event = {
   id: 3,
   eventName: 'Minecraft Bed Wars Lan Event',
@@ -49,9 +53,16 @@ const hardcodedEvent3: Event = {
   organizerProfilePic: "../Images/parker.jpeg",
   editMode: false,
   buttonPressed: 0,
-
+  ratings: 3.2,
+  theme: "willy wonka",
+  date: "Monday",
+  location: "joe's house",
+  bid: true
 };
 
+interface InvitePageProps {
+  events?: Event[];
+}
 const InvitePage: React.FC<InvitePageProps> = ({ events = [] }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
@@ -69,23 +80,20 @@ const InvitePage: React.FC<InvitePageProps> = ({ events = [] }) => {
 
   const closeModal = () => {
     setModalVisible(false);
-    setEditMode(selectedEvent?.id, false); // Reset edit mode for the specific event
+    setEditMode(selectedEvent?.id, false);
   };
 
   const handleResponse = (eventId: number, response: 'yes' | 'no') => {
     console.log(`User responded ${response} for event ${eventId}`);
-    // Update the RSVP status for the event
     setRSVPStatus((prevRSVPStatus) => ({
       ...prevRSVPStatus,
       [eventId]: response === 'yes' ? 1 : 2,
     }));
-    // Update the buttonPressed property for the event
     setEditMode(eventId, true);
   };
-  
 
   const handleEdit = (eventId: number) => {
-    setEditMode(eventId, false); // Reset edit mode for the specific event
+    setEditMode(eventId, false);
   };
 
   const setEditMode = (eventId: number, value: boolean) => {
@@ -97,22 +105,32 @@ const InvitePage: React.FC<InvitePageProps> = ({ events = [] }) => {
 
   const getEventStyles = (event: Event) => {
     const eventRSVPStatus = rsvpStatus[event.id];
-    
+
     if (event.editMode || (eventRSVPStatus !== undefined && eventRSVPStatus !== 0)) {
       return {
         borderColor: eventRSVPStatus === 1 ? '#00FF00' : (eventRSVPStatus === 2 ? '#FF0000' : 'transparent'),
         borderWidth: 2,
-        backgroundColor: '#7d12ff', // Keep the background color constant
+        backgroundColor: '#7d12ff',
       };
     }
-    
+
     return {
-      borderColor: 'transparent', // No border when not in edit mode and no RSVP status
+      borderColor: 'transparent',
       borderWidth: 0,
-      backgroundColor: '#7d12ff', // Keep the background color constant
+      backgroundColor: '#7d12ff',
     };
   };
-  
+
+  const modalData = {
+    img: selectedEvent?.organizerProfilePic,
+    name: selectedEvent?.eventName,
+    ratings: selectedEvent?.ratings,
+    location: selectedEvent?.location,
+    date: selectedEvent?.date,
+    theme: selectedEvent?.theme,
+    bid: selectedEvent?.bid,
+  };
+
   return (
     <View style={styles.container}>
       {[...events, hardcodedEvent, hardcodedEvent2, hardcodedEvent3].map((event) => (
@@ -138,8 +156,8 @@ const InvitePage: React.FC<InvitePageProps> = ({ events = [] }) => {
                 </TouchableOpacity>
               </View>
             ) : (
-              <TouchableOpacity 
-                onPress={() => handleEdit(event.id)} 
+              <TouchableOpacity
+                onPress={() => handleEdit(event.id)}
                 style={[styles.responseButton, styles.editButton]}
               >
                 <Text style={styles.buttonText}>Edit RSVP</Text>
@@ -148,43 +166,10 @@ const InvitePage: React.FC<InvitePageProps> = ({ events = [] }) => {
           </View>
         </TouchableOpacity>
       ))}
-      <Modal animationType="slide" transparent={false} visible={modalVisible}>
-        <View style={styles.modalContainer}>
-          <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
-            <MaterialCommunityIcons name="close" size={30} color="#FF0000" />
-          </TouchableOpacity>
-          {/* Add the details of the selected event in the modal */}
-          {selectedEvent && (
-            <>
-              <Image source={{ uri: selectedEvent.organizerProfilePic }} style={styles.modalImg} resizeMode="contain"/>
-              <Text style={styles.modalTitle}>{selectedEvent.eventName}</Text>
-              <View style={styles.ratings} />
-                {/* Add your rating and location details here */}
-              {/* </View> */}
-              <Text style={styles.themeText}>Time: {selectedEvent.date}</Text>
-              <Text style={styles.themeText}>Theme: {selectedEvent.theme}</Text>
-              {selectedEvent.bid ? (
-                <Text style={styles.themeText}>Bids Required: Yes</Text>
-              ) : (
-                <Text style={styles.themeText}>Bids Required: No</Text>
-              )}
-              <Text style={styles.themeText}></Text>
-              {/* <View style={styles.buttonContainer}>
-                <TouchableOpacity style={[styles.button, { marginRight: 10 }]} onPress={closeModal}>
-                  <MaterialCommunityIcons name="check" size={30} color="#4CAF50" />
-                </TouchableOpacity>
-                <TouchableOpacity style={[styles.button, { marginLeft: 10 }]} onPress={closeModal}>
-                  <MaterialCommunityIcons name="close" size={30} color="#FF0000" />
-                </TouchableOpacity>
-              </View> */}
-            </>
-          )}
-        </View>
-      </Modal>
+      <EventModel modalVisible={modalVisible} closeModal={closeModal} {...modalData} />
     </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {
@@ -291,6 +276,11 @@ const styles = StyleSheet.create({
   editButton: {
     backgroundColor: '#007BFF', // Blue color for Edit RSVP button
     marginLeft: 10,
+  },
+  ratings: {
+    flexDirection: "row",
+    alignItems: "center",
+    
   },
 });
 

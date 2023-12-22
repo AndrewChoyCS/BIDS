@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, StyleSheet } from 'react-native';
+import { View, Text, FlatList, StyleSheet, Touchable} from 'react-native';
 import FriendItem from '../components/FriendItem';
 // import { COLORS } from "../utils"
 const COLORS = {
@@ -35,17 +35,18 @@ const FriendPage: React.FC = () => {
   }, []);
 
   return (
-    <FlatList
-      data={friends}
-      // style={styles.friendText}
-      keyExtractor={(item) => item.id}
-      renderItem={({ item }) => {
-        console.log(item); // This should log each friend object
-        return <FriendItem friend={item}/>;
-      }}
-      ListEmptyComponent={<Text>No friends to show.</Text>}
-      contentContainerStyle={styles.container}
-    />
+      <FlatList
+        data={friends}
+        // style={styles.friendText}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => {
+          console.log(item); // This should log each friend object
+          return <FriendItem friend={item}/>;
+        }}
+        ListEmptyComponent={<Text>No friends to show.</Text>}
+        contentContainerStyle={styles.container}
+      />
+ 
   );
 };
 

@@ -11,6 +11,7 @@ import {
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import { COLORS } from "../utils";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import EventModel from "../components/EventModel";
 
 
 type Props = {
@@ -33,6 +34,15 @@ const EventCard = ({ img, location, name, ratings, theme, date, bid }: Props) =>
   const closeModal = () => {
     setModalVisible(false);
   };
+  const modalData = {
+    img: img,
+    name: name,
+    ratings: ratings,
+    location: location,
+    date: date,
+    theme: theme,
+    bid: bid,
+  };
 
 
 
@@ -54,44 +64,11 @@ const EventCard = ({ img, location, name, ratings, theme, date, bid }: Props) =>
           </View>
         </View>
       </View>
-      
+      <View>
+        <EventModel modalVisible={modalVisible} closeModal={closeModal} {...modalData} />
+    </View>
       {/*This is when you click on the event  */}
-      <Modal animationType="slide" transparent={false} visible={modalVisible}>
-        <View style={styles.modalContainer}>
-          <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
-            <MaterialCommunityIcons name="close" size={30} color="#FF0000" />
-          </TouchableOpacity>
-          <Image source={img} style={styles.modalImg} resizeMode="contain"/>
-          <Text style={styles.modalTitle}>{name}</Text>
-          <View style={styles.ratings}>
-            <MaterialCommunityIcons
-              name="star"
-              size={20}
-              color={COLORS.primary}
-            />
-            <Text style={styles.ratingsText}>{ratings}</Text>
-            <Entypo name="dot-single" size={20} color={"#ffffff"} />
-            <Text style={styles.locationTextInModel}>{location}</Text>
-          </View>
-          <Text style={styles.themeText}>Time: {date}</Text>
-          <Text style={styles.themeText}>Theme: {theme}</Text>
-          {bid ? /*This renders bids required#*/
-          (<Text style={styles.themeText}>Bids Required: Yes</Text>):
-          (<Text style={styles.themeText}>Bids Required: No</Text>)}
-          <Text style={styles.themeText}></Text>
-          
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity style={[styles.button, {marginRight: 10}]} onPress={closeModal}>
-              <MaterialCommunityIcons name="check" size={30} color="#4CAF50" />
-            </TouchableOpacity>
-            <TouchableOpacity style={[styles.button, {marginLeft: 10}]} onPress={closeModal}>
-              <MaterialCommunityIcons name="close" size={30} color="#FF0000" />
-            </TouchableOpacity>
-          </View>
 
-          {/* <Button title="Close" onPress={closeModal} /> */}
-        </View>
-      </Modal>
     </TouchableWithoutFeedback>
   );
 };

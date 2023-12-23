@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 10,
     alignItems: 'center',
-    backgroundColor: '#2c2c2c', // Updated background color to a dark shade
+    backgroundColor: 'transparent', // Updated background color to a dark shade
     borderRadius: 10,
     marginVertical: 5,
   },

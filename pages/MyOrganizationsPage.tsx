@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Alert } from 'react-native';
 import {
   SafeAreaView,
   ScrollView,
@@ -10,7 +11,8 @@ import {
   TouchableOpacity,
   FlatList,
   Modal,
-  Platform
+  Platform,
+  Button
 } from 'react-native';
 
 const MyOrganizationsPage = () => {
@@ -20,8 +22,10 @@ const MyOrganizationsPage = () => {
 
   // Hardcoded friends list (replace with dynamic data later)
   const friendsList = [
-    { id: '1', name: 'Friend 1' },
-    { id: '2', name: 'Friend 2' },
+    { id: '1', name: 'Obama' },
+    { id: '2', name: 'Donald Trump' },
+    { id: '3', name: 'George Bush'},
+    { id: '4', name: 'Joe Biden'}
     // ... add more friends
   ];
 
@@ -54,7 +58,10 @@ const MyOrganizationsPage = () => {
             source={require('../Images/tke.jpeg')}
             style={styles.orgImage}
           />
-          <Text style={styles.imageUploadText}>Upload Organization Photo</Text>
+          <Button
+            title="Edit Organization Photo"
+            onPress={() => Alert.alert('Your Organization has been created')}
+          />
         </View>
 
         <View style={styles.inputContainer}>
@@ -119,7 +126,7 @@ const MyOrganizationsPage = () => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#f4f4f4',
+    backgroundColor: '#0a0a0a', // Dark background
   },
   container: {
     flex: 1,
@@ -133,11 +140,11 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     borderRadius: 60,
-    backgroundColor: '#e1e4e8',
+    backgroundColor: '#00ff00', // Neon green
   },
   imageUploadText: {
     fontSize: 16,
-    color: '#0000ff',
+    color: '#00ff00', // Neon green
     marginTop: 10,
   },
   inputContainer: {
@@ -145,17 +152,19 @@ const styles = StyleSheet.create({
   },
   textInput: {
     height: 40,
-    borderColor: 'gray',
+    borderColor: '#A076F9', // Neon green
     borderWidth: 1,
     paddingHorizontal: 10,
     borderRadius: 5,
+    color: '#ffffff', // White text
   },
   label: {
     fontSize: 18,
     marginBottom: 10,
+    color: '#D7BBF5', // Neon green
   },
   pickerContainer: {
-    borderColor: 'gray',
+    borderColor: '#A076F9', // Neon green
     borderWidth: 1,
     borderRadius: 5,
     marginBottom: 20,
@@ -167,7 +176,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   selectedFriend: {
-    backgroundColor: '#dedede',
+    backgroundColor: '#ff00ff', // Neon pink
     borderRadius: 15,
     padding: 8,
     marginRight: 10,
@@ -175,36 +184,38 @@ const styles = StyleSheet.create({
   },
   selectedFriendText: {
     fontSize: 14,
+    color: '#ffffff', // White text
   },
   friendItem: {
     padding: 15,
     borderBottomWidth: 1,
-    borderBottomColor: '#cccccc',
+    borderBottomColor: '#A076F9',
   },
   friendItemSelected: {
-    backgroundColor: '#c0ebff',
+    backgroundColor: '#A076F9', // Light blue
   },
   friendItemText: {
     fontSize: 16,
+    color: '#ffffff', // White text
   },
   submitButton: {
-    backgroundColor: '#0000ff',
+    backgroundColor: '#6528F7', // Neon green
     padding: 15,
     borderRadius: 5,
     alignItems: 'center',
   },
   submitButtonText: {
     fontSize: 16,
-    color: '#ffffff',
+    color: '#ffffff', // White text
     fontWeight: 'bold',
   },
   modalView: {
     flex: 1,
     paddingTop: Platform.OS === 'ios' ? 44 : 20,
-    backgroundColor: '#f4f4f4',
+    backgroundColor: '#0a0a0a', // Dark background
   },
   modalSubmitButton: {
-    backgroundColor: '#0000ff',
+    backgroundColor: '#6528F7', // Neon green
     padding: 15,
     borderRadius: 5,
     alignItems: 'center',

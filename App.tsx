@@ -15,6 +15,10 @@ import MyOrganizationsPage from "./pages/MyOrganizationsPage"; //test
 import MyEventsPage from "./pages/MyEventsPage";
 import { View, Text} from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+import { BlurView } from 'expo-blur';
+import { Entypo, MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
+
+
 
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
@@ -32,19 +36,85 @@ const CustomDrawerContent = (props) => (
   </DrawerContentScrollView>
 );
 
+
 const TabNavigator = () => (
-  <Tab.Navigator screenOptions={{ headerShown: false }} sceneContainerStyle={styles.tabContainer}>
-    <Tab.Screen name="Events" component={LandingPage} />
-    <Tab.Screen name="Friends" component={FriendPage}/>
-    <Tab.Screen name="Create" component={CreatePage}/>
-    <Tab.Screen name="Invites" component={InvitePage}/>
-    <Tab.Screen name="Photos" component={PhotoPage}/>
+  <Tab.Navigator
+    screenOptions={{
+      headerShown: false,
+      tabBarStyle: {
+        backgroundColor: '#000', // Set the background color to black
+      },
+      tabBarLabelStyle: {
+        fontSize: 12,
+        fontWeight: 'bold',
+        marginBottom: 5,
+        color: '#fff', // Set the label color to white
+      },
+      tabBarIconStyle: {
+        marginTop: 5,
+      },
+      tabBarActiveTintColor: '#0F0', // Set the active tab color to neon green
+      tabBarInactiveTintColor: '#666', // Set the inactive tab color to gray
+    }}
+  >
+    <Tab.Screen
+      name="Events"
+      component={LandingPage}
+      options={{
+        tabBarLabel: 'Events',
+        tabBarIcon: ({ color, size }) => (
+          <MaterialCommunityIcons name="beer-outline" color={color} size={size} />
+        ),
+      }}
+    />
+    <Tab.Screen
+      name="Friends"
+      component={FriendPage}
+      options={{
+        tabBarLabel: 'Friends',
+        tabBarIcon: ({ color, size }) => (
+          <MaterialCommunityIcons name="account-multiple-plus-outline" color={color} size={size} />
+        ),
+      }}
+    />
+    <Tab.Screen
+      name="Create"
+      component={CreatePage}
+      options={{
+        tabBarLabel: 'Create',
+        tabBarIcon: ({ color, size }) => (
+          <FontAwesome5 name="plus-circle" color={color} size={size} />
+        ),
+      }}
+    />
+    <Tab.Screen
+      name="Invites"
+      component={InvitePage}
+      options={{
+        tabBarLabel: 'Invites',
+        tabBarIcon: ({ color, size }) => (
+          <MaterialCommunityIcons name="email-outline" color={color} size={size} />
+        ),
+      }}
+    />
+    <Tab.Screen
+      name="Photos"
+      component={PhotoPage}
+      options={{
+        tabBarLabel: 'Map',
+        tabBarIcon: ({ color, size }) => (
+          <MaterialCommunityIcons name="google-maps" color={color} size={size} />
+        ),
+      }}
+    />
   </Tab.Navigator>
 );
+
 
 const DrawerNavigator = () => (
   <Drawer.Navigator
     initialRouteName="TabNavigator"
+    // screenOptions={{headerShown: false}}
     drawerContent={(props) => <CustomDrawerContent {...props} />}
   >
     <Drawer.Screen
@@ -136,7 +206,7 @@ const styles = StyleSheet.create({
     color: '#7d12ff',
   },
   tabContainer: {
-    // backgroundColor: "#0A0A08"
+    color: "#D7BBF5"
   }
 });
 

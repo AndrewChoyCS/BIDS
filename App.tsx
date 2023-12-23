@@ -18,7 +18,6 @@ import { View, Text} from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { BlurView } from 'expo-blur';
 import { Entypo, MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
-import AppNavigator from './pages/SampleNavigator';
 
 
 

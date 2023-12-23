@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
   },
   imageUploadText: {
     fontSize: 16,
-    color: '#00ff00', // Neon green
+    color: '#7d12ff',
     marginTop: 10,
   },
   inputContainer: {
@@ -152,11 +152,12 @@ const styles = StyleSheet.create({
   },
   textInput: {
     height: 40,
-    borderColor: '#A076F9', // Neon green
+    borderColor: '#7d12ff', // Neon green
     borderWidth: 1,
     paddingHorizontal: 10,
-    borderRadius: 5,
+    borderRadius: 20, // Increased border radius for a bubbly shape
     color: '#ffffff', // White text
+    backgroundColor: '#ffffff', // Optional: background color if needed
   },
   label: {
     fontSize: 18,
@@ -164,11 +165,13 @@ const styles = StyleSheet.create({
     color: '#D7BBF5', // Neon green
   },
   pickerContainer: {
-    borderColor: '#A076F9', // Neon green
+    borderColor: '#7d12ff',
+    backgroundColor: '#ffffff',
     borderWidth: 1,
     borderRadius: 5,
     marginBottom: 20,
     padding: 10,
+    borderRadius: 20,
   },
   selectedFriendsContainer: {
     flexDirection: 'row',
@@ -199,7 +202,7 @@ const styles = StyleSheet.create({
     color: '#ffffff', // White text
   },
   submitButton: {
-    backgroundColor: '#6528F7', // Neon green
+    backgroundColor: '#7d12ff',
     padding: 15,
     borderRadius: 5,
     alignItems: 'center',

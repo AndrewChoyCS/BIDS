@@ -1,7 +1,7 @@
 import React, { useState, createContext, useContext, } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Modal } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import EventModel from '../components/EventModel';
+import EventModel from '../components/EventModal';
 
 
 interface Event {
@@ -22,7 +22,7 @@ const hardcodedEvent: Event = {
   id: 1,
   eventName: 'Test Event',
   organizerName: 'Test Organizer',
-  organizerProfilePic: "../Images/parker.jpeg",
+  organizerProfilePic: require("../Images/parker.jpeg"),
   editMode: false,
   buttonPressed: 0,
   ratings: 3.2,
@@ -36,7 +36,7 @@ const hardcodedEvent2: Event = {
   id: 2,
   eventName: 'Merp and Derp',
   organizerName: 'Da Boi',
-  organizerProfilePic: "../Images/parker.jpeg",
+  organizerProfilePic: require("../Images/parker.jpeg"),
   editMode: false,
   buttonPressed: 0,
   ratings: 3.2,
@@ -50,7 +50,7 @@ const hardcodedEvent3: Event = {
   id: 3,
   eventName: 'Minecraft Bed Wars Lan Event',
   organizerName: 'One of us Gaming feat. Minimize and avelman',
-  organizerProfilePic: "../Images/parker.jpeg",
+  organizerProfilePic: require("../Images/parker.jpeg"),
   editMode: false,
   buttonPressed: 0,
   ratings: 3.2,

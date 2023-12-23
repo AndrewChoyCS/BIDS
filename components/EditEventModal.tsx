@@ -69,66 +69,69 @@ const EditEventModel = ( {modalVisible,
   const isCreateButtonEnabled =
     eventTitle && organization && address && entryFee && eventDescription;
 
-  return (
-      <SafeAreaView>
+    return (
+      // <SafeAreaView>
         <Modal animationType="slide" transparent={false} visible={modalVisible}>
-          <ScrollView style={styles.pageContainer}>
-            <View style={styles.inputBoxesContainer}>
-            <TextInput
-              defaultValue={name}
-              onChangeText={setEventTitle}
-              style={styles.textInput}
-            />
-            <TextInput
-              defaultValue={organizationName}
-              onChangeText={setOrganization}
-              style={styles.textInput}
-            />
-            <TextInput
-              defaultValue={location}
-              onChangeText={setAddress}
-              style={styles.textInput}
-            />
-            <TextInput
-              defaultValue="Entry Fee"
-              onChangeText={setEntryFee}
-              style={styles.textInput}
-            />
-            <TextInput
-              style={styles.largeInputBox}
-              defaultValue={description}
-              multiline
-              onChangeText={setEventDescription}
-              placeholderTextColor="#a9a9a9"
-            />
-            <DateTimeSection
-              label="Start Date and Time"
-              dateValue={startDate}
-              onDateChange={(selectedDate) => setStartDate(selectedDate)}
-              timeValue={startTime}
-              onTimeChange={(selectedTime) => setStartTime(selectedTime)}
-            />
-            <DateTimeSection
-              label="End Date and Time"
-              dateValue={endDate}
-              onDateChange={(selectedDate) => setEndDate(selectedDate)}
-              timeValue={endTime}
-              onTimeChange={(selectedTime) => setEndTime(selectedTime)}
-            />
-            <TouchableOpacity
-              style={[
-                styles.createButton,
-                isCreateButtonEnabled ? {} : styles.disabledButton,
-              ]}
-              onPress={closeModal}
-              disabled={!isCreateButtonEnabled}
-            >
+            <ScrollView style={styles.pageContainer}>
+              <TouchableOpacity style={styles.closeButton} onPress={() => closeModal()}>
+                <Text style={styles.closeButtonText}>X</Text>
+              </TouchableOpacity>
+              <View style={styles.inputBoxesContainer}>
+                <TextInput
+                  defaultValue={name}
+                  onChangeText={setEventTitle}
+                  style={styles.textInput}
+                />
+                <TextInput
+                  defaultValue={organizationName}
+                  onChangeText={setOrganization}
+                  style={styles.textInput}
+                />
+                <TextInput
+                  defaultValue={location}
+                  onChangeText={setAddress}
+                  style={styles.textInput}
+                />
+                <TextInput
+                  defaultValue="Entry Fee"
+                  onChangeText={setEntryFee}
+                  style={styles.textInput}
+                />
+                <TextInput
+                  style={styles.largeInputBox}
+                  defaultValue={description}
+                  multiline
+                  onChangeText={setEventDescription}
+                  placeholderTextColor="#a9a9a9"
+                />
+                <DateTimeSection
+                  label="Start Date and Time"
+                  dateValue={startDate}
+                  onDateChange={(selectedDate) => setStartDate(selectedDate)}
+                  timeValue={startTime}
+                  onTimeChange={(selectedTime) => setStartTime(selectedTime)}
+                />
+                <DateTimeSection
+                  label="End Date and Time"
+                  dateValue={endDate}
+                  onDateChange={(selectedDate) => setEndDate(selectedDate)}
+                  timeValue={endTime}
+                  onTimeChange={(selectedTime) => setEndTime(selectedTime)}
+                />
+                <TouchableOpacity
+                  style={[
+                    styles.createButton,
+                    isCreateButtonEnabled ? {} : styles.disabledButton,
+                  ]}
+                  onPress={closeModal}
+                  disabled={!isCreateButtonEnabled}
+                >
               <Text style={styles.buttonText}>Edit my event</Text>
             </TouchableOpacity>
-          </View>
-        </ScrollView>
+            </View>
+          </ScrollView>
       </Modal>
-    </SafeAreaView>
+    // </SafeAreaView>
   );
 }
 
@@ -142,6 +145,17 @@ const styles = StyleSheet.create({
   inputBoxesContainer: {
     paddingHorizontal: 20,
     paddingTop: 10,  // Add paddingTop to create space at the top
+  },  
+  closeButton: {
+    position: 'absolute',
+    top: -20,
+    left: 10,
+    zIndex: 1, // Ensure it's above other elements
+  },
+  closeButtonText: {
+    color: 'white',
+    fontSize: 24,
+    fontWeight: 'bold',
   },
   textInput: {
     height: 50,

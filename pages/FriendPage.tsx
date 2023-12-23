@@ -24,8 +24,8 @@ const FriendPage: React.FC = () => {
     // Here you would fetch your friends from an API or local data source
     // This is just hardcoded data for example purposes
     const newFriends = [
-      { id: '1', name: 'John Doe', profilePicture: 'https://via.placeholder.com/150', status: 'Online' },
-      { id: '2', name: 'Big Fucking Joe Mr Smith', profilePicture: 'https://via.placeholder.com/150', status: 'Offline' },
+      { id: '1', name: 'Big Time Rush', profilePicture: 'https://via.placeholder.com/150', status: 'Online' },
+      { id: '2', name: 'Henry Danger', profilePicture: 'https://via.placeholder.com/150', status: 'Offline' },
       { id: '3', name: 'Chirs Pena', profilePicture: 'https://via.placeholder.com/150', status: 'Getting Blasted' },
       { id: '4', name: 'Andrew Choy', profilePicture: 'https://via.placeholder.com/150', status: 'Gettting Active' },
       // Add more friends here

@@ -11,7 +11,7 @@ import {
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import { COLORS } from "../utils";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
-import EventModel from "../components/EventModel";
+import EventModel from "../components/EventModal";
 
 
 type Props = {

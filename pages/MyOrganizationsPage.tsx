@@ -148,7 +148,13 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 1,
     paddingHorizontal: 10,
+<<<<<<< Updated upstream
     borderRadius: 5,
+=======
+    borderRadius: 20, // Increased border radius for a bubbly shape
+    color: '#ffffff', // White text
+    backgroundColor: '#0a0a0a', // Optional: background color if needed
+>>>>>>> Stashed changes
   },
   label: {
     fontSize: 18,
@@ -160,6 +166,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 20,
     padding: 10,
+    borderRadius: 20,
   },
   selectedFriendsContainer: {
     flexDirection: 'row',

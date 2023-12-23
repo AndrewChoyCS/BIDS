@@ -13,10 +13,12 @@ import InvitePage from './pages/InvitePage';
 import ProfilePage from "./pages/ProfilePage";
 import MyOrganizationsPage from "./pages/MyOrganizationPage"; //test
 import MyEventsPage from "./pages/MyEventsPage";
+import CreateOrganizationPage from "./pages/CreateOrganizationPage";
 import { View, Text} from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { BlurView } from 'expo-blur';
 import { Entypo, MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
+import AppNavigator from './pages/SampleNavigator';
 
 
 
@@ -214,8 +216,8 @@ const styles = StyleSheet.create({
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <DrawerNavigator />
-    </NavigationContainer>
+      <NavigationContainer>
+        <DrawerNavigator />
+      </NavigationContainer>
   );
 }

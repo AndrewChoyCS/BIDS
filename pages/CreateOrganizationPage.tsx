@@ -151,18 +151,19 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   textInput: {
-    height: 40,
+    height: 50,
     borderColor: '#7d12ff', // Neon green
     borderWidth: 1,
     paddingHorizontal: 10,
     borderRadius: 20, // Increased border radius for a bubbly shape
-    color: '#ffffff', // White text
+    color: '#6528F7', // White text
+    // fontWeight: "bold",
     backgroundColor: '#ffffff', // Optional: background color if needed
   },
   label: {
     fontSize: 18,
     marginBottom: 10,
-    color: '#D7BBF5', // Neon green
+    color: '#A076F9', // Neon green
   },
   pickerContainer: {
     borderColor: '#7d12ff',

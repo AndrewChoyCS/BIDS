@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   },
   friendText: {
     color: "#200589"
-  }
+  },
 });
 
 export default FriendPage;

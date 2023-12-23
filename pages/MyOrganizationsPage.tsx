@@ -119,7 +119,7 @@ const MyOrganizationsPage = () => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#f4f4f4',
+    backgroundColor: 'black',
   },
   container: {
     flex: 1,
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
   },
   imageUploadText: {
     fontSize: 16,
-    color: '#0000ff',
+    color: '#7d12ff',
     marginTop: 10,
   },
   inputContainer: {
@@ -145,23 +145,20 @@ const styles = StyleSheet.create({
   },
   textInput: {
     height: 40,
-    borderColor: 'gray',
+    borderColor: '#7d12ff', // Neon green
     borderWidth: 1,
     paddingHorizontal: 10,
-<<<<<<< Updated upstream
-    borderRadius: 5,
-=======
     borderRadius: 20, // Increased border radius for a bubbly shape
     color: '#ffffff', // White text
-    backgroundColor: '#0a0a0a', // Optional: background color if needed
->>>>>>> Stashed changes
+    backgroundColor: '#ffffff', // Optional: background color if needed
   },
   label: {
     fontSize: 18,
     marginBottom: 10,
   },
   pickerContainer: {
-    borderColor: 'gray',
+    borderColor: '#7d12ff',
+    backgroundColor: '#ffffff',
     borderWidth: 1,
     borderRadius: 5,
     marginBottom: 20,
@@ -195,7 +192,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   submitButton: {
-    backgroundColor: '#0000ff',
+    backgroundColor: '#7d12ff',
     padding: 15,
     borderRadius: 5,
     alignItems: 'center',

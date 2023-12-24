@@ -8,7 +8,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import LandingPage from "./pages/LandingPage";
 import CreatePage from "./pages/CreatePage";
 import FriendPage from "./pages/FriendPage";
-import PhotoPage from "./pages/PhotoPage";
+import PhotoPage from "./pages/MapPage";
 import InvitePage from './pages/InvitePage';
 import ProfilePage from "./pages/ProfilePage";
 import MyOrganizationsPage from "./pages/MyOrganizationPage"; //test
@@ -18,11 +18,14 @@ import { View, Text} from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { BlurView } from 'expo-blur';
 import { Entypo, MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 
 
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
+
 
 const CustomDrawerContent = (props) => (
   <DrawerContentScrollView {...props} style={styles.drawerContainer}>
@@ -216,7 +219,15 @@ const styles = StyleSheet.create({
 export default function App() {
   return (
       <NavigationContainer>
-        <DrawerNavigator />
+        <Stack.Navigator>
+        <Stack.Screen
+          name="DrawerNavigator"
+          component={DrawerNavigator}
+          options={{ headerShown: false }}
+        />
+          <Stack.Screen name="MyOrganizationPage" component={MyOrganizationsPage} options={{headerShown: false}}/>
+          <Stack.Screen name="CreateOrganization" component={CreateOrganizationPage} />
+        </Stack.Navigator>
       </NavigationContainer>
   );
 }

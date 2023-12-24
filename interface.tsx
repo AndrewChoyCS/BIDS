@@ -10,5 +10,16 @@ interface Friend {
     description: string; 
     friendList: Friend[];
   }
+
+  interface Event {
+    img: string;
+    location: string;
+    name: string;
+    ratings: number;
+    theme: string;
+    date: string
+    bid: boolean
+    description: string
+  }
   
-  export { Friend, Organization };
+  export { Friend, Organization, Event};

@@ -14,11 +14,16 @@ import {
   Platform,
   Button
 } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
+import { useNavigation } from "@react-navigation/native";
 
-const MyOrganizationsPage = () => {
+
+const CreateOrganizationPage = () => {
   const [orgName, setOrgName] = useState('');
   const [selectedFriends, setSelectedFriends] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const navigation = useNavigation();
+
 
   // Hardcoded friends list (replace with dynamic data later)
   const friendsList = [
@@ -43,24 +48,57 @@ const MyOrganizationsPage = () => {
 
   const onSubmit = () => {
     // Handle the submit action
-    console.log('Organization Name:', orgName);
-    console.log('Selected Friends:', selectedFriends);
-    // Close the modal
+    const newOrganization = {
+      // id:  generateUniqueId(), // Implement a function to generate a unique ID
+      id: 3,
+      name: orgName,
+      profilePicture: image,
+      // ... other organization details
+      friendList: selectedFriends.map((friendId) => {
+        const friend = friendsList.find((f) => f.id === friendId);
+        return { id: friendId, name: friend.name };
+      }),
+    };
     setShowModal(false);
+    navigation.goBack(); 
+    //You should Add it to the data base, then the backend should query for all the user's organiztions
   };
+
+  const [image, setImage] = useState(null);
+  const [defaultImage, setDefaultImage] = useState(require('../Images/tke.jpeg'));
+
+  
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+      // Set the default image to the selected image
+      setDefaultImage({ uri: result.assets[0].uri });
+    }
+  };
+
 
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView style={styles.container}>
         <View style={styles.imageContainer}>
-          {/* Placeholder for image - replace with actual image */}
+          {/* Use dynamic source based on whether an image is selected */}
           <Image
-            source={require('../Images/tke.jpeg')}
+            source={image ? { uri: image } : defaultImage}
             style={styles.orgImage}
           />
           <Button
             title="Edit Organization Photo"
-            onPress={() => Alert.alert('Your Organization has been created')}
+            onPress={pickImage}
           />
         </View>
 
@@ -90,8 +128,12 @@ const MyOrganizationsPage = () => {
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.submitButton} onPress={onSubmit}>
-          <Text style={styles.submitButtonText}>Submit</Text>
+        <TouchableOpacity
+          style={[styles.submitButton, !orgName && styles.disabledButton]}
+          onPress={onSubmit}
+          disabled={!orgName}
+        >
+          <Text style={styles.submitButtonText}>Create</Text>
         </TouchableOpacity>
       </ScrollView>
 
@@ -223,7 +265,10 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignItems: 'center',
     marginTop: 20,
+  },  
+  disabledButton: {
+    backgroundColor: '#808080', // Gray color for disabled button
   },
 });
 
-export default MyOrganizationsPage;
+export default CreateOrganizationPage;

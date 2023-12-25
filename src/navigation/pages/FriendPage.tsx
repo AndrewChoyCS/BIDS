@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, Touchable} from 'react-native';
-import FriendItem from '../components/FriendItem';
+import FriendItem from '../../components/FriendItem';
+import { SafeAreaView } from 'react-native-safe-area-context';
 // import { COLORS } from "../utils"
 const COLORS = {
   primary: '#000000',
@@ -35,6 +36,7 @@ const FriendPage: React.FC = () => {
   }, []);
 
   return (
+    <SafeAreaView style={styles.safeArea}>
       <FlatList
         data={friends}
         // style={styles.friendText}
@@ -46,15 +48,20 @@ const FriendPage: React.FC = () => {
         ListEmptyComponent={<Text>No friends to show.</Text>}
         contentContainerStyle={styles.container}
       />
+    </SafeAreaView>
  
   );
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#0A0A08', // Black
+  },
   container: {
     flexGrow: 1,
     backgroundColor: "#0A0A08",
-    padding: 10
+    paddingTop: 20
   },
   friendText: {
     color: "#200589"

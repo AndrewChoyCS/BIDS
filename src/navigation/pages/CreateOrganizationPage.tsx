@@ -65,7 +65,7 @@ const CreateOrganizationPage = () => {
   };
 
   const [image, setImage] = useState(null);
-  const [defaultImage, setDefaultImage] = useState(require('../Images/tke.jpeg'));
+  const [defaultImage, setDefaultImage] = useState(require('../../Images/tke.jpeg'));
 
   
   const pickImage = async () => {

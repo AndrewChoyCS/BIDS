@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, TextInput, TouchableOpacity, SafeAreaView } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 const COLORS = {
@@ -75,64 +75,70 @@ export default function CreatePage() {
     eventTitle && organization && address && entryFee && eventDescription;
 
   return (
-    <ScrollView style={styles.pageContainer}>
-      <View style={styles.titleContainer}>
-        <Text style={styles.titleText}>Create</Text>
-      </View>
-      <View style={styles.inputBoxesContainer}>
-        <TextInputBox
-          placeholder="Event Title"
-          onChangeText={setEventTitle}
-        />
-        <TextInputBox
-          placeholder="Organization"
-          onChangeText={setOrganization}
-        />
-        <TextInputBox
-          placeholder="Address"
-          onChangeText={setAddress}
-        />
-        <TextInputBox
-          placeholder="Entry Fee"
-          onChangeText={setEntryFee}
-        />
-        <TextInput
-          style={styles.largeInputBox}
-          placeholder="Event Description"
-          multiline
-          onChangeText={setEventDescription}
-          placeholderTextColor="#a9a9a9"
-        />
-        <DateTimeSection
-          label="Start Date and Time"
-          dateValue={startDate}
-          onDateChange={(selectedDate) => setStartDate(selectedDate)}
-          timeValue={startTime}
-          onTimeChange={(selectedTime) => setStartTime(selectedTime)}
-        />
-        <DateTimeSection
-          label="End Date and Time"
-          dateValue={endDate}
-          onDateChange={(selectedDate) => setEndDate(selectedDate)}
-          timeValue={endTime}
-          onTimeChange={(selectedTime) => setEndTime(selectedTime)}
-        />
-        <TouchableOpacity
-          style={[
-            styles.createButton,
-            isCreateButtonEnabled ? {} : styles.disabledButton,
-          ]}
-          onPress={handleCreateEvent}
-          disabled={!isCreateButtonEnabled}
-        >
-          <Text style={styles.buttonText}>Create my event</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+    <SafeAreaView style={styles.safeArea}>
+      <ScrollView style={styles.pageContainer}>
+        <View style={styles.titleContainer}>
+          <Text style={styles.titleText}>Create</Text>
+        </View>
+        <View style={styles.inputBoxesContainer}>
+          <TextInputBox
+            placeholder="Event Title"
+            onChangeText={setEventTitle}
+          />
+          <TextInputBox
+            placeholder="Organization"
+            onChangeText={setOrganization}
+          />
+          <TextInputBox
+            placeholder="Address"
+            onChangeText={setAddress}
+          />
+          <TextInputBox
+            placeholder="Entry Fee"
+            onChangeText={setEntryFee}
+          />
+          <TextInput
+            style={styles.largeInputBox}
+            placeholder="Event Description"
+            multiline
+            onChangeText={setEventDescription}
+            placeholderTextColor="#a9a9a9"
+          />
+          <DateTimeSection
+            label="Start Date and Time"
+            dateValue={startDate}
+            onDateChange={(selectedDate) => setStartDate(selectedDate)}
+            timeValue={startTime}
+            onTimeChange={(selectedTime) => setStartTime(selectedTime)}
+          />
+          <DateTimeSection
+            label="End Date and Time"
+            dateValue={endDate}
+            onDateChange={(selectedDate) => setEndDate(selectedDate)}
+            timeValue={endTime}
+            onTimeChange={(selectedTime) => setEndTime(selectedTime)}
+          />
+          <TouchableOpacity
+            style={[
+              styles.createButton,
+              isCreateButtonEnabled ? {} : styles.disabledButton,
+            ]}
+            onPress={handleCreateEvent}
+            disabled={!isCreateButtonEnabled}
+          >
+            <Text style={styles.buttonText}>Create my event</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#0A0A08', // Black
+  },
   pageContainer: {
     flex: 1,
     // backgroundColor: COLORS.background,

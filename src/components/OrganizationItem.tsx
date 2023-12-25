@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
-import { Organization, Friend } from "../interface";
+import { Organization, Friend } from "../../interface";
 
 interface OrganizationItemProps {
   organization: Organization;

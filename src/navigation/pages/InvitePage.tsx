@@ -1,7 +1,9 @@
 import React, { useState, createContext, useContext, } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Modal } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import EventModel from '../components/EventModal';
+import EventModel from '../../components/EventModal';
+import { ScrollView } from 'react-native-gesture-handler';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 interface Event {
@@ -22,7 +24,7 @@ const hardcodedEvent: Event = {
   id: 1,
   eventName: 'Test Event',
   organizerName: 'Test Organizer',
-  organizerProfilePic: require("../Images/parker.jpeg"),
+  organizerProfilePic: require("../../Images/parker.jpeg"),
   editMode: false,
   buttonPressed: 0,
   ratings: 3.2,
@@ -36,7 +38,7 @@ const hardcodedEvent2: Event = {
   id: 2,
   eventName: 'Merp and Derp',
   organizerName: 'Da Boi',
-  organizerProfilePic: require("../Images/parker.jpeg"),
+  organizerProfilePic: require("../../Images/parker.jpeg"),
   editMode: false,
   buttonPressed: 0,
   ratings: 3.2,
@@ -50,7 +52,7 @@ const hardcodedEvent3: Event = {
   id: 3,
   eventName: 'Minecraft Bed Wars Lan Event',
   organizerName: 'One of us Gaming feat. Minimize and avelman',
-  organizerProfilePic: require("../Images/parker.jpeg"),
+  organizerProfilePic: require("../../Images/parker.jpeg"),
   editMode: false,
   buttonPressed: 0,
   ratings: 3.2,
@@ -132,50 +134,57 @@ const InvitePage: React.FC<InvitePageProps> = ({ events = [] }) => {
   };
 
   return (
-    <View style={styles.container}>
-      {[...events, hardcodedEvent, hardcodedEvent2, hardcodedEvent3].map((event) => (
-        <TouchableOpacity key={event.id} onPress={() => openModal(event)}>
-          <View style={[styles.eventCard, getEventStyles(event)]}>
-            <View style={styles.eventInfo}>
-              <Text style={styles.eventName}>{event.eventName}</Text>
-              <Text style={styles.organizerText}>Organized by: {event.organizerName}</Text>
-            </View>
-            {!editModes[event.id] ? (
-              <View style={styles.responseButtons}>
-                <TouchableOpacity
-                  onPress={() => handleResponse(event.id, 'yes')}
-                  style={[styles.responseButton, styles.yesButton]}
-                >
-                  <Text style={styles.buttonText}>Going</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => handleResponse(event.id, 'no')}
-                  style={[styles.responseButton, styles.noButton]}
-                >
-                  <Text style={styles.buttonText}>Not Going</Text>
-                </TouchableOpacity>
+    <SafeAreaView style={styles.safeArea}>
+      <ScrollView style={styles.container}>
+        {[...events, hardcodedEvent, hardcodedEvent2, hardcodedEvent3].map((event) => (
+          <TouchableOpacity key={event.id} onPress={() => openModal(event)}>
+            <View style={[styles.eventCard, getEventStyles(event)]}>
+              <View style={styles.eventInfo}>
+                <Text style={styles.eventName}>{event.eventName}</Text>
+                <Text style={styles.organizerText}>Organized by: {event.organizerName}</Text>
               </View>
-            ) : (
-              <TouchableOpacity
-                onPress={() => handleEdit(event.id)}
-                style={[styles.responseButton, styles.editButton]}
-              >
-                <Text style={styles.buttonText}>Edit RSVP</Text>
-              </TouchableOpacity>
-            )}
-          </View>
-        </TouchableOpacity>
-      ))}
-      <EventModel modalVisible={modalVisible} closeModal={closeModal} {...modalData} />
-    </View>
+              {!editModes[event.id] ? (
+                <View style={styles.responseButtons}>
+                  <TouchableOpacity
+                    onPress={() => handleResponse(event.id, 'yes')}
+                    style={[styles.responseButton, styles.yesButton]}
+                  >
+                    <Text style={styles.buttonText}>Going</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => handleResponse(event.id, 'no')}
+                    style={[styles.responseButton, styles.noButton]}
+                  >
+                    <Text style={styles.buttonText}>Not Going</Text>
+                  </TouchableOpacity>
+                </View>
+              ) : (
+                <TouchableOpacity
+                  onPress={() => handleEdit(event.id)}
+                  style={[styles.responseButton, styles.editButton]}
+                >
+                  <Text style={styles.buttonText}>Edit RSVP</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+          </TouchableOpacity>
+        ))}
+        <EventModel modalVisible={modalVisible} closeModal={closeModal} {...modalData} />
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#0A0A08', // Black
+  },
   container: {
     flex: 1,
     backgroundColor: "#0A0A08",
     padding: 10,
+    paddingTop:20
   },
   eventCard: {
     flexDirection: 'row',

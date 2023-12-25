@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import EditEventModal from "../components/EditEventModal";
+import EditEventModal from "../../components/EditEventModal";
 import { ScrollView } from 'react-native-gesture-handler';
+import { SafeAreaFrameContext, SafeAreaView } from 'react-native-safe-area-context';
 
 interface Event {
   id: number;
@@ -28,7 +29,7 @@ const MyEventsPage: React.FC = () => {
         id: 1,
         eventName: 'Test Event',
         organizerName: 'Test Organizer',
-        organizerProfilePic: require("../Images/parker.jpeg"), // Use require for local images
+        organizerProfilePic: require("../../Images/parker.jpeg"), // Use require for local images
         editMode: false,
         buttonPressed: 0,
         ratings: 3.2,
@@ -41,7 +42,7 @@ const MyEventsPage: React.FC = () => {
         id: 2,
         eventName: 'Merp and Derp',
         organizerName: 'Da Boi',
-        organizerProfilePic: require("../Images/parker.jpeg"), // Use require for local images
+        organizerProfilePic: require("../../Images/parker.jpeg"), // Use require for local images
         editMode: false,
         buttonPressed: 0,
         ratings: 3.2,
@@ -54,7 +55,7 @@ const MyEventsPage: React.FC = () => {
         id: 3,
         eventName: 'Minecraft Bed Wars Lan Event',
         organizerName: 'One of us Gaming feat. Minimize and avelman',
-        organizerProfilePic: require("../Images/parker.jpeg"), // Use require for local images
+        organizerProfilePic: require("../../Images/parker.jpeg"), // Use require for local images
         editMode: false,
         buttonPressed: 0,
         ratings: 3.2,
@@ -90,29 +91,35 @@ const MyEventsPage: React.FC = () => {
   };
 
   return (
-    <ScrollView style={styles.wholePageContainer}>
-      {events.map((item, index) => (
-        <TouchableOpacity key={item.id} onPress={() => handleItemPress(item)}>
-          <View style={styles.cardContainer}>            
-          <Image source={item.organizerProfilePic} style={styles.profilePic} />
-            <View style={styles.cardContent}>
-              <Text style={styles.eventName}>{item.eventName}</Text>
-              <Text style={styles.organizerName}>{item.organizerName}</Text>
-              <Text style={styles.location}>{item.location}</Text>
+    <SafeAreaView style={styles.safeArea}>
+      <ScrollView style={styles.wholePageContainer}>
+        {events.map((item, index) => (
+          <TouchableOpacity key={item.id} onPress={() => handleItemPress(item)}>
+            <View style={styles.cardContainer}>            
+            <Image source={item.organizerProfilePic} style={styles.profilePic} />
+              <View style={styles.cardContent}>
+                <Text style={styles.eventName}>{item.eventName}</Text>
+                <Text style={styles.organizerName}>{item.organizerName}</Text>
+                <Text style={styles.location}>{item.location}</Text>
+              </View>
             </View>
-          </View>
-        </TouchableOpacity>
-      ))}
-      <EditEventModal modalVisible={modalVisible} closeModal={closeModal} {...modalData} />
-    </ScrollView>
+          </TouchableOpacity>
+        ))}
+        <EditEventModal modalVisible={modalVisible} closeModal={closeModal} {...modalData} />
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#0A0A08', // Black
+  },
   wholePageContainer: {
     flex: 1,
     backgroundColor: '#0A0A08', // Black
-    paddingTop: 16
+    paddingTop: 50
   },
   cardContainer: {
     flexDirection: 'row',

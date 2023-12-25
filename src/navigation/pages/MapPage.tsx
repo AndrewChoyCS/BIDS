@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import MapView, { Marker } from 'react-native-maps';
 import { Text, View, Image, StyleSheet, Dimensions, Button } from "react-native";
 import * as Location from 'expo-location';
+import {Event} from "../../../interface"
 
 export default function MapPage() {
    const [mapRegion, setMapRegion] = useState({
@@ -36,7 +37,11 @@ export default function MapPage() {
             style={styles.map}
             region={mapRegion}
          >
+
             <Marker coordinate={mapRegion} title="Marker" />
+            {/* You should querry the data base here for all the open events and the ones you are invited too,
+            to pop up as markes */}
+         
          </MapView>
          <Button title='Get Location' onPress={userLocation} />
       </View>

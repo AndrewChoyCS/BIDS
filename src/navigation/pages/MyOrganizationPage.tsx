@@ -1,41 +1,42 @@
 // MyOrganizationPage.js
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import OrganizationItem from "../../components/OrganizationItem";
 import { Organization } from "../../../interface";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { ref, onValue, getDatabase } from "firebase/database";
+import { db } from "../../config/firebase";
+import { getAuth } from "firebase/auth";
+
 
 export default function MyOrganizationPage({route}) {
   const navigation = useNavigation();
-  const { newOrganization } = route.params || { newOrganization: null };
+  const [organizations, setOrganizations] = useState([]);
 
-  const organizations: Organization[] = [
-    {
-      id: '1',
-      name: 'Codology',
-      profilePicture: "merp",
-      description: "UC Berkeley Tech Group",
-      friendList: [
-        { id: '101', name: 'John Doe' },
-        { id: '102', name: 'Jane Smith' },
-      ],
-    },
-    {
-      id: '2',
-      name: 'Designers United',
-      profilePicture: "merp",
-      description: "NYC Fun Club",
-      friendList: [
-        { id: '201', name: 'Alice Johnson' },
-        { id: '202', name: 'Bob Anderson' },
-        { id: '203', name: 'Andrew' },
-        { id: '204', name: 'Daniel' },
-        { id: '205', name: 'Joe' },
-        { id: '206', name: 'Chirs' },
-      ],
-    },
-  ];
+  const { newOrganization } = route.params || { newOrganization: null };
+  const auth = getAuth();
+  const user = auth.currentUser;
+  
+  useEffect(() => {
+    const organizationsRef = ref(db, 'Organizations');
+  
+    onValue(organizationsRef, (snapshot) => {
+      const data = snapshot.val();
+  
+      if (data) {
+        const organizationsArray = Object.values(data);
+        
+        // Filter organizations where admin UID matches the current user's UID
+        const userOrganizations = organizationsArray.filter(
+          organization => organization.admin === user.uid
+        );
+  
+        setOrganizations(userOrganizations);
+        console.log(userOrganizations);
+      }
+    });
+  }, [user]);  // Include user in the dependency array to trigger the effect when user changes
 
   return (
       <SafeAreaView style={styles.container}>
@@ -47,7 +48,10 @@ export default function MyOrganizationPage({route}) {
         </TouchableOpacity>
         <View style={styles.organizationContainer}>
           {organizations.map((organization) => (
-            <OrganizationItem key={organization.id} organization={organization} />
+            // console.log(organization),
+            <OrganizationItem 
+              key={organization.id} 
+              organization={organization} />
           ))}
         </View>
       </SafeAreaView>

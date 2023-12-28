@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   FlatList,
   Image,
@@ -16,6 +16,9 @@ import { EventCard } from "../../Cards";
 import { useAuthentication } from '../../utils/hooks/useAuthentication';
 import { signOut, getAuth } from "firebase/auth";
 import { CommonActions, useNavigation } from '@react-navigation/native';
+import { db } from "../../config/firebase";
+import { getDatabase, ref, onValue } from "firebase/database";
+
 
 
 // import { StyleSheet, Text, View } from 'react-native';
@@ -23,80 +26,52 @@ import { CommonActions, useNavigation } from '@react-navigation/native';
 import React from "react";
 
 export default function LandingPage () {
-  const { user } = useAuthentication();
+  // const { user } = useAuthentication();
   const auth = getAuth();
   const navigation = useNavigation();
-  
-  const handleSignOut = async () => {
-    try {
-      await signOut(auth);
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 0,
-          routes: [{ name: 'Welcome' }],
-        })
-      );    } catch (error) {
-      console.error('Error signing out:', error.message);
-    }
-  };
+  // const db = getDatabase();
+  const [events, setEvents] = useState([]);
+  const db = getDatabase();
+
+  useEffect(() => {
+    const eventsRef = ref(db, "Events");
+
+    // Listen for changes to the 'Events' node in the database
+    onValue(eventsRef, (snapshot) => {
+      const data = snapshot.val();
+
+      // Convert the data to an array and update the state
+      if (data) {
+        const eventsArray = Object.values(data);
+        setEvents(eventsArray);
+      }
+    });
+  }, []);
 
 
-    return (
-      <SafeAreaView style={styles.safeArea}>
-        <ScrollView style={styles.pageContainer}>
-          {/* <Button title="Sign Out" onPress={() => handleSignOut()} /> */}
 
-            <View style={styles.eventsContainer}>
-                {/*Header*/}
-                <View style={styles.eventHeader}>
-                    {/* <Text style={styles.eventTitle}>Events</Text> */}
-                </View>
-                <EventCard
-                    name="TKE"
-                    location="32421 Berk"
-                    img={require("../../Images/tke.jpeg")}
-                    ratings={1.8}
-                    theme="White Lies"
-                    bid={true}
-                    date="10pm"
-                />
-                <EventCard
-                    name="Jupiter"
-                    location="DownTown Berkeley" 
-                    img={require("../../Images/dtberk.jpeg")}
-                    ratings={4.7}
-                    theme="Willy Wonka "
-                    bid = {true}
-                    date="10pm"
-                />
-                <EventCard
-                    name="La Casa Parker"
-                    location="2221 Parker St."
-                    img={require("../../Images/parker.jpeg")}
-                    ratings={100.0}
-                    theme="I love parker"
-                    bid = {false}
-                    date="11am"
-                />
-                <EventCard
-                    name="La Casa Parker"
-                    location="2221 Parker St."
-                    img={require("../../Images/parker.jpeg")}
-                    ratings={100.0}
-                    theme="merps and derps"
-                    bid = {false}
-                    date="10pm"
-                />
-                {/* <EventCard
-                    name="La Casa Parker"
-                    location="2221 Parker St."
-                    img={require("../Images/parker.jpeg")}
-                    ratings={100.0}
-                /> */}
-            </View>
-        </ScrollView>
-      </SafeAreaView>
-    )
+  return (
+    <SafeAreaView style={styles.safeArea}>
+      <ScrollView style={styles.pageContainer}>
+        <Text style={styles.eventText}>Events</Text>
+        <View style={styles.eventsContainer}>
+          {/* Header */}
+          {events.map((event, index) => (
+            <EventCard
+              key={index}
+              name={event.eventTitle}
+              location={event.address}
+              img={require("../../Images/tke.jpeg")}
+              ratings={1.8}
+              theme={event.theme}
+              bid={true}
+              date="10pm"
+            />
+          ))}
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -104,21 +79,27 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#0A0A08', // Black
   },
-    pageContainer: {
-      backgroundColor: "#0A0A08", // Replace with your desired background color
-    },
-    eventsContainer: {
-      marginTop: 30,
-      paddingHorizontal: 16,
-      paddingVertical: 16,
-    },
-    eventHeader: {
-      justifyContent: "space-between",
-    },
-    eventTitle: {
-      fontWeight: 'bold',
-      fontSize: 50,
-      color: '#2C514C',
-      textAlign: 'center',
-    },
+  pageContainer: {
+    backgroundColor: "#0A0A08", // Replace with your desired background color
+  },
+  eventText: {
+    fontSize: 30,
+    color: "#F0EDEE",
+    alignSelf: "center",
+    fontWeight: "bold"
+  },
+  eventsContainer: {
+    marginTop: 0,
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+  },
+  eventHeader: {
+    justifyContent: "space-between",
+  },
+  eventTitle: {
+    fontWeight: 'bold',
+    fontSize: 50,
+    color: '#2C514C',
+    textAlign: 'center',
+  },
   });

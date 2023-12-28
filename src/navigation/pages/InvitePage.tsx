@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#0A0A08",
     padding: 10,
-    paddingTop:20
+    paddingTop: 30
   },
   eventCard: {
     flexDirection: 'row',
@@ -192,7 +192,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 16,
     margin: 8,
-    // backgroundColor: '#7d12ff',
     borderRadius: 16,
   },
   eventInfo: {
@@ -244,7 +243,6 @@ const styles = StyleSheet.create({
     height: 400,
     width: "100%",
     marginBottom: 15,
-    // borderCurve: 10
   },
   modalTitle: {
     fontSize: 24,

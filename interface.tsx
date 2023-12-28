@@ -14,12 +14,12 @@ interface Friend {
   interface Event {
     img: string;
     location: string;
-    name: string;
+    eventName: string;
     ratings: number;
     theme: string;
-    date: string
-    bid: boolean
-    description: string
+    date: string;
+    entryFee: boolean;
+    description: string;
   }
   
   export { Friend, Organization, Event};

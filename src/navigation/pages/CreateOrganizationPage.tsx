@@ -16,6 +16,11 @@ import {
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from "@react-navigation/native";
+import Icon from 'react-native-vector-icons/FontAwesome'; // Import the icon you want to use
+import { db } from '../../config/firebase';
+import {getAuth,} from 'firebase/auth'
+import {push, ref, set} from 'firebase/database';
+
 
 
 const CreateOrganizationPage = () => {
@@ -24,6 +29,33 @@ const CreateOrganizationPage = () => {
   const [showModal, setShowModal] = useState(false);
   const navigation = useNavigation();
 
+  const auth = getAuth();
+  const user = auth.currentUser;
+  
+  const dataAddOn = async () => {
+    try {
+      const organizationRef = ref(db, 'Organizations');
+      const newOrganizationRef = push(organizationRef);
+      const organizationID = newOrganizationRef.key;
+      const adminUID = user.uid;
+     
+      const eventData = {
+        organizationID: organizationID,
+        organizationName: orgName,
+        organizationMembers: selectedFriends,
+        // organizationPhoto: imageURL,
+        admin: adminUID,
+      };
+  
+      await set(newOrganizationRef, eventData);
+  
+      navigation.goBack();
+      console.log("Organization has been created with ID:", organizationID);
+      console.log("The creator is: ", adminUID);
+    } catch (error) {
+      console.error("Error creating organization:", error);
+    }
+  };
 
   // Hardcoded friends list (replace with dynamic data later)
   const friendsList = [
@@ -44,24 +76,6 @@ const CreateOrganizationPage = () => {
 
   const isFriendSelected = (id) => {
     return selectedFriends.includes(id);
-  };
-
-  const onSubmit = () => {
-    // Handle the submit action
-    const newOrganization = {
-      // id:  generateUniqueId(), // Implement a function to generate a unique ID
-      id: 3,
-      name: orgName,
-      profilePicture: image,
-      // ... other organization details
-      friendList: selectedFriends.map((friendId) => {
-        const friend = friendsList.find((f) => f.id === friendId);
-        return { id: friendId, name: friend.name };
-      }),
-    };
-    setShowModal(false);
-    navigation.goBack(); 
-    //You should Add it to the data base, then the backend should query for all the user's organiztions
   };
 
   const [image, setImage] = useState(null);
@@ -89,6 +103,9 @@ const CreateOrganizationPage = () => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
+      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Icon name="arrow-left" size={25} color="white" />
+      </TouchableOpacity>
       <ScrollView style={styles.container}>
         <View style={styles.imageContainer}>
           {/* Use dynamic source based on whether an image is selected */}
@@ -130,7 +147,7 @@ const CreateOrganizationPage = () => {
 
         <TouchableOpacity
           style={[styles.submitButton, !orgName && styles.disabledButton]}
-          onPress={onSubmit}
+          onPress={dataAddOn}
           disabled={!orgName}
         >
           <Text style={styles.submitButtonText}>Create</Text>
@@ -268,6 +285,11 @@ const styles = StyleSheet.create({
   },  
   disabledButton: {
     backgroundColor: '#808080', // Gray color for disabled button
+  },
+  backButton: {
+    marginTop: 10,
+    marginLeft: 10,
+    padding: 10,
   },
 });
 

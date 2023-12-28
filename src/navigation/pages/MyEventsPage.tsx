@@ -3,6 +3,9 @@ import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity } from 'react
 import EditEventModal from "../../components/EditEventModal";
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaFrameContext, SafeAreaView } from 'react-native-safe-area-context';
+import { getAuth,} from 'firebase/auth';
+import { db } from '../../config/firebase';
+import { push, ref, set, onValue } from 'firebase/database';
 
 interface Event {
   id: number;
@@ -23,51 +26,29 @@ const MyEventsPage: React.FC = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
 
-  useEffect(() => {
-    const newEvents: Event[] = [
-      {
-        id: 1,
-        eventName: 'Test Event',
-        organizerName: 'Test Organizer',
-        organizerProfilePic: require("../../Images/parker.jpeg"), // Use require for local images
-        editMode: false,
-        buttonPressed: 0,
-        ratings: 3.2,
-        theme: "willy wonka",
-        date: "Monday",
-        bid: true,
-        location: "home"
-      },
-      {
-        id: 2,
-        eventName: 'Merp and Derp',
-        organizerName: 'Da Boi',
-        organizerProfilePic: require("../../Images/parker.jpeg"), // Use require for local images
-        editMode: false,
-        buttonPressed: 0,
-        ratings: 3.2,
-        theme: "willy wonka",
-        date: "Monday",
-        bid: true,
-        location: "joe mama house",
-      },
-      {
-        id: 3,
-        eventName: 'Minecraft Bed Wars Lan Event',
-        organizerName: 'One of us Gaming feat. Minimize and avelman',
-        organizerProfilePic: require("../../Images/parker.jpeg"), // Use require for local images
-        editMode: false,
-        buttonPressed: 0,
-        ratings: 3.2,
-        theme: "willy wonka",
-        date: "Monday",
-        location: "joe's house",
-        bid: true
-      }
-    ];
-    setEvents(newEvents);
-  }, []);
+  const auth = getAuth();
+  const user = auth.currentUser;
 
+  useEffect(() => {
+    const eventsRef = ref(db, 'Events');
+
+    onValue(eventsRef, (snapshot) => {
+      const data = snapshot.val();
+
+      if (data) {
+        const eventsArray: Event[] = Object.values(data);
+
+        // Filter events where admin UID matches the current user's UID
+        const userEvents = eventsArray.filter(
+          event => event.admin === user.uid
+        );
+
+        setEvents(userEvents);
+        console.log(userEvents);
+      }
+    });
+  }, [user]);
+  
   const handleItemPress = (event: Event) => {
     // Set the selected event and open the modal
     setSelectedEvent(event);
@@ -96,11 +77,11 @@ const MyEventsPage: React.FC = () => {
         {events.map((item, index) => (
           <TouchableOpacity key={item.id} onPress={() => handleItemPress(item)}>
             <View style={styles.cardContainer}>            
-            <Image source={item.organizerProfilePic} style={styles.profilePic} />
+              <Image source={item.organizerProfilePic} style={styles.profilePic} />
               <View style={styles.cardContent}>
-                <Text style={styles.eventName}>{item.eventName}</Text>
-                <Text style={styles.organizerName}>{item.organizerName}</Text>
-                <Text style={styles.location}>{item.location}</Text>
+                <Text style={styles.eventName}>{item.eventTitle}</Text>
+                <Text style={styles.organizerName}>{item.organization}</Text>
+                <Text style={styles.location}>{item.address}</Text>
               </View>
             </View>
           </TouchableOpacity>

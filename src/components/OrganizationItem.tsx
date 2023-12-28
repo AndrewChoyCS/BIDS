@@ -1,32 +1,39 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
-import { Organization, Friend } from "../../interface";
 
 interface OrganizationItemProps {
-  organization: Organization;
+  organization: {
+    organizationMembers?: any[]; // Update the type as per your data structure
+    image: string;
+    organizationName: string;
+    // Add other properties as needed
+  };
 }
 
 const OrganizationItem: React.FC<OrganizationItemProps> = ({ organization }) => {
-  console.log("Organization Item Rendered:", organization);
+
+  // Check if organizationMembers is defined
+  const memberCount = organization.organizationMembers ? organization.organizationMembers.length : 0;
 
   return (
     <View style={styles.organizationItem}>
       <View style={styles.imageContainer}>
         <Image
-          source={require("../Images/cody.png")}
+          source={require('../Images/cody.png')}
           style={styles.organizationImage}
         />
       </View>
       <View style={styles.detailsContainer}>
-        <Text style={styles.organizationName}>{organization.name}</Text>
+        <Text style={styles.organizationName}>{organization.organizationName}</Text>
         <View style={styles.membersContainer}>
-          <Text style={styles.remainingMemberText}> {organization.friendList.length} Members</Text>
-          {/* {renderMembers()} */}
+          <Text style={styles.remainingMemberText}>{memberCount} Members</Text>
         </View>
       </View>
     </View>
   );
 };
+
+
 
 const styles = StyleSheet.create({
   organizationItem: {
@@ -66,18 +73,6 @@ const styles = StyleSheet.create({
   },
   membersContainer: {
     marginTop: 10,
-  },
-  membersHeader: {
-    marginBottom: 10,
-    fontSize: 22,
-    color: '#EF4040',
-    textAlign: 'center',
-  },
-  memberName: {
-    color: '#FFA732',
-    fontSize: 13,
-    fontWeight: 'bold',
-    textAlign: 'center',
   },
   remainingMembersContainer: {
     marginTop: 10,

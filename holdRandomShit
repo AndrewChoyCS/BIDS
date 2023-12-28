@@ -1,0 +1,24 @@
+ const dataAddOn = async () => {
+    try {
+      const organizationRef = databaseRef(db, 'Organizations');
+      const newOrganizationRef = push(organizationRef);
+      const organizationID = newOrganizationRef.key;
+      const adminUID = user.uid;
+     
+      const eventData = {
+        organizationID: organizationID,
+        organizationName: orgName,
+        organizationMembers: selectedFriends,
+        // organizationPhoto: imageURL,
+        admin: adminUID,
+      };
+  
+      await set(newOrganizationRef, eventData);
+  
+      navigation.goBack();
+      console.log("Organization has been created with ID:", organizationID);
+      console.log("The creator is: ", adminUID);
+    } catch (error) {
+      console.error("Error creating organization:", error);
+    }
+  };

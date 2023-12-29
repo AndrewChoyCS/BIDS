@@ -21,5 +21,18 @@ interface Friend {
     entryFee: boolean;
     description: string;
   }
+
+  interface User {
+    uid: string;
+    username: string;
+    email: string;
+    friendList: string[]; // Array of friend UIDs
+  }
+  
+  // Define an interface for a friend request
+  interface FriendRequest {
+    from: string; // Sender's UID
+    to: string;   // Receiver's UID
+  }
   
   export { Friend, Organization, Event};

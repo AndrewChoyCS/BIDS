@@ -1,15 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, StyleSheet, Touchable} from 'react-native';
-import FriendItem from '../../components/FriendItem';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-// import { COLORS } from "../utils"
-const COLORS = {
-  primary: '#000000',
-  secondary: '#7d12ff',
-  tertiary: '#ab20fd',
-  accent: '#200589',
-  background: '#fbf8fd',
-};
+import { useNavigation } from '@react-navigation/native';
+import { ScrollView } from 'react-native-gesture-handler';
+import FriendItem from '../../components/FriendItem';
 
 interface Friend {
   id: string;
@@ -18,53 +12,92 @@ interface Friend {
   status: string;
 }
 
+const COLORS = {
+  primary: '#000000',
+  secondary: '#7d12ff',
+  tertiary: '#ab20fd',
+  accent: '#200589',
+  background: '#fbf8fd',
+  button: '#35CE8D', // Added button color
+};
+
 const FriendPage: React.FC = () => {
   const [friends, setFriends] = useState<Friend[]>([]);
+  const navigation = useNavigation();
 
   useEffect(() => {
-    // Here you would fetch your friends from an API or local data source
-    // This is just hardcoded data for example purposes
     const newFriends = [
       { id: '1', name: 'Big Time Rush', profilePicture: 'https://via.placeholder.com/150', status: 'Online' },
       { id: '2', name: 'Henry Danger', profilePicture: 'https://via.placeholder.com/150', status: 'Offline' },
-      { id: '3', name: 'Chirs Pena', profilePicture: 'https://via.placeholder.com/150', status: 'Getting Blasted' },
-      { id: '4', name: 'Andrew Choy', profilePicture: 'https://via.placeholder.com/150', status: 'Gettting Active' },
-      // Add more friends here
+      { id: '3', name: 'Chris Pena', profilePicture: 'https://via.placeholder.com/150', status: 'Getting Blasted' },
+      { id: '4', name: 'Andrew Choy', profilePicture: 'https://via.placeholder.com/150', status: 'Getting Active' },
     ];
     setFriends(newFriends);
-    console.log(newFriends); // This should print the array of friends
   }, []);
 
+  const handleAddFriendPress = () => {
+    // Navigate to AddFriendPage.tsx
+    navigation.navigate('AddFriendPage');
+  };
+
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <ScrollView style={styles.safeArea}>
+      <View style={styles.header}>
+        <Text style={styles.headerText}>Friends</Text>
+        <TouchableOpacity onPress={handleAddFriendPress} style={styles.addButton}>
+          <Text style={styles.buttonText}>Add</Text>
+        </TouchableOpacity>
+      </View>
       <FlatList
         data={friends}
-        // style={styles.friendText}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => {
-          console.log(item); // This should log each friend object
-          return <FriendItem friend={item}/>;
-        }}
-        ListEmptyComponent={<Text>No friends to show.</Text>}
+        renderItem={({ item }) => <FriendItem friend={item} />}
+        ListEmptyComponent={<Text style={styles.emptyText}>No friends to show.</Text>}
         contentContainerStyle={styles.container}
       />
-    </SafeAreaView>
- 
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#0A0A08', // Black
+    backgroundColor: "#0A0A08"
   },
   container: {
     flexGrow: 1,
-    backgroundColor: "#0A0A08",
-    paddingTop: 20
+    paddingTop: 20,
+    paddingBottom: 20,
   },
-  friendText: {
-    color: "#200589"
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    // paddingVertical: 20,
+    paddingTop: 80,
+    backgroundColor: COLORS.primary,
+  },
+  headerText: {
+    color: COLORS.button,
+    fontSize: 35,
+    fontWeight: 'bold',
+  },
+  addButton: {
+    backgroundColor: COLORS.button,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  emptyText: {
+    textAlign: 'center',
+    color: '#555', // Adjusted empty text color
+    fontSize: 16,
   },
 });
 

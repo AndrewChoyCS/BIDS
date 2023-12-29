@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
   },
   name: {
     fontWeight: 'bold',
-    color: "#ab20fd", // Purple color
+    color: "#6BA292", // Purple color
     fontSize: 18,
   },
   status: {

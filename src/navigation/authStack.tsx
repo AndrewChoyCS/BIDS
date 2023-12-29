@@ -18,7 +18,8 @@ import SignOutScreen from '../navigation/pages/Welcome';
 import SignInScreen from './pages/SignInPage';
 import WelcomeScreen from '../navigation/pages/Welcome';
 import CustomHeader from '../components/CustomHeader';
-import {getAuth, signOut} from "firebase/auth";
+import AddFriendPage from './pages/AddFriendPage';
+import {getAuth, signOut, updateCurrentUser} from "firebase/auth";
 
 
 import { Entypo, MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
@@ -121,10 +122,14 @@ const LandingPageWithNavigation = () => {
   );
 };
 
-const CustomDrawerContent = (props) => (
+const CustomDrawerContent = (props) => {
+  const auth = getAuth();
+  const user = auth.currentUser
+
+  return (
     <DrawerContentScrollView {...props} style={styles.drawerContainer}>
       <View style={styles.usernameContainer}>
-        <Text style={styles.usernameText}>Andrew Choy</Text>
+        <Text style={styles.usernameText}>{user.displayName}</Text>
       </View>
       <Image
         source={require("../Images/profilePic.jpg")}
@@ -137,10 +142,11 @@ const CustomDrawerContent = (props) => (
           onPress={() => handleSignOut(props.navigation)}
         />
       </View>
-   
-  
-  </DrawerContentScrollView>
+    </DrawerContentScrollView>
   );
+};
+
+  
   
 
 const TabNavigator = () => (
@@ -181,6 +187,7 @@ const TabNavigator = () => (
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="account-multiple-plus-outline" color={color} size={size} />
           ),
+          headerShown:false
         }}
       />
       <Tab.Screen
@@ -227,6 +234,9 @@ export default function AuthStack() {
           <Stack.Screen name="LandingPage" component={LandingPageWithNavigation} />
           <Stack.Screen name="MyOrganizationPage" component={MyOrganizationsPage} options={{headerShown: false}}/>
           <Stack.Screen name="CreateOrganization" component={CreateOrganizationPage} />
+          <Stack.Screen name="AddFriendPage" component={AddFriendPage} />
+          {/* <Stack.Screen */}
+
 
         </Stack.Navigator>
       </NavigationContainer>

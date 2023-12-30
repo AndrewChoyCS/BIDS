@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
 import {
   SafeAreaView,
@@ -16,39 +16,68 @@ import {
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from "@react-navigation/native";
-import Icon from 'react-native-vector-icons/FontAwesome'; // Import the icon you want to use
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { ref, push, set, onValue } from 'firebase/database';
+import getUserData from '../../components/getUserData';
 import { db } from '../../config/firebase';
-import {getAuth,} from 'firebase/auth'
-import {push, ref, set} from 'firebase/database';
-
-
+import { getAuth } from 'firebase/auth';
 
 const CreateOrganizationPage = () => {
   const [orgName, setOrgName] = useState('');
-  const [selectedFriends, setSelectedFriends] = useState([]);
+  const [selectedFriends, setSelectedFriends] = useState<string[]>([]);
   const [showModal, setShowModal] = useState(false);
+  const [friendsList, setFriendsList] = useState([]);
   const navigation = useNavigation();
 
   const auth = getAuth();
   const user = auth.currentUser;
-  
+  useEffect(() => {
+    const userFriendsRef = ref(db, `Users/${user.uid}/Friends`);
+
+    onValue(userFriendsRef, (snapshot) => {
+      const data = snapshot.val();
+
+      if (data) {
+        const friends = Object.values(data);
+        setFriendsList(friends);
+        // console.log(friendsList);
+      }
+    });
+  }, [user]);
+
+  const [friendUsernames, setFriendUsernames] = useState({});
+
+  useEffect(() => {
+    const fetchUsernames = async () => {
+      const usernames = {};
+      for (const friend of friendsList) {
+        const friendUsername = await getUserData(friend);
+        usernames[friend] = friendUsername;
+      }
+      setFriendUsernames(usernames);
+      // console.log(usernames)
+    };
+
+    fetchUsernames();
+  }, [friendsList]);
+
+
   const dataAddOn = async () => {
     try {
       const organizationRef = ref(db, 'Organizations');
       const newOrganizationRef = push(organizationRef);
       const organizationID = newOrganizationRef.key;
-      const adminUID = user.uid;
-     
+      const adminUID = user?.uid;
+
       const eventData = {
         organizationID: organizationID,
         organizationName: orgName,
         organizationMembers: selectedFriends,
-        // organizationPhoto: imageURL,
         admin: adminUID,
       };
-  
+
       await set(newOrganizationRef, eventData);
-  
+
       navigation.goBack();
       console.log("Organization has been created with ID:", organizationID);
       console.log("The creator is: ", adminUID);
@@ -57,31 +86,22 @@ const CreateOrganizationPage = () => {
     }
   };
 
-  // Hardcoded friends list (replace with dynamic data later)
-  const friendsList = [
-    { id: '1', name: 'Obama' },
-    { id: '2', name: 'Donald Trump' },
-    { id: '3', name: 'George Bush'},
-    { id: '4', name: 'Joe Biden'}
-    // ... add more friends
-  ];
-
-  const onFriendSelect = (id) => {
-    if (selectedFriends.includes(id)) {
-      setSelectedFriends(selectedFriends.filter(friendId => friendId !== id));
+  const onFriendSelect = (uid) => {
+    if (selectedFriends.includes(uid)) {
+      setSelectedFriends(selectedFriends.filter(friendId => friendId !== uid));
+      console.log(selectedFriends)
     } else {
-      setSelectedFriends([...selectedFriends, id]);
+      setSelectedFriends([...selectedFriends, uid]);
     }
   };
 
-  const isFriendSelected = (id) => {
-    return selectedFriends.includes(id);
+  const isFriendSelected = (uid) => {
+    return selectedFriends.includes(uid);
   };
 
   const [image, setImage] = useState(null);
   const [defaultImage, setDefaultImage] = useState(require('../../Images/tke.jpeg'));
 
-  
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -100,11 +120,10 @@ const CreateOrganizationPage = () => {
     }
   };
 
-
   return (
     <SafeAreaView style={styles.safeArea}>
       <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Icon name="arrow-left" size={25} color="white" />
+        <Icon name="arrow-left" size={25} color="white" />
       </TouchableOpacity>
       <ScrollView style={styles.container}>
         <View style={styles.imageContainer}>
@@ -134,11 +153,11 @@ const CreateOrganizationPage = () => {
           <Text style={styles.label}>Add Members:</Text>
           {/* Display selected friends */}
           <View style={styles.selectedFriendsContainer}>
-            {selectedFriends.map(friendId => {
-              const friend = friendsList.find(f => f.id === friendId);
+            {selectedFriends.map(uid => {
+              const friendUsername = friendUsernames[uid];
               return (
-                <View style={styles.selectedFriend} key={friendId}>
-                  <Text style={styles.selectedFriendText}>{friend.name}</Text>
+                <View style={styles.selectedFriend} key={uid}>
+                  <Text style={styles.selectedFriendText}>{friendUsername}</Text>
                 </View>
               );
             })}
@@ -161,18 +180,17 @@ const CreateOrganizationPage = () => {
         onRequestClose={() => setShowModal(false)}
       >
         <View style={styles.modalView}>
-          <FlatList
-            data={friendsList}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                style={[styles.friendItem, isFriendSelected(item.id) && styles.friendItemSelected]}
-                onPress={() => onFriendSelect(item.id)}
-              >
-                <Text style={styles.friendItemText}>{item.name}</Text>
-              </TouchableOpacity>
-            )}
-          />
+        <FlatList
+        data={friendsList}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            style={[styles.friendItem, isFriendSelected(item) && styles.friendItemSelected]}
+            onPress={() => onFriendSelect(item)}
+          >
+            <Text style={styles.friendItemText}>{friendUsernames[item]}</Text>
+          </TouchableOpacity>
+        )}
+      />
           <TouchableOpacity style={styles.modalSubmitButton} onPress={() => setShowModal(false)}>
             <Text style={styles.submitButtonText}>Done</Text>
           </TouchableOpacity>

@@ -132,7 +132,7 @@ const CustomDrawerContent = (props) => {
         <Text style={styles.usernameText}>{user.displayName}</Text>
       </View>
       <Image
-        source={require("../Images/profilePic.jpg")}
+        source={require("../Images/club_Penguin.jpeg")}
         style={styles.profilePic}
       />
       <DrawerItemList {...props} />

@@ -1,9 +1,12 @@
-import React, { useState, createContext, useContext, } from 'react';
+import React, { useState, createContext, useContext, useEffect, } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Modal } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import EventModel from '../../components/EventModal';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { getAuth } from 'firebase/auth';
+import { onValue, ref } from 'firebase/database';
+import { db } from '../../config/firebase';
 
 
 interface Event {
@@ -20,48 +23,6 @@ interface Event {
   bid: boolean;
 }
 
-const hardcodedEvent: Event = {
-  id: 1,
-  eventName: 'Test Event',
-  organizerName: 'Test Organizer',
-  organizerProfilePic: require("../../Images/parker.jpeg"),
-  editMode: false,
-  buttonPressed: 0,
-  ratings: 3.2,
-  theme: "willy wonka",
-  date: "Monday",
-  bid: true,
-  location: "home"
-};
-
-const hardcodedEvent2: Event = {
-  id: 2,
-  eventName: 'Merp and Derp',
-  organizerName: 'Da Boi',
-  organizerProfilePic: require("../../Images/parker.jpeg"),
-  editMode: false,
-  buttonPressed: 0,
-  ratings: 3.2,
-  theme: "willy wonka",
-  date: "Monday",
-  bid: true,
-  location: "joe mama house",
-};
-
-const hardcodedEvent3: Event = {
-  id: 3,
-  eventName: 'Minecraft Bed Wars Lan Event',
-  organizerName: 'One of us Gaming feat. Minimize and avelman',
-  organizerProfilePic: require("../../Images/parker.jpeg"),
-  editMode: false,
-  buttonPressed: 0,
-  ratings: 3.2,
-  theme: "willy wonka",
-  date: "Monday",
-  location: "joe's house",
-  bid: true
-};
-
 interface InvitePageProps {
   events?: Event[];
 }
@@ -70,11 +31,29 @@ const InvitePage: React.FC<InvitePageProps> = ({ events = [] }) => {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [editModes, setEditModes] = useState<{ [eventId: number]: boolean }>({});
   const [rsvpStatus, setRSVPStatus] = useState<{ [eventId: number]: number }>({
-    1: hardcodedEvent.buttonPressed,
-    2: hardcodedEvent2.buttonPressed,
-    3: hardcodedEvent3.buttonPressed,
   });
 
+  const auth = getAuth()
+  const user = auth.currentUser
+
+  useEffect(() => {
+    // console.log(user.uid)
+    const friendsRef = ref(db, `Users/${user.uid}/Friends`);
+
+    onValue(friendsRef, (snapshot) => {
+      const data = snapshot.val();
+
+      if (data) {
+        const friendsArray = Object.values(data);
+        setSelectedEvent(friendsArray);
+      }      
+    });
+    // console.log(friends)
+  }, [user]);
+
+  const handleAddFriendPress = () => {
+    navigation.navigate('AddFriendPage');
+  };
   const openModal = (event: Event) => {
     setSelectedEvent(event);
     setModalVisible(true);

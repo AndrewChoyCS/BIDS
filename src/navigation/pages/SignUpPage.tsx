@@ -48,7 +48,7 @@ const SignUpScreen: React.FC<StackScreenProps<any>> = ({ navigation }) => {
         userId: userCredential.user.uid,
         username: value.username,
         email: value.email,
-        Friends: ["plaeceholder"],
+        Friends: [],
         // Add other user details as needed
       };
   

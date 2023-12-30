@@ -4,6 +4,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { ScrollView } from 'react-native-gesture-handler';
 import FriendItem from '../../components/FriendItem';
+import { getAuth } from 'firebase/auth';
+import {ref, push, set, onValue} from 'firebase/database';
+import { db } from '../../config/firebase';
 
 interface Friend {
   id: string;
@@ -24,19 +27,25 @@ const COLORS = {
 const FriendPage: React.FC = () => {
   const [friends, setFriends] = useState<Friend[]>([]);
   const navigation = useNavigation();
+  const auth = getAuth();
+  const user = auth.currentUser;
 
   useEffect(() => {
-    const newFriends = [
-      { id: '1', name: 'Big Time Rush', profilePicture: 'https://via.placeholder.com/150', status: 'Online' },
-      { id: '2', name: 'Henry Danger', profilePicture: 'https://via.placeholder.com/150', status: 'Offline' },
-      { id: '3', name: 'Chris Pena', profilePicture: 'https://via.placeholder.com/150', status: 'Getting Blasted' },
-      { id: '4', name: 'Andrew Choy', profilePicture: 'https://via.placeholder.com/150', status: 'Getting Active' },
-    ];
-    setFriends(newFriends);
-  }, []);
+    // console.log(user.uid)
+    const friendsRef = ref(db, `Users/${user.uid}/Friends`);
+
+    onValue(friendsRef, (snapshot) => {
+      const data = snapshot.val();
+
+      if (data) {
+        const friendsArray = Object.values(data) as Friend[];
+        setFriends(friendsArray);
+      }      
+    });
+    // console.log(friends)
+  }, [user]);
 
   const handleAddFriendPress = () => {
-    // Navigate to AddFriendPage.tsx
     navigation.navigate('AddFriendPage');
   };
 
@@ -50,10 +59,12 @@ const FriendPage: React.FC = () => {
       </View>
       <FlatList
         data={friends}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <FriendItem friend={item} />}
+        // keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <FriendItem userId={item} />
+        )}
         ListEmptyComponent={<Text style={styles.emptyText}>No friends to show.</Text>}
-        contentContainerStyle={styles.container}
+        contentContainerStyle={styles.container} // Remove this line if not needed
       />
     </ScrollView>
   );

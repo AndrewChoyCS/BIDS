@@ -119,7 +119,6 @@ export default function AddFriendPage({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: Platform.OS === 'android' ? 25 : 0, // Adjusted padding for Android
     padding: 16,
   },
   header: {

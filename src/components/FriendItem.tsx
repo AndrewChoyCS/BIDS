@@ -1,26 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, Modal, TouchableWithoutFeedback } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
-import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
-
-interface Friend {
-  id: string;
-  name: string;
-  profilePicture: string;
-  status: string;
-}
+import { Entypo } from "@expo/vector-icons";
+import { onValue, ref } from 'firebase/database';
+import { db } from '../config/firebase';
 
 interface FriendItemProps {
-  friend: Friend;
+  userId: string; // Change this to userId
 }
 
-const FriendItem: React.FC<FriendItemProps> = ({ friend }) => {
+const FriendItem: React.FC<FriendItemProps> = ({ userId }) => {
   const [modalVisible, setModalVisible] = useState(false);
-
-  if (!friend) {
-    console.error('FriendItem received undefined friend.');
-    return null;
-  }
+  const [userData, setUserData] = useState<any>(null);
 
   const openModal = () => {
     setModalVisible(true);
@@ -30,16 +20,37 @@ const FriendItem: React.FC<FriendItemProps> = ({ friend }) => {
     setModalVisible(false);
   };
 
+  useEffect(() => {
+    const userRef = ref(db, `Users/${userId}`);
+  
+    const fetchData = async () => {
+      try {
+        // Provide both the reference and a callback function to onValue
+        onValue(userRef, (snapshot) => {
+          // handle snapshot data here
+          setUserData(snapshot.val());
+          console.log(userId)
+
+        });
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+    // console.log(userData)
+    fetchData();
+  }, [userId]);
+
   const recentEvents = ["Event Title 1", "Event Title 2", "Event Title 3"];
 
   return (
     <>
       <TouchableOpacity onPress={openModal}>
         <View style={styles.container}>
-          <Image source={{ uri: friend.profilePicture }} style={styles.profilePicture} />
+          <Image source={{ uri: userData?.profilePicture }} style={styles.profilePicture} />
           <View style={styles.info}>
-            <Text style={styles.name}>{friend.name}</Text>
-            <Text style={styles.status}>{friend.status}</Text>
+            <Text style={styles.name}>{userData?.username}</Text>
+            {/* <Text style={styles.status}>{userData?.status}</Text> */}
+            <Text style={styles.status}>Insert status here</Text>
           </View>
         </View>
       </TouchableOpacity>
@@ -53,9 +64,9 @@ const FriendItem: React.FC<FriendItemProps> = ({ friend }) => {
         <TouchableWithoutFeedback onPress={closeModal}>
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
-              <Image source={{ uri: friend.profilePicture }} style={styles.imageInModel} />
-              <Text style={styles.nameInModel}>{friend.name}</Text>
-              <Text style={styles.statusInModel}>{friend.status}</Text>
+              <Image source={{ uri: userData?.profilePicture }} style={styles.imageInModel} />
+              <Text style={styles.nameInModel}>{userData?.name}</Text>
+              <Text style={styles.statusInModel}>{userData?.status}</Text>
 
               <View style={styles.recentEventsContainer}>
                 <Text style={styles.recentEventTitle}>Recent Events</Text>
@@ -75,7 +86,6 @@ const FriendItem: React.FC<FriendItemProps> = ({ friend }) => {
     </>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {

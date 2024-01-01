@@ -5,55 +5,80 @@ import EventModel from '../../components/EventModal';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { getAuth } from 'firebase/auth';
-import { onValue, ref } from 'firebase/database';
+import { child, get, getDatabase, onValue, ref } from 'firebase/database';
 import { db } from '../../config/firebase';
+import getUserEventData from "../../components/getUserEventData";
 
-
-interface Event {
-  id: number;
-  eventName: string;
-  organizerName: string;
-  organizerProfilePic: string;
-  editMode: boolean;
-  buttonPressed: number;
-  location: string;
-  ratings: number;
-  theme: string;
-  date: string;
-  bid: boolean;
-}
 
 interface InvitePageProps {
   events?: Event[];
 }
-const InvitePage: React.FC<InvitePageProps> = ({ events = [] }) => {
+const InvitePage: React.FC<InvitePageProps> = ({}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [editModes, setEditModes] = useState<{ [eventId: number]: boolean }>({});
-  const [rsvpStatus, setRSVPStatus] = useState<{ [eventId: number]: number }>({
-  });
+  const [rsvpStatus, setRSVPStatus] = useState<{ [eventId: number]: number }>({});
+  const [userOrganizations, setUserOrganizations] = useState([]);
+  const [userEvents, setUserEvents] = useState([]);
+  const [eventList, setEventList] = useState([]);
 
   const auth = getAuth()
   const user = auth.currentUser
+  const dbRef = ref(getDatabase());
 
-  useEffect(() => {
-    // console.log(user.uid)
-    const friendsRef = ref(db, `Users/${user.uid}/Friends`);
+useEffect(() => {
+  const userRef = ref(db, `Users/${user.uid}/Organizations`);
 
-    onValue(friendsRef, (snapshot) => {
+  get(userRef).then((snapshot) => {
+    if (snapshot.exists()) {
       const data = snapshot.val();
+      const dataArray = Object.values(data);
 
-      if (data) {
-        const friendsArray = Object.values(data);
-        setSelectedEvent(friendsArray);
-      }      
+      // Create an array of promises
+      const promises = dataArray.map((organization) => {
+        return get(child(dbRef, `Organizations/${organization}/OngoingEvents`))
+          .then((snapshot2) => {
+            if (snapshot2.exists()) {
+              const ongoingEvents = snapshot2.val();
+              return Object.values(ongoingEvents);
+            } else {
+              return [];
+            }
+          });
+      });
+
+      // Wait for all promises to resolve
+      return Promise.all(promises);
+    } else {
+      console.log("No data found");
+      return [];
+    }
+  }).then((allOngoingEventsArrays) => {
+    // Concatenate arrays obtained from different promises
+    const ongoingEventsArray = [].concat(...allOngoingEventsArrays);
+
+    // Create an array of promises for fetching events
+    const eventPromises = ongoingEventsArray.map((currEvent) => {
+      return get(child(dbRef, `Events/${currEvent}`))
+        .then((snapshot3) => {
+          if (snapshot3.exists()) {
+            const eventData = snapshot3.val();
+            return eventData;
+          } else {
+            return [];
+          }
+        });
     });
-    // console.log(friends)
-  }, [user]);
+    // Wait for all event promises to resolve
+    return Promise.all(eventPromises);
+  }).then((allEvents) => {
+    const allUserEvents = [].concat(...allEvents);
+    setUserEvents(allUserEvents)
+  }).catch((error) => {
+    console.error(error);
+  });
+}, [db, user.uid, dbRef]);
 
-  const handleAddFriendPress = () => {
-    navigation.navigate('AddFriendPage');
-  };
   const openModal = (event: Event) => {
     setSelectedEvent(event);
     setModalVisible(true);
@@ -85,7 +110,7 @@ const InvitePage: React.FC<InvitePageProps> = ({ events = [] }) => {
   };
 
   const getEventStyles = (event: Event) => {
-    const eventRSVPStatus = rsvpStatus[event.id];
+    const eventRSVPStatus = rsvpStatus[event.eventId];
 
     if (event.editMode || (eventRSVPStatus !== undefined && eventRSVPStatus !== 0)) {
       return {
@@ -115,23 +140,23 @@ const InvitePage: React.FC<InvitePageProps> = ({ events = [] }) => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView style={styles.container}>
-        {[...events, hardcodedEvent, hardcodedEvent2, hardcodedEvent3].map((event) => (
-          <TouchableOpacity key={event.id} onPress={() => openModal(event)}>
+        {userEvents.map((event) => (
+          <TouchableOpacity key={event.eventId} onPress={() => openModal(event)}>
             <View style={[styles.eventCard, getEventStyles(event)]}>
               <View style={styles.eventInfo}>
-                <Text style={styles.eventName}>{event.eventName}</Text>
-                <Text style={styles.organizerText}>Organized by: {event.organizerName}</Text>
+                <Text style={styles.eventName}>{event.eventTitle}</Text>
+                <Text style={styles.organizerText}>Organized by: {event.organizationName}</Text>
               </View>
-              {!editModes[event.id] ? (
+              {!editModes[event.eventId] ? (
                 <View style={styles.responseButtons}>
                   <TouchableOpacity
-                    onPress={() => handleResponse(event.id, 'yes')}
+                    onPress={() => handleResponse(event.eventId, 'yes')}
                     style={[styles.responseButton, styles.yesButton]}
                   >
                     <Text style={styles.buttonText}>Going</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
-                    onPress={() => handleResponse(event.id, 'no')}
+                    onPress={() => handleResponse(event.eventId, 'no')}
                     style={[styles.responseButton, styles.noButton]}
                   >
                     <Text style={styles.buttonText}>Not Going</Text>
@@ -139,7 +164,7 @@ const InvitePage: React.FC<InvitePageProps> = ({ events = [] }) => {
                 </View>
               ) : (
                 <TouchableOpacity
-                  onPress={() => handleEdit(event.id)}
+                  onPress={() => handleEdit(event.eventId)}
                   style={[styles.responseButton, styles.editButton]}
                 >
                   <Text style={styles.buttonText}>Edit RSVP</Text>

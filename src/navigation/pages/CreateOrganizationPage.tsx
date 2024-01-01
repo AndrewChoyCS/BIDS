@@ -69,18 +69,32 @@ const CreateOrganizationPage = () => {
       const organizationID = newOrganizationRef.key;
       const adminUID = user?.uid;
 
-      const eventData = {
+      const organizationData = {
         organizationID: organizationID,
         organizationName: orgName,
-        organizationMembers: selectedFriends,
+        organizationMembers: [...selectedFriends, adminUID],
         admin: adminUID,
       };
 
-      await set(newOrganizationRef, eventData);
+      await set(newOrganizationRef, organizationData);
 
       navigation.goBack();
       console.log("Organization has been created with ID:", organizationID);
       console.log("The creator is: ", adminUID);
+      console.log(selectedFriends)
+
+      for (const friendUID of selectedFriends) {
+        const friendOrgRef = ref(db, `Users/${friendUID}/Organizations`);
+        const newFriendOrgRef = push(friendOrgRef);
+        await set(newFriendOrgRef, organizationID);
+      }
+
+      // Add code here do this for every person in selected friends
+      const userRef = ref(db, `Users/${user.uid}/Organizations`);
+      const newUserRef = push(userRef)
+      await set(newUserRef, organizationID)
+
+
     } catch (error) {
       console.error("Error creating organization:", error);
     }
@@ -89,7 +103,6 @@ const CreateOrganizationPage = () => {
   const onFriendSelect = (uid) => {
     if (selectedFriends.includes(uid)) {
       setSelectedFriends(selectedFriends.filter(friendId => friendId !== uid));
-      console.log(selectedFriends)
     } else {
       setSelectedFriends([...selectedFriends, uid]);
     }

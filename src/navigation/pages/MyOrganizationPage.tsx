@@ -1,6 +1,6 @@
 // MyOrganizationPage.js
 import React, { useState, useEffect } from "react";
-import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
+import { View, TouchableOpacity, Text, StyleSheet, ScrollView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import OrganizationItem from "../../components/OrganizationItem";
 import { Organization } from "../../../interface";
@@ -40,6 +40,7 @@ export default function MyOrganizationPage({route}) {
 
   return (
       <SafeAreaView style={styles.container}>
+        {/* <ScrollView> */}
         <TouchableOpacity
           onPress={() => navigation.navigate("CreateOrganization")}
           style={styles.createButton}
@@ -54,6 +55,9 @@ export default function MyOrganizationPage({route}) {
               organization={organization} />
           ))}
         </View>
+        {/* </ScrollView> */}
+        {/* #TODO
+        Fix to Scroll View */}
       </SafeAreaView>
   );
 }

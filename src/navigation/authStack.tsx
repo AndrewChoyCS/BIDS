@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Image, StyleSheet } from 'react-native';
 import { CommonActions, NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
@@ -28,6 +28,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { firebase } from '@react-native-firebase/auth';
 import SignUpScreen from './pages/SignUpPage';
 import navigation from '.';
+import { child, getDatabase, ref , get} from 'firebase/database';
 
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
@@ -109,10 +110,32 @@ const LandingPageWithNavigation = () => {
     </Drawer.Navigator>
   );
 };
-
 const CustomDrawerContent = (props) => {
+  const [profilePicture, setProfilePicture] = useState(null);
   const auth = getAuth();
-  const user = auth.currentUser
+  const user = auth.currentUser;
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const dbRef = ref(getDatabase());
+
+      if (user) {
+        // Fetch profile picture
+        const profilePicPath = `Users/${user.uid}/profilePicture`;
+        const picture = await get(child(dbRef, profilePicPath)).then((snapshot) => {
+          if (snapshot.exists()) {
+            // Use snapshot.val() to get the actual value
+            console.log(snapshot.val());
+            setProfilePicture(snapshot.val());
+          }
+        }).catch((error) => {
+          console.error('Error fetching profile picture:', error.message);
+        });
+      }
+    };
+
+    fetchUserData();
+  }, [user]); // Include 'user' in the dependency array
 
   return (
     <DrawerContentScrollView {...props} style={styles.drawerContainer}>
@@ -120,7 +143,7 @@ const CustomDrawerContent = (props) => {
         <Text style={styles.usernameText}>{user.displayName}</Text>
       </View>
       <Image
-        source={require("../Images/club_Penguin.jpeg")}
+        source={{ uri: profilePicture }}
         style={styles.profilePic}
       />
       <DrawerItemList {...props} />
@@ -133,9 +156,6 @@ const CustomDrawerContent = (props) => {
     </DrawerContentScrollView>
   );
 };
-
-  
-  
 
 const TabNavigator = () => (
     <Tab.Navigator

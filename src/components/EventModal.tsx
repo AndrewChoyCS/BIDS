@@ -38,7 +38,7 @@ const EventModel = ( {modalVisible,
         <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
           <MaterialCommunityIcons name="close" size={30} color="#FF0000" />
         </TouchableOpacity>
-        <Image source={img} style={styles.modalImg} resizeMode="contain" />
+        <Image source={{uri: img}} style={styles.modalImg} resizeMode="contain" />
         <Text style={styles.modalTitle}>{name}</Text>
         <View style={styles.ratings}>
           <MaterialCommunityIcons name="star" size={20} color={COLORS.primary} />

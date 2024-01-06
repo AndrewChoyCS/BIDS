@@ -1,67 +1,165 @@
-// MyOrganizationPage.js
 import React, { useState, useEffect } from "react";
-import { View, TouchableOpacity, Text, StyleSheet, ScrollView } from "react-native";
+import { View, TouchableOpacity, Text, StyleSheet, ScrollView, Modal, Image, FlatList } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import OrganizationItem from "../../components/OrganizationItem";
-import { Organization } from "../../../interface";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { ref, onValue, getDatabase } from "firebase/database";
+import { ref, onValue, update } from "firebase/database";
 import { db } from "../../config/firebase";
 import { getAuth } from "firebase/auth";
+import Icon from 'react-native-vector-icons/FontAwesome';
+import getUserData from '../../components/getUserData';
+import OrganizationItem from "../../components/OrganizationItem";
+import FriendSelectorModal from "../../components/FriendSelectorModal";
 
-
-export default function MyOrganizationPage({route}) {
+export default function MyOrganizationPage({ route }) {
   const navigation = useNavigation();
   const [organizations, setOrganizations] = useState([]);
+  const [selectedOrganization, setSelectedOrganization] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [organizationMembers, setOrganizationMembers] = useState([]);
+  const [selectedMembers, setSelectedMembers] = useState([]);
+  const [friendModalVisible, setFriendModalVisible] = useState(false);
+  const [aggregatedData, setAggregatedData] = useState([]);
 
-  const { newOrganization } = route.params || { newOrganization: null };
+
   const auth = getAuth();
   const user = auth.currentUser;
-  
+
   useEffect(() => {
     const organizationsRef = ref(db, 'Organizations');
-  
+
     onValue(organizationsRef, (snapshot) => {
       const data = snapshot.val();
-  
+
       if (data) {
         const organizationsArray = Object.values(data);
-        
+
         // Filter organizations where admin UID matches the current user's UID
         const userOrganizations = organizationsArray.filter(
           organization => organization.admin === user.uid
         );
-  
+
         setOrganizations(userOrganizations);
         console.log(userOrganizations);
       }
     });
-  }, [user]);  // Include user in the dependency array to trigger the effect when user changes
+  }, [user]); // Include user in the dependency array to trigger the effect when user changes
+  
+  const openFriendModal = () => {
+    setFriendModalVisible(true);
+  };
+
+  const openModal = async (organization) => {
+    setSelectedOrganization(organization);
+    const data = [];
+
+    // Create an array of promises for each friend
+    const friendPromises = organization.organizationMembers.map((friend) => {
+      const friendRef = ref(db, `Users/${friend}`);
+
+      return new Promise<void>((resolve) => {
+        onValue(friendRef, (snapshot) => {
+          const friendData = snapshot.val();
+          data.push({ uid: friend, username: friendData.username });
+          resolve();
+        });
+      });
+    });
+
+    // Wait for all promises to resolve
+    await Promise.all(friendPromises);
+
+    // Now 'data' contains all the friend data
+    setAggregatedData(data);
+
+    setOrganizationMembers(organization.organizationMembers);
+    setSelectedMembers(organization.organizationMembers);
+    setModalVisible(true);
+  };
+
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
+  const handleSaveMembers = async () => {
+    try {
+      // Update the organization members in the local state
+      setSelectedOrganization((prevOrg) => ({
+        ...prevOrg,
+        organizationMembers: selectedMembers,
+      }));
+  
+      // Update the organization members in the database
+      const organizationRef = ref(db, `Organizations/${selectedOrganization.organizationID}`);
+      await update(organizationRef, { organizationMembers: selectedMembers });
+  
+      console.log("Members updated successfully");
+      closeModal();
+    } catch (error) {
+      console.error("Error updating members:", error);
+    }
+  };
 
   return (
-      <SafeAreaView style={styles.container}>
-        {/* <ScrollView> */}
-        <TouchableOpacity
-          onPress={() => navigation.navigate("CreateOrganization")}
-          style={styles.createButton}
-        >
-          <Text style={{ color: 'white' }}>Create an Organization</Text>
-        </TouchableOpacity>
+    <View style={styles.container}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("CreateOrganization")}
+        style={styles.createButton}
+      >
+        <Text style={{ color: 'white' }}>Create an Organization</Text>
+      </TouchableOpacity>
+      <ScrollView style={{ ...styles.container }}>
         <View style={styles.organizationContainer}>
           {organizations.map((organization) => (
-            // console.log(organization),
-            <OrganizationItem 
-              key={organization.id} 
-              organization={organization} />
+            <TouchableOpacity key={organization.id} onPress={() => openModal(organization)}>
+              <OrganizationItem organization={organization} />
+            </TouchableOpacity>
           ))}
         </View>
-        {/* </ScrollView> */}
-        {/* #TODO
-        Fix to Scroll View */}
-      </SafeAreaView>
+      </ScrollView>
+
+      <Modal
+        visible={modalVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={closeModal}
+      >
+        <View style={styles.modalContainer}>
+          <Image
+            source={{ uri: selectedOrganization?.organizationPhoto }}
+            style={styles.modalImage}
+          />
+          <Text style={styles.modalOrganizationName}>{selectedOrganization?.organizationName}</Text>
+
+          <TouchableOpacity onPress={openFriendModal} style={styles.modalButton}>
+            <Text style={styles.modalButtonText}>Edit Members</Text>
+            <FriendSelectorModal
+              showModal={friendModalVisible}
+              friendsList={organizationMembers}
+              isFriendSelected={(uid) => selectedMembers.includes(uid)}
+              onFriendSelect={(uid) => {
+                setSelectedMembers((prevMembers) => {
+                  if (prevMembers.includes(uid)) {
+                    return prevMembers.filter((member) => member !== uid);
+                  } else {
+                    return [...prevMembers, uid];
+                  }
+                });
+              }}
+              onCloseModal={() => setFriendModalVisible(false)}
+              friendUsernames={aggregatedData.reduce(
+                (acc, friend) => ({ ...acc, [friend.uid]: friend.username }),
+                {}
+              )}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={closeModal} style={styles.modalButton}>
+            <Text style={styles.modalButtonText}>Close</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
+    </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -84,6 +182,61 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'space-between',
     marginTop: 60, // Adjust the top margin to create space for the button
+  },
+  modalContainer: {
+    backgroundColor: '#A4BEF3',
+    marginTop: 150,
+    // margin: 20,
+    marginHorizontal:20,
+    padding: 100,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 999
+  },
+  modalImage: {
+    width: 200,
+    height: 200,
+    borderRadius: 10,
+    marginBottom: 20,
+  },
+  modalOrganizationName: {
+    color: '#F5EDF0',
+    fontSize: 25,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  modalLabel: {
+    fontSize: 18,
+    marginBottom: 10,
+    color: '#A076F9', // Neon green
+  },
+  memberItem: {
+    backgroundColor: '#ff00ff', // Neon pink
+    borderRadius: 15,
+    padding: 8,
+    marginRight: 10,
+    marginBottom: 10,
+  },
+  memberItemSelected: {
+    backgroundColor: '#A076F9', // Light blue
+  },
+  memberItemText: {
+    fontSize: 14,
+    color: '#ffffff', // White text
+  },
+  modalButton: {
+    backgroundColor: '#6528F7', // Neon green
+    padding: 15,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  modalButtonText: {
+    fontSize: 16,
+    color: '#ffffff', // White text
+    fontWeight: 'bold',
   },
 });
 

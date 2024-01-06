@@ -102,7 +102,8 @@ export default function LandingPage () {
               key={index}
               name={event.eventTitle}
               location={event.address}
-              img={require("../../Images/tke.jpeg")}
+              img={event.eventBanner}
+              // img={require("../../Images/tke.jpeg")}
               ratings={1.8}
               theme={event.theme}
               bid={true}

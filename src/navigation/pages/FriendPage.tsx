@@ -3,11 +3,12 @@ import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { ScrollView } from 'react-native-gesture-handler';
+import { getAuth } from 'firebase/auth';
+import { ref, onValue, remove, set, get } from 'firebase/database';
+import { db } from '../../config/firebase';
+import { Swipeable } from 'react-native-gesture-handler';
 import FriendItem from '../../components/FriendItem';
 import FriendRequestItem from '../../components/FriendRequestItem';
-import { getAuth } from 'firebase/auth';
-import {ref, push, set, onValue} from 'firebase/database';
-import { db } from '../../config/firebase';
 
 interface Friend {
   id: string;
@@ -22,7 +23,7 @@ const COLORS = {
   tertiary: '#ab20fd',
   accent: '#200589',
   background: '#fbf8fd',
-  button: '#35CE8D', // Added button color
+  button: '#35CE8D',
 };
 
 const FriendPage: React.FC = () => {
@@ -37,11 +38,11 @@ const FriendPage: React.FC = () => {
     const friendRequestRef = ref(db,`Users/${user.uid}/FriendRequest`)
     onValue(friendRequestRef, (snapshot) => {
       const data = snapshot.val();
-      console.log(data)
+      // console.log(data)
       if (data) {
         const friendRequestArray = Object.values(data)
         setFriendRequests(friendRequestArray)
-        console.log(friendRequestArray)
+        // console.log(friendRequestArray)
       }
     })
   };
@@ -61,11 +62,11 @@ const FriendPage: React.FC = () => {
     const friendRequestRef = ref(db,`Users/${user.uid}/FriendRequest`)
     onValue(friendRequestRef, (snapshot) => {
       const data = snapshot.val();
-      console.log(data)
+      // console.log(data)
       if (data) {
         const friendRequestArray = Object.values(data)
         setFriendRequests(friendRequestArray)
-        console.log(friendRequestArray)
+        // console.log(friendRequestArray)
       }
     })
   }, [user]);
@@ -74,6 +75,54 @@ const FriendPage: React.FC = () => {
     navigation.navigate('AddFriendPage');
   };
 
+  const renderSwipeableFriendItem = (friend: Friend) => {
+    // console.log(friend)
+    const swipeRightActions = () => (
+      <TouchableOpacity
+        style={styles.deleteButton}
+        onPress={() => handleDeleteFriend(friend)}
+      >
+        <Text style={styles.deleteButtonText}>Delete</Text>
+      </TouchableOpacity>
+    );
+
+    return (
+      <Swipeable renderRightActions={swipeRightActions}>
+        <FriendItem userId={friend} />
+      </Swipeable>
+    );
+  };
+
+  const handleDeleteFriend = async (friendId: string) => {
+    console.log(friendId);
+    try {
+      // Perform deletion logic here:
+  
+      const myRef = ref(db, `Users/${user.uid}/Friends`);
+      //the ref was wrong 
+      const snapshot = await get(myRef);
+  
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        const updatedData = {};
+  
+        for (const key in data) {
+          if (data[key] !== friendId) {
+            updatedData[key] = data[key];
+          }
+        }
+        await set(myRef, updatedData);
+      }
+
+
+  
+      const friendRef = ref(db, `Users/${friendId}/Friends`);
+      await remove(friendRef);
+    } catch (error) {
+      console.error('Error deleting friend:', error);
+    }
+  };
+  
   return (
     <ScrollView style={styles.safeArea}>
       <View style={styles.header}>
@@ -89,18 +138,16 @@ const FriendPage: React.FC = () => {
       )}
       ListEmptyComponent={<Text>No friend requests to show.</Text>}
       // contentContainerStyle={styles.container} // Remove this line if not needed
-    />
+      />
   
       {/* Dotted line */}
       <View style={styles.dottedLine} />
-  
+
       <FlatList
         data={friends}
-        renderItem={({ item }) => (
-          <FriendItem userId={item} />
-        )}
+        renderItem={({ item }) => renderSwipeableFriendItem(item)}
         ListEmptyComponent={<Text style={styles.emptyText}>No friends to show.</Text>}
-        contentContainerStyle={styles.container} // Remove this line if not needed
+        contentContainerStyle={styles.container}
       />
     </ScrollView>
   );
@@ -154,6 +201,17 @@ const styles = StyleSheet.create({
     // borderStyle: 'dashed',
     marginVertical: 10, // Adjust this value based on your preference
     // color: 'white',
+  },  
+  deleteButton: {
+    backgroundColor: 'red', // You can customize the color as needed
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 80, // Adjust the width as needed
+  },
+  deleteButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 

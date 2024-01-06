@@ -49,7 +49,7 @@ const EventCard = ({ img, location, name, ratings, theme, date, bid }: Props) =>
   return (
     <TouchableWithoutFeedback onPress={openModal}>
       <View style={styles.container}>
-        <Image source={img} style={styles.img} resizeMode="cover" />
+        <Image source={{uri: img}} style={styles.img} resizeMode="cover" />
         <View style={styles.cardContent}>
           <Text style={styles.cardTitle}>{name}</Text>
           <View style={styles.ratings}>
@@ -67,8 +67,6 @@ const EventCard = ({ img, location, name, ratings, theme, date, bid }: Props) =>
       <View>
         <EventModel modalVisible={modalVisible} closeModal={closeModal} {...modalData} />
     </View>
-      {/*This is when you click on the event  */}
-
     </TouchableWithoutFeedback>
   );
 };

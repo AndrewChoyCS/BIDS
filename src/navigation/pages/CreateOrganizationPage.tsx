@@ -19,14 +19,17 @@ import { useNavigation } from "@react-navigation/native";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { ref, push, set, onValue } from 'firebase/database';
 import getUserData from '../../components/getUserData';
-import { db } from '../../config/firebase';
+import { db, storage} from '../../config/firebase';
+import {ref as StorageRef, getDownloadURL, uploadBytes} from 'firebase/storage'
 import { getAuth } from 'firebase/auth';
+import FriendSelectorModal from '../../components/FriendSelectorModal';
 
 const CreateOrganizationPage = () => {
   const [orgName, setOrgName] = useState('');
   const [selectedFriends, setSelectedFriends] = useState<string[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [friendsList, setFriendsList] = useState([]);
+  const [pictureDownloadURL, setPictureDownloadURL] = useState(null)
   const navigation = useNavigation();
 
   const auth = getAuth();
@@ -69,11 +72,26 @@ const CreateOrganizationPage = () => {
       const organizationID = newOrganizationRef.key;
       const adminUID = user?.uid;
 
+      let url = null; // Declare url outside the if block
+      let result = imageResult;
+
+      if (result && !result.canceled) {
+        const imgRef = StorageRef(storage, `${organizationID}-OrganizationPicture`);
+        const bytes = await fetch(result.assets[0].uri).then((response) => response.blob());
+        const uploadedBytes = await uploadBytes(imgRef, bytes);
+        const url = await getDownloadURL(imgRef);
+        setPictureDownloadURL(url);
+        console.log("Bytes Uploaded");
+        console.log(`File available at:`, url);
+        console.log("done");
+        } 
+
       const organizationData = {
         organizationID: organizationID,
         organizationName: orgName,
         organizationMembers: [...selectedFriends, adminUID],
         admin: adminUID,
+        organizationPhoto: url || "https://firebasestorage.googleapis.com/v0/b/bids-408802.appspot.com/o/J4CXyo8TurMjwsbeKLkoykIXkNi2-ProfilePicture?alt=media&token=051882a0-8f62-4fba-a337-57514439f9e4"
       };
 
       await set(newOrganizationRef, organizationData);
@@ -112,7 +130,7 @@ const CreateOrganizationPage = () => {
     return selectedFriends.includes(uid);
   };
 
-  const [image, setImage] = useState(null);
+  const [imageResult, setImageResult] = useState(null);
   const [defaultImage, setDefaultImage] = useState(require('../../Images/tke.jpeg'));
 
   const pickImage = async () => {
@@ -127,8 +145,7 @@ const CreateOrganizationPage = () => {
     console.log(result);
 
     if (!result.canceled) {
-      setImage(result.assets[0].uri);
-      // Set the default image to the selected image
+      setImageResult(result);
       setDefaultImage({ uri: result.assets[0].uri });
     }
   };
@@ -142,7 +159,7 @@ const CreateOrganizationPage = () => {
         <View style={styles.imageContainer}>
           {/* Use dynamic source based on whether an image is selected */}
           <Image
-            source={image ? { uri: image } : defaultImage}
+            source={pictureDownloadURL ? { uri: pictureDownloadURL } : defaultImage}
             style={styles.orgImage}
           />
           <Button
@@ -176,7 +193,15 @@ const CreateOrganizationPage = () => {
             })}
           </View>
         </TouchableOpacity>
-
+        
+        <FriendSelectorModal
+          showModal={showModal}
+          friendsList={friendsList}
+          isFriendSelected={isFriendSelected}
+          onFriendSelect={onFriendSelect}
+          onCloseModal={() => setShowModal(false)}
+          friendUsernames={friendUsernames}
+        />
         <TouchableOpacity
           style={[styles.submitButton, !orgName && styles.disabledButton]}
           onPress={dataAddOn}
@@ -185,30 +210,6 @@ const CreateOrganizationPage = () => {
           <Text style={styles.submitButtonText}>Create</Text>
         </TouchableOpacity>
       </ScrollView>
-
-      <Modal
-        animationType="slide"
-        transparent={false}
-        visible={showModal}
-        onRequestClose={() => setShowModal(false)}
-      >
-        <View style={styles.modalView}>
-        <FlatList
-        data={friendsList}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            style={[styles.friendItem, isFriendSelected(item) && styles.friendItemSelected]}
-            onPress={() => onFriendSelect(item)}
-          >
-            <Text style={styles.friendItemText}>{friendUsernames[item]}</Text>
-          </TouchableOpacity>
-        )}
-      />
-          <TouchableOpacity style={styles.modalSubmitButton} onPress={() => setShowModal(false)}>
-            <Text style={styles.submitButtonText}>Done</Text>
-          </TouchableOpacity>
-        </View>
-      </Modal>
     </SafeAreaView>
   );
 };

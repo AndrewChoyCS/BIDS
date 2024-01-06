@@ -9,7 +9,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { color } from 'react-native-elements/dist/helpers';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import { getStorage, ref as StorageRef, uploadBytes} from 'firebase/storage';
+import { getStorage, ref as StorageRef, uploadBytes, getDownloadURL} from 'firebase/storage';
 import { Alert } from 'react-native';
 
 
@@ -81,17 +81,16 @@ export default function CreatePage() {
   const [selectedOrganization, setSelectedOrganization] = useState(null);
   const [organizationOptions, setOrganizationOptions] = useState([]);
   const [eventBanner, setEventBanner] = useState('')
-
   const [imageResult, setImageResult] = useState(null);
   const [defaultImage, setDefaultImage] = useState(require('../../Images/tke.jpeg'));
+  const [downloadURL, setDownloadURL] = useState('')
 
-  const isCreateButtonEnabled =
-    eventTitle && organization && address && entryFee && eventDescription;
+  const isCreateButtonEnabled = eventTitle && organization && address && entryFee && eventDescription;
     
   const auth = getAuth();
   const user = auth.currentUser;
   
-  const dataAddOn = () => {
+  const dataAddOn = async () => {
     // Get a new reference to the 'Events' node
     const eventsRef = ref(db, 'Events');
     // Push a new child node with auto-generated ID
@@ -100,27 +99,30 @@ export default function CreatePage() {
     const eventId = newEventRef.key;
     const adminUID = user.uid;
 
+    const result = imageResult;
+    const imgRef = StorageRef(storage, `${eventId}-EventBanner`);
+        
+        // Use the 'uri' property of the result directly
+    const bytes = await fetch(result.assets[0].uri).then(response => response.blob());
+        
+        // Upload the image to Firebase Storage
+    const uploadedBytes = await uploadBytes(imgRef, bytes);
+        
+        // Get the download URL for the uploaded file
+    const url = await getDownloadURL(imgRef);
+    setDownloadURL(url)
+    console.log("Bytes Uploaded");
+    console.log(`File available at:`, url);
+
+    // Set the image state and default image to the selected image
+    setEventBanner(`${eventId}-EventBanner`);
+    setDefaultImage({ uri: result.assets[0].uri});
+    console.log("done")
 
     const orgRef = ref(db, `Organizations/${selectedOrganization}`);
 
     get(orgRef).then(async (snapshot) => {
       if (snapshot.exists()) {
-
-        const result = imageResult
-        const imgRef = StorageRef(storage, `${eventId}-EventBanner`);
-  
-        // Use the 'uri' property of the result directly
-        const bytes = await fetch(result.assets[0].uri).then(response => response.blob());
-  
-        // Upload the image to Firebase Storage
-        await uploadBytes(imgRef, bytes);
-        console.log("Bytes Uploaded");
-  
-        // Set the image state and default image to the selected image
-        setEventBanner(`${eventId}-EventBanner`);
-        setDefaultImage({ uri: result.assets[0].uri});
-        console.log("done")
-
         const orgData = snapshot.val();
         const orgName = orgData.organizationName;
          // Create the data object with the unique ID
@@ -138,7 +140,7 @@ export default function CreatePage() {
           endDate: endDate,
           endTime: endTime,
           admin: adminUID,
-          eventBanner: eventBanner
+          eventBanner: downloadURL
         };
         // Set the data to the unique ID
         set(newEventRef, eventData);
@@ -157,7 +159,6 @@ export default function CreatePage() {
         console.log("Event has been added to OngoingEvents with ID:", organizationEventId);
         set(newOrganizationRef, eventId)
 
-        Alert.alert('Success', 'Event has been created successfully.');
         setEventTitle('');
         setOrganization([]);
         setAddress('');
@@ -171,6 +172,8 @@ export default function CreatePage() {
         setSelectedOrganization(null);
         setEventBanner(null);
         setImageResult(null);
+        Alert.alert('Success', 'Event has been created successfully.');
+
     
       } else {
         const orgName = "None"

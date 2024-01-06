@@ -49,6 +49,7 @@ const SignUpScreen: React.FC<StackScreenProps<any>> = ({ navigation }) => {
         username: value.username,
         email: value.email,
         Friends: [],
+        profilePicture:"https://firebasestorage.googleapis.com/v0/b/bids-408802.appspot.com/o/club_Penguin.jpeg?alt=media&token=7091609b-cfa6-4efb-ab4b-158f4dfaeabd"
         // Add other user details as needed
       };
   

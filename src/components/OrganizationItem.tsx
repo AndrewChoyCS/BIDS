@@ -1,5 +1,9 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import React, { useState } from 'react';
+import { View, Text, Image, StyleSheet, Touchable , Dimensions, } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Modal, Portal, Button } from 'react-native-paper';
+
 
 interface OrganizationItemProps {
   organization: {
@@ -11,28 +15,39 @@ interface OrganizationItemProps {
 }
 
 const OrganizationItem: React.FC<OrganizationItemProps> = ({ organization }) => {
+  const navigation = useNavigation();
+
+  // Get the screen width
+  const screenWidth = Dimensions.get('window').width;
+
+  // Calculate the width of each item to have two items per row
+  const itemWidth = (screenWidth - 30) / 2; // 30 is the total horizontal padding
 
   // Check if organizationMembers is defined
   const memberCount = organization.organizationMembers ? organization.organizationMembers.length : 0;
 
+  const [modalVisible, setModalVisible] = useState(false);
+
+
   return (
-    <View style={styles.organizationItem}>
-      <View style={styles.imageContainer}>
-        <Image
-          source={require('../Images/cody.png')}
-          style={styles.organizationImage}
-        />
-      </View>
-      <View style={styles.detailsContainer}>
-        <Text style={styles.organizationName}>{organization.organizationName}</Text>
-        <View style={styles.membersContainer}>
-          <Text style={styles.remainingMemberText}>{memberCount} Members</Text>
+    <>
+      <View style={[styles.organizationItem]}>
+        <View style={styles.imageContainer}>
+          <Image
+            source={{ uri: organization.organizationPhoto}}
+            style={styles.organizationImage}
+          />
+        </View>
+        <View style={styles.detailsContainer}>
+          <Text style={styles.organizationName}>{organization.organizationName}</Text>
+          <View style={styles.membersContainer}>
+            <Text style={styles.remainingMemberText}>{organization.organizationMembers?.length || 0} Members</Text>
+          </View>
         </View>
       </View>
-    </View>
+    </>
   );
 };
-
 
 
 const styles = StyleSheet.create({
@@ -45,10 +60,11 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     marginBottom: 20,
     overflow: 'hidden',
-    flexBasis: '48%', // Set the flex basis to have two items per row
     flexGrow: 0, // Avoid items from growing beyond flexBasis
     borderWidth: 2,
     borderColor: '#31304D',
+    maxHeight: 275,
+    maxWidth: 200
   },
   imageContainer: {
     borderTopLeftRadius: 10,
@@ -83,7 +99,7 @@ const styles = StyleSheet.create({
   remainingMemberText: {
     color: "#c1d5f5",
     alignSelf: "center"
-  },
+  }, 
 });
 
 export default OrganizationItem;

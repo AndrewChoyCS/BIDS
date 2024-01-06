@@ -5,7 +5,7 @@ import EventModel from '../../components/EventModal';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { getAuth } from 'firebase/auth';
-import { child, get, getDatabase, onValue, ref } from 'firebase/database';
+import { child, equalTo, get, getDatabase, onValue, orderByValue, push, query, ref, remove, set } from 'firebase/database';
 import { db } from '../../config/firebase';
 import getUserEventData from "../../components/getUserEventData";
 
@@ -89,7 +89,37 @@ useEffect(() => {
     setEditMode(selectedEvent?.id, false);
   };
 
-  const handleResponse = (eventId: number, response: 'yes' | 'no') => {
+  const handleResponse = async (eventId: number, response: 'yes' | 'no') => {
+    const eventRef = ref(db, `Events/${eventId}/RSVPStatus/`);
+    
+    const oppositeResponse = response === 'yes' ? 'no' : 'yes';
+    const oppositeRef = ref(db, `Events/${eventId}/RSVPStatus/${oppositeResponse}`);
+  
+    const userUid = user.uid;
+  
+    // Check if user is already in the corresponding category
+    const currentResponseRef = ref(db, `Events/${eventId}/RSVPStatus/${response}`);
+    const currentResponseQuery = query(currentResponseRef, orderByValue(), equalTo(userUid));
+    const currentResponseSnapshot = await get(currentResponseQuery);
+  
+    if (currentResponseSnapshot.exists()) {
+      console.log(`User already in ${response} category for event ${eventId}`);
+      return; // User is already in the corresponding category, no need to make changes
+    }
+  
+    // Remove user from the opposite RSVP status if exists
+    const oppositeQuery = query(oppositeRef, orderByValue(), equalTo(userUid));
+    const oppositeSnapshot = await get(oppositeQuery);
+    oppositeSnapshot.forEach((childSnapshot) => {
+      const childRef = ref(db, `Events/${eventId}/RSVPStatus/${oppositeResponse}/${childSnapshot.key}`);
+      remove(childRef);
+    });
+  
+    // Add user to the new RSVP status
+    const newRef = ref(db, `Events/${eventId}/RSVPStatus/${response}`);
+    const newOrganizationRef = push(newRef);
+    set(newOrganizationRef, userUid);
+  
     console.log(`User responded ${response} for event ${eventId}`);
     setRSVPStatus((prevRSVPStatus) => ({
       ...prevRSVPStatus,
@@ -129,12 +159,12 @@ useEffect(() => {
 
   const modalData = {
     img: selectedEvent?.organizerProfilePic,
-    name: selectedEvent?.eventName,
+    name: selectedEvent?.eventTitle,
     ratings: selectedEvent?.ratings,
-    location: selectedEvent?.location,
+    location: selectedEvent?.address,
     date: selectedEvent?.date,
     theme: selectedEvent?.theme,
-    bid: selectedEvent?.bid,
+    bid: selectedEvent?.entryFee,
   };
 
   return (

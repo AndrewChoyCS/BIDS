@@ -19,6 +19,7 @@ import SignInScreen from './pages/SignInPage';
 import WelcomeScreen from '../navigation/pages/Welcome';
 import CustomHeader from '../components/CustomHeader';
 import AddFriendPage from './pages/AddFriendPage';
+import EditProfile from './pages/EditProfilePage';
 import {getAuth, signOut, updateCurrentUser} from "firebase/auth";
 
 
@@ -94,24 +95,11 @@ const LandingPageWithNavigation = () => {
       />
       <Drawer.Screen
         name="Edit Profile"
-        component={ProfilePage}
+        component={EditProfile}
         options={{
           drawerLabel: ({ focused }) => (
             <Text style={[styles.drawerItemLabel, focused ? { fontWeight: 'bold' } : null]}>
               Edit Profile
-            </Text>
-          ),
-          headerTransparent: true,
-          headerTitle: "",
-        }}
-      />
-      <Drawer.Screen
-        name="Settings"
-        component={ProfilePage}
-        options={{
-          drawerLabel: ({ focused }) => (
-            <Text style={[styles.drawerItemLabel, focused ? { fontWeight: 'bold' } : null]}>
-              Settings
             </Text>
           ),
           headerTransparent: true,

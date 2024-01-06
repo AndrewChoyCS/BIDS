@@ -1,13 +1,17 @@
 import React, { useState, useEffect} from 'react';
 import { ScrollView, StyleSheet, Text, View, TextInput, TouchableOpacity, SafeAreaView, Button,} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { db } from '../../config/firebase';
+import { db, storage } from '../../config/firebase';
 import {get, onValue, push, ref, set} from 'firebase/database';
 import * as ImagePicker from 'expo-image-picker';
 import { getAuth } from 'firebase/auth';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { color } from 'react-native-elements/dist/helpers';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import { getStorage, ref as StorageRef, uploadBytes} from 'firebase/storage';
+import { Alert } from 'react-native';
+
 
 
 const COLORS = {
@@ -74,6 +78,12 @@ export default function CreatePage() {
   const [startTime, setStartTime] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [endTime, setEndTime] = useState(new Date());
+  const [selectedOrganization, setSelectedOrganization] = useState(null);
+  const [organizationOptions, setOrganizationOptions] = useState([]);
+  const [eventBanner, setEventBanner] = useState('')
+
+  const [imageResult, setImageResult] = useState(null);
+  const [defaultImage, setDefaultImage] = useState(require('../../Images/tke.jpeg'));
 
   const isCreateButtonEnabled =
     eventTitle && organization && address && entryFee && eventDescription;
@@ -90,10 +100,27 @@ export default function CreatePage() {
     const eventId = newEventRef.key;
     const adminUID = user.uid;
 
+
     const orgRef = ref(db, `Organizations/${selectedOrganization}`);
 
-    get(orgRef).then((snapshot) => {
+    get(orgRef).then(async (snapshot) => {
       if (snapshot.exists()) {
+
+        const result = imageResult
+        const imgRef = StorageRef(storage, `${eventId}-EventBanner`);
+  
+        // Use the 'uri' property of the result directly
+        const bytes = await fetch(result.assets[0].uri).then(response => response.blob());
+  
+        // Upload the image to Firebase Storage
+        await uploadBytes(imgRef, bytes);
+        console.log("Bytes Uploaded");
+  
+        // Set the image state and default image to the selected image
+        setEventBanner(`${eventId}-EventBanner`);
+        setDefaultImage({ uri: result.assets[0].uri});
+        console.log("done")
+
         const orgData = snapshot.val();
         const orgName = orgData.organizationName;
          // Create the data object with the unique ID
@@ -110,7 +137,8 @@ export default function CreatePage() {
           startTime: startTime,
           endDate: endDate,
           endTime: endTime,
-          admin: adminUID
+          admin: adminUID,
+          eventBanner: eventBanner
         };
         // Set the data to the unique ID
         set(newEventRef, eventData);
@@ -128,6 +156,21 @@ export default function CreatePage() {
         };
         console.log("Event has been added to OngoingEvents with ID:", organizationEventId);
         set(newOrganizationRef, eventId)
+
+        Alert.alert('Success', 'Event has been created successfully.');
+        setEventTitle('');
+        setOrganization([]);
+        setAddress('');
+        setTheme('');
+        setEntryFee('');
+        setEventDescription('');
+        setStartDate(new Date());
+        setStartTime(new Date());
+        setEndDate(new Date());
+        setEndTime(new Date());
+        setSelectedOrganization(null);
+        setEventBanner(null);
+        setImageResult(null);
     
       } else {
         const orgName = "None"
@@ -138,29 +181,23 @@ export default function CreatePage() {
     });    
   }
 
-
-  const [image, setImage] = useState(null);
-  const [defaultImage, setDefaultImage] = useState(require('../../Images/tke.jpeg'));
   const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    console.log(result);
-
-    if (!result.canceled) {
-      setImage(result.assets[0].uri);
-      // Set the default image to the selected image
-      setDefaultImage({ uri: result.assets[0].uri });
+    try {
+      // No request is necessary for launching the image library
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+      console.log(result)
+      if (!result.canceled) {
+        setImageResult(result)
+      }
+    } catch (error) {
+      console.error('Error picking image:', error);
     }
   };
-
-  const [selectedOrganization, setSelectedOrganization] = useState(null);
-  const [organizationOptions, setOrganizationOptions] = useState([]);
 
   useEffect(() => {
     const organizationsRef = ref(db, 'Organizations');
@@ -199,7 +236,41 @@ export default function CreatePage() {
           <TextInputBox
             placeholder="Address"
             onChangeText={setAddress}
-          />
+          /> 
+          {/* I want my autocomplete API to go here
+          {/* <GooglePlacesAutocomplete
+            placeholder='Location'
+            onPress={(data, details = null) => {
+              console.log(data, details);
+            }}
+            query={{
+              key: 'AIzaSyBIt3E2OkFlypJTWt-QD2n2ZVpGMidaLHI',
+              language: 'en',
+            }}
+            styles={{
+              container: {
+                flex: 1,
+                marginTop: 10,
+              },
+              textInputContainer: {
+                width: '100%',
+                backgroundColor: COLORS.background,
+                marginTop: -15,
+                marginBottom: 15,
+                borderRadius: 20,
+                paddingHorizontal: 15,
+
+              },
+              textInput: {
+                height: 50,
+                color: '#5d5d5d',
+                fontSize: 16,
+              },
+              predefinedPlacesDescription: {
+                color: COLORS.primary,
+              },
+            }}
+          /> */}
           <TextInputBox
             placeholder="Theme"
             onChangeText={setTheme}

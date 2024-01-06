@@ -50,7 +50,7 @@ export default function AddFriendPage({ navigation }) {
     const user = auth.currentUser;
 
     // Replace 'Friends' with the path to your friends collection in Firebase
-    const friendsRef = ref(db, `Users/${user.uid}/Friends`);
+    const friendsRef = ref(db, `Users/${friendUserId}/FriendRequest`);
 
     // Check if a friend request has already been sent to this user
     if (friendRequestsSent[friendUserId]) {
@@ -64,9 +64,9 @@ export default function AddFriendPage({ navigation }) {
     try {
       // Set the user with friendUserId as a friend using the unique key
       // Assuming you want to set a boolean value (true) as a friend
-      await set(newFriendRef, friendUserId, true);
+      await set(newFriendRef, user.uid, true);
 
-      console.log(`Successfully added ${friendUserId} to your Friends list`);
+      console.log(`Successfully sent a friend request to  ${friendUserId}`);
 
       // Update state to indicate that the friend request has been sent for this user
       setFriendRequestsSent((prev) => ({

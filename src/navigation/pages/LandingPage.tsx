@@ -17,7 +17,7 @@ import { useAuthentication } from '../../utils/hooks/useAuthentication';
 import { signOut, getAuth } from "firebase/auth";
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { db } from "../../config/firebase";
-import { getDatabase, ref, onValue } from "firebase/database";
+import { getDatabase, ref, onValue, get, child } from "firebase/database";
 
 
 
@@ -28,25 +28,66 @@ import React from "react";
 export default function LandingPage () {
   // const { user } = useAuthentication();
   const auth = getAuth();
+  const user = auth.currentUser
   const navigation = useNavigation();
   // const db = getDatabase();
   const [events, setEvents] = useState([]);
   const db = getDatabase();
+  const dbRef = ref(getDatabase());
 
+  // TODO: this is the same function as invite page. Find way to optimize
   useEffect(() => {
-    const eventsRef = ref(db, "Events");
-
-    // Listen for changes to the 'Events' node in the database
-    onValue(eventsRef, (snapshot) => {
-      const data = snapshot.val();
-
-      // Convert the data to an array and update the state
-      if (data) {
-        const eventsArray = Object.values(data);
-        setEvents(eventsArray);
+    const userRef = ref(db, `Users/${user.uid}/Organizations`);
+  
+    get(userRef).then((snapshot) => {
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        const dataArray = Object.values(data);
+  
+        // Create an array of promises
+        const promises = dataArray.map((organization) => {
+          return get(child(dbRef, `Organizations/${organization}/OngoingEvents`))
+            .then((snapshot2) => {
+              if (snapshot2.exists()) {
+                const ongoingEvents = snapshot2.val();
+                return Object.values(ongoingEvents);
+              } else {
+                return [];
+              }
+            });
+        });
+  
+        // Wait for all promises to resolve
+        return Promise.all(promises);
+      } else {
+        console.log("No data found");
+        return [];
       }
+    }).then((allOngoingEventsArrays) => {
+      // Concatenate arrays obtained from different promises
+      const ongoingEventsArray = [].concat(...allOngoingEventsArrays);
+  
+      // Create an array of promises for fetching events
+      const eventPromises = ongoingEventsArray.map((currEvent) => {
+        return get(child(dbRef, `Events/${currEvent}`))
+          .then((snapshot3) => {
+            if (snapshot3.exists()) {
+              const eventData = snapshot3.val();
+              return eventData;
+            } else {
+              return [];
+            }
+          });
+      });
+      // Wait for all event promises to resolve
+      return Promise.all(eventPromises);
+    }).then((allEvents) => {
+      const allUserEvents = [].concat(...allEvents);
+      setEvents(allUserEvents)
+    }).catch((error) => {
+      console.error(error);
     });
-  }, []);
+  }, [db, user.uid, dbRef]);
 
 
 

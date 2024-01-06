@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { ScrollView } from 'react-native-gesture-handler';
 import FriendItem from '../../components/FriendItem';
+import FriendRequestItem from '../../components/FriendRequestItem';
 import { getAuth } from 'firebase/auth';
 import {ref, push, set, onValue} from 'firebase/database';
 import { db } from '../../config/firebase';
@@ -26,9 +27,24 @@ const COLORS = {
 
 const FriendPage: React.FC = () => {
   const [friends, setFriends] = useState<Friend[]>([]);
+  const [freindRequests, setFriendRequests] =  useState([])
+  
   const navigation = useNavigation();
   const auth = getAuth();
   const user = auth.currentUser;
+  
+  const removeFriendRequest = (userId: string) => {
+    const friendRequestRef = ref(db,`Users/${user.uid}/FriendRequest`)
+    onValue(friendRequestRef, (snapshot) => {
+      const data = snapshot.val();
+      console.log(data)
+      if (data) {
+        const friendRequestArray = Object.values(data)
+        setFriendRequests(friendRequestArray)
+        console.log(friendRequestArray)
+      }
+    })
+  };
 
   useEffect(() => {
     // console.log(user.uid)
@@ -42,7 +58,16 @@ const FriendPage: React.FC = () => {
         setFriends(friendsArray);
       }      
     });
-    // console.log(friends)
+    const friendRequestRef = ref(db,`Users/${user.uid}/FriendRequest`)
+    onValue(friendRequestRef, (snapshot) => {
+      const data = snapshot.val();
+      console.log(data)
+      if (data) {
+        const friendRequestArray = Object.values(data)
+        setFriendRequests(friendRequestArray)
+        console.log(friendRequestArray)
+      }
+    })
   }, [user]);
 
   const handleAddFriendPress = () => {
@@ -58,8 +83,19 @@ const FriendPage: React.FC = () => {
         </TouchableOpacity>
       </View>
       <FlatList
+      data={freindRequests}
+        renderItem={({ item }) => (
+        <FriendRequestItem userId={item} onAccept={() => removeFriendRequest(item)} onDecline={() => removeFriendRequest(item)} />
+      )}
+      ListEmptyComponent={<Text>No friend requests to show.</Text>}
+      // contentContainerStyle={styles.container} // Remove this line if not needed
+    />
+  
+      {/* Dotted line */}
+      <View style={styles.dottedLine} />
+  
+      <FlatList
         data={friends}
-        // keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <FriendItem userId={item} />
         )}
@@ -109,6 +145,15 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#555', // Adjusted empty text color
     fontSize: 16,
+  },
+  dottedLine: {
+    height: 1,
+    width: '100%',
+    borderBottomWidth: 1,
+    borderBottomColor: '#fff', // You can replace 'dotted' with a color of your choice
+    // borderStyle: 'dashed',
+    marginVertical: 10, // Adjust this value based on your preference
+    // color: 'white',
   },
 });
 

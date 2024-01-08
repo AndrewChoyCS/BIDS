@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Text, View, TextInput, TouchableOpacity, Modal} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { db } from '../config/firebase';
+import {get, ref, set, update} from 'firebase/database'
 
 const COLORS = {
   primary: '#000000',
@@ -47,28 +49,42 @@ const EditEventModel = ( {modalVisible,
   theme,
   bid,
   organizationName,
-  description
+  description,
+  fee,
+  eventID
+  
 }) => {
-  const [eventTitle, setEventTitle] = useState('');
-  const [organization, setOrganization] = useState('');
-  const [address, setAddress] = useState('');
-  const [entryFee, setEntryFee] = useState('');
-  const [eventDescription, setEventDescription] = useState('');
+  // console.log(eventID)
+
+  const [eventTitle, setEventTitle] = useState(name);
+  const [organization, setOrganization] = useState(organizationName);
+  const [address, setAddress] = useState(location);
+  const [entryFee, setEntryFee] = useState( fee|| '');
+  const [eventDescription, setEventDescription] = useState(description);
   const [startDate, setStartDate] = useState(new Date());
   const [startTime, setStartTime] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [endTime, setEndTime] = useState(new Date());
 
-  const handleEditEvent = () => {
-    // Implement your logic to handle event creation here
-    console.log("Creating event...");
-    //Chnage to false
-    
+
+  const handleEditEvent = async () => {
+    try {
+      const eventRef = ref(db, `Events/${eventID}`);
+      
+      await update(eventRef, {
+        eventTitle: eventTitle,
+        address: address,
+        theme: entryFee,
+        eventDescription: eventDescription,
+        // Add other fields as needed
+      });
+  
+      console.log("Updated Event");
+      closeModal();
+    } catch (error) {
+      console.error(error);
+    }
   };
-
-  const isCreateButtonEnabled =
-    eventTitle && organization && address && entryFee && eventDescription;
-
     return (
       // <SafeAreaView>
         <Modal animationType="slide" transparent={false} visible={modalVisible}>
@@ -83,17 +99,12 @@ const EditEventModel = ( {modalVisible,
                   style={styles.textInput}
                 />
                 <TextInput
-                  defaultValue={organizationName}
-                  onChangeText={setOrganization}
-                  style={styles.textInput}
-                />
-                <TextInput
                   defaultValue={location}
                   onChangeText={setAddress}
                   style={styles.textInput}
                 />
                 <TextInput
-                  defaultValue="Entry Fee"
+                  defaultValue={fee}
                   onChangeText={setEntryFee}
                   style={styles.textInput}
                 />
@@ -119,12 +130,8 @@ const EditEventModel = ( {modalVisible,
                   onTimeChange={(selectedTime) => setEndTime(selectedTime)}
                 />
                 <TouchableOpacity
-                  style={[
-                    styles.createButton,
-                    isCreateButtonEnabled ? {} : styles.disabledButton,
-                  ]}
-                  onPress={closeModal}
-                  disabled={!isCreateButtonEnabled}
+                  style={styles.createButton}
+                  onPress={handleEditEvent}
                 >
               <Text style={styles.buttonText}>Edit my event</Text>
             </TouchableOpacity>

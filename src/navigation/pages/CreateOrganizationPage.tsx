@@ -71,53 +71,50 @@ const CreateOrganizationPage = () => {
       const newOrganizationRef = push(organizationRef);
       const organizationID = newOrganizationRef.key;
       const adminUID = user?.uid;
-
+  
       let url = null; // Declare url outside the if block
       let result = imageResult;
-
+  
       if (result && !result.canceled) {
         const imgRef = StorageRef(storage, `${organizationID}-OrganizationPicture`);
         const bytes = await fetch(result.assets[0].uri).then((response) => response.blob());
         const uploadedBytes = await uploadBytes(imgRef, bytes);
-        const url = await getDownloadURL(imgRef);
+        url = await getDownloadURL(imgRef); // Assign to the outer 'url'
         setPictureDownloadURL(url);
         console.log("Bytes Uploaded");
         console.log(`File available at:`, url);
         console.log("done");
-        } 
-
+      }
+  
       const organizationData = {
         organizationID: organizationID,
         organizationName: orgName,
         organizationMembers: [...selectedFriends, adminUID],
         admin: adminUID,
-        organizationPhoto: url || "https://firebasestorage.googleapis.com/v0/b/bids-408802.appspot.com/o/J4CXyo8TurMjwsbeKLkoykIXkNi2-ProfilePicture?alt=media&token=051882a0-8f62-4fba-a337-57514439f9e4"
+        organizationPhoto: url, // Set organizationPhoto after url has been initialized
       };
-
+  
+      // Move the 'set' inside the try block to ensure 'url' is set
       await set(newOrganizationRef, organizationData);
-
+  
       navigation.goBack();
       console.log("Organization has been created with ID:", organizationID);
       console.log("The creator is: ", adminUID);
-      console.log(selectedFriends)
-
+  
       for (const friendUID of selectedFriends) {
         const friendOrgRef = ref(db, `Users/${friendUID}/Organizations`);
         const newFriendOrgRef = push(friendOrgRef);
         await set(newFriendOrgRef, organizationID);
       }
-
-      // Add code here do this for every person in selected friends
+  
       const userRef = ref(db, `Users/${user.uid}/Organizations/`);
-      const newUserRef = push(userRef)
-      await set(newUserRef, organizationID)
-      // await set(userRef, true)
-
-
+      const newUserRef = push(userRef);
+      await set(newUserRef, organizationID);
     } catch (error) {
       console.error("Error creating organization:", error);
     }
   };
+  
 
   const onFriendSelect = (uid) => {
     if (selectedFriends.includes(uid)) {
@@ -143,7 +140,7 @@ const CreateOrganizationPage = () => {
       quality: 1,
     });
 
-    console.log(result);
+    // console.log(result);
 
     if (!result.canceled) {
       setImageResult(result);

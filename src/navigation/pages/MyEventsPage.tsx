@@ -5,21 +5,22 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaFrameContext, SafeAreaView } from 'react-native-safe-area-context';
 import { getAuth,} from 'firebase/auth';
 import { db } from '../../config/firebase';
-import { push, ref, set, onValue } from 'firebase/database';
+import { push, ref, set, onValue, remove, get } from 'firebase/database';
+import { Swipeable } from 'react-native-gesture-handler';
 
-interface Event {
-  id: number;
-  eventName: string;
-  organizerName: string;
-  organizerProfilePic: any; // Change the type to 'any' or the correct type based on your image handling library
-  editMode: boolean;
-  buttonPressed: number;
-  location: string;
-  ratings: number;
-  theme: string;
-  date: string;
-  bid: boolean;
-}
+// interface Event {
+//   id: number;
+//   eventName: string;
+//   organizerName: string;
+//   organizerProfilePic: any; // Change the type to 'any' or the correct type based on your image handling library
+//   editMode: boolean;
+//   buttonPressed: number;
+//   location: string;
+//   ratings: number;
+//   theme: string;
+//   date: string;
+//   bid: boolean;
+// }
 
 const MyEventsPage: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
@@ -44,7 +45,7 @@ const MyEventsPage: React.FC = () => {
         );
 
         setEvents(userEvents);
-        console.log(userEvents);
+        // console.log(userEvents);
       }
     });
   }, [user]);
@@ -52,6 +53,7 @@ const MyEventsPage: React.FC = () => {
   const handleItemPress = (event: Event) => {
     // Set the selected event and open the modal
     setSelectedEvent(event);
+    console.log(event)
     setModalVisible(true);
   };
 
@@ -61,32 +63,81 @@ const MyEventsPage: React.FC = () => {
   };
   const modalData = {
     img: selectedEvent?.organizerProfilePic,
-    name: selectedEvent?.eventName,
+    name: selectedEvent?.eventTitle,
     ratings: selectedEvent?.ratings,
-    location: selectedEvent?.location,
+    location: selectedEvent?.address,
+    fee: selectedEvent?.entryFee,
     date: selectedEvent?.date,
     theme: selectedEvent?.theme,
     bid: selectedEvent?.bid,
-    description: "Mepr",
-    organizationName: selectedEvent?.organizerName
+    description: selectedEvent?.eventDescription,
+    organizationName: selectedEvent?.organizerName,
+    eventID: selectedEvent?.eventId
+  };
+
+  const renderSwipeableEventItem = (event: Event) => {
+    console.log(event)
+    const swipeRightActions = () => (
+      <TouchableOpacity
+        style={styles.deleteButton}
+        onPress={() => handleDeleteEvent(event)}
+      >
+        <Text style={styles.deleteButtonText}>Delete</Text>
+      </TouchableOpacity>
+    );
+
+    return (
+      <Swipeable renderRightActions={swipeRightActions}>
+        <TouchableOpacity onPress={() => handleItemPress(event)}>
+          <View style={styles.cardContainer}>            
+            <Image source={{uri: event.eventBanner}} style={styles.profilePic} />
+            <View style={styles.cardContent}>
+              <Text style={styles.eventName}>{event.eventTitle}</Text>
+              <Text style={styles.organizerName}>{event.organizationName}</Text>
+              <Text style={styles.location}>{event.address}</Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+      </Swipeable>
+    );
+  };
+
+  const handleDeleteEvent = async (eventData) => {
+    try {
+      const eventRef = ref(db, `Events/${eventData.eventId}`);
+      await remove(eventRef);
+  
+      const orgRef = ref(db, `Organizations/${eventData.organizationID}/OngoingEvents`);
+      const snapshot = await get(orgRef);
+  
+      if (snapshot.exists()) {
+        const allEvents = snapshot.val();
+  
+        for (const event in allEvents) {
+          if (allEvents[event] === eventData.eventId) {
+            const lastRef = ref(db, `Organizations/${eventData.organizationID}/OngoingEvents/${event}`);
+            await remove(lastRef);
+          }
+        }
+  
+        console.log(`Deleting event with ID ${eventData.eventId}`);
+      } else {
+        console.log("Organization's ongoing events not found");
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView style={styles.wholePageContainer}>
-        {events.map((item, index) => (
-          <TouchableOpacity key={item.id} onPress={() => handleItemPress(item)}>
-            <View style={styles.cardContainer}>            
-              <Image source={item.organizerProfilePic} style={styles.profilePic} />
-              <View style={styles.cardContent}>
-                <Text style={styles.eventName}>{item.eventTitle}</Text>
-                <Text style={styles.organizerName}>{item.organization}</Text>
-                <Text style={styles.location}>{item.address}</Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-        ))}
-        <EditEventModal modalVisible={modalVisible} closeModal={closeModal} {...modalData} />
+        {events.map((item, index) => renderSwipeableEventItem(item))}
+        <EditEventModal
+          modalVisible={modalVisible}
+          closeModal={closeModal}
+          {...modalData}// Pass the entire event object// Pass the event ID
+        />      
       </ScrollView>
     </SafeAreaView>
   );
@@ -141,6 +192,18 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 14,
     color: '#e5cfe3', // Deep Blue
+  },
+  deleteButton: {
+    backgroundColor: 'red', // You can customize the color as needed
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 80, // Adjust the width as needed
+    // borderCurve: 100,
+  },
+  deleteButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 

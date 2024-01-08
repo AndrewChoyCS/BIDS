@@ -1,32 +1,52 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, View, FlatList, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import getUserData from './getUserData';
 
 const FriendSelectorModal = ({ showModal, friendsList, isFriendSelected, onFriendSelect, onCloseModal, friendUsernames }) => {
-  console.log(friendUsernames)
+  console.log(friendsList);
+
+  const [localFriendUsernames, setLocalFriendUsernames] = useState({});
+
+  useEffect(() => {
+    const fetchUsernames = async () => {
+      const usernames = {};
+      const promises = friendsList.map(async (friend) => {
+        const friendUsername = await getUserData(friend);
+        usernames[friend] = friendUsername;
+      });
+
+      await Promise.all(promises);
+      setLocalFriendUsernames(usernames);
+    };
+
+    fetchUsernames();
+  }, [friendsList]);
+
+
   return (
     <Modal
-      animationType="slide"
-      transparent={false}
-      visible={showModal}
-      onRequestClose={onCloseModal}
-    >
-      <View style={styles.modalView}>
-        <FlatList
-          data={friendsList}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              style={[styles.friendItem, isFriendSelected(item) && styles.friendItemSelected]}
-              onPress={() => onFriendSelect(item)}
-            >
-              <Text style={styles.friendItemText}>{friendUsernames[item]}</Text>
-            </TouchableOpacity>
-          )}
-        />
-        <TouchableOpacity style={styles.modalSubmitButton} onPress={onCloseModal}>
-          <Text style={styles.submitButtonText}>Done</Text>
-        </TouchableOpacity>
-      </View>
-    </Modal>
+    animationType="slide"
+    transparent={false}
+    visible={showModal}
+    onRequestClose={onCloseModal}
+  >
+    <View style={styles.modalView}>
+      <FlatList
+        data={friendsList}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            style={[styles.friendItem, isFriendSelected(item) && styles.friendItemSelected]}
+            onPress={() => onFriendSelect(item)}
+          >
+            <Text style={styles.friendItemText}>{localFriendUsernames[item]}</Text>
+          </TouchableOpacity>
+        )}
+      />
+      <TouchableOpacity style={styles.modalSubmitButton} onPress={onCloseModal}>
+        <Text style={styles.submitButtonText}>Done</Text>
+      </TouchableOpacity>
+    </View>
+  </Modal>
   );
 };
 

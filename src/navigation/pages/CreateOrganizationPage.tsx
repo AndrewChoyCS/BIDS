@@ -108,9 +108,10 @@ const CreateOrganizationPage = () => {
       }
 
       // Add code here do this for every person in selected friends
-      const userRef = ref(db, `Users/${user.uid}/Organizations`);
+      const userRef = ref(db, `Users/${user.uid}/Organizations/`);
       const newUserRef = push(userRef)
       await set(newUserRef, organizationID)
+      // await set(userRef, true)
 
 
     } catch (error) {

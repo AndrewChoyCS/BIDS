@@ -114,10 +114,21 @@ const FriendPage: React.FC = () => {
         await set(myRef, updatedData);
       }
 
-
+      const friendRef = ref(db, `Users/${friendId}/Friends`)
+      const snapshot2 = await get(friendRef)
+      if (snapshot2.exists()) {
+        const data2 = snapshot2.val();
+        const updatedData2 = {};
   
-      const friendRef = ref(db, `Users/${friendId}/Friends`);
-      await remove(friendRef);
+        for (const key in data2) {
+          if (data2[key] !== user.uid) {
+            updatedData2[key] = data2[key];
+          }
+        }
+        await set(friendRef, updatedData2);
+      }
+      console.log("friend Deleted")
+
     } catch (error) {
       console.error('Error deleting friend:', error);
     }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, TouchableOpacity, Text, StyleSheet, ScrollView, Modal, Image, FlatList } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { ref, onValue, update } from "firebase/database";
+import { ref, onValue, update, remove, set, push, get } from "firebase/database";
 import { db } from "../../config/firebase";
 import { getAuth } from "firebase/auth";
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -17,8 +17,8 @@ export default function MyOrganizationPage({ route }) {
   const [organizationMembers, setOrganizationMembers] = useState([]);
   const [selectedMembers, setSelectedMembers] = useState([]);
   const [friendModalVisible, setFriendModalVisible] = useState(false);
-  const [aggregatedData, setAggregatedData] = useState([]);
-
+  const [aggregatedData, setAggregatedData] = useState([]); 
+  const [friendUID, setFriendUID] = useState([])
 
   const auth = getAuth();
   const user = auth.currentUser;
@@ -39,6 +39,26 @@ export default function MyOrganizationPage({ route }) {
 
         setOrganizations(userOrganizations);
         console.log(userOrganizations);
+      }
+    });
+
+    const friendRef = ref(db, `Users/${user.uid}/Friends`);
+    const fullList = [];
+  
+    onValue(friendRef, (snapshot) => {
+      const friendData = snapshot.val();
+  
+      if (friendData) {
+        // Use Object.values to get an array of friendData values
+        const friendValues = Object.values(friendData);
+  
+        // Push each friend value to the fullList array
+        for (const friendValue of friendValues) {
+          fullList.push(friendValue);
+        }
+  
+        // console.log(fullList);
+        setFriendUID(fullList)
       }
     });
   }, [user]); // Include user in the dependency array to trigger the effect when user changes
@@ -82,6 +102,9 @@ export default function MyOrganizationPage({ route }) {
 
   const handleSaveMembers = async () => {
     try {
+      // Get the previous organization members
+      const prevMembers = selectedOrganization.organizationMembers;
+  
       // Update the organization members in the local state
       setSelectedOrganization((prevOrg) => ({
         ...prevOrg,
@@ -91,9 +114,50 @@ export default function MyOrganizationPage({ route }) {
       // Update the organization members in the database
       const organizationRef = ref(db, `Organizations/${selectedOrganization.organizationID}`);
       await update(organizationRef, { organizationMembers: selectedMembers });
+      console.log("Update occurred");
   
-      console.log("Members updated successfully");
-      closeModal();
+      // Identify members to remove organization ID
+      const membersToRemove = prevMembers.filter(
+        (prevMember) => !selectedMembers.includes(prevMember)
+      );
+  
+      // Identify members to add organization ID
+      const membersToAdd = selectedMembers.filter(
+        (selectedMember) => !prevMembers.includes(selectedMember)
+      );
+  
+      // Create an array of promises to remove organization ID for each member
+      const removePromises = membersToRemove.map(async (memberIdToRemove) => {
+        const userRef = ref(db, `Users/${memberIdToRemove}/Organizations`);
+        const snapshot = await get(userRef);
+        const allOrgs = snapshot.val();
+  
+        // Check each key in the dictionary
+        for (const orgKey in allOrgs) {
+          if (allOrgs.hasOwnProperty(orgKey)) {
+            // If the organization ID matches, remove the key
+            if (allOrgs[orgKey] === selectedOrganization.organizationID) {
+              const orgRef = ref(db, `Users/${memberIdToRemove}/Organizations/${orgKey}`);
+              await remove(orgRef);
+            }
+          }
+        }
+      });
+  
+      // Wait for all remove promises to resolve
+      await Promise.all(removePromises);
+  
+      // Create an array of promises to add organization ID for each member
+      const addPromises = membersToAdd.map(async (memberIdToAdd) => {
+        const memberRef = ref(db, `Users/${memberIdToAdd}/Organizations`);
+        const newRef = push(memberRef);
+        await set(newRef, selectedOrganization.organizationID);
+      });
+  
+      // Wait for all add promises to resolve
+      await Promise.all(addPromises);
+  
+      console.log("Done");
     } catch (error) {
       console.error("Error updating members:", error);
     }
@@ -134,7 +198,7 @@ export default function MyOrganizationPage({ route }) {
             <Text style={styles.modalButtonText}>Edit Members</Text>
             <FriendSelectorModal
               showModal={friendModalVisible}
-              friendsList={organizationMembers}
+              friendsList={friendUID}
               isFriendSelected={(uid) => selectedMembers.includes(uid)}
               onFriendSelect={(uid) => {
                 setSelectedMembers((prevMembers) => {
@@ -152,7 +216,7 @@ export default function MyOrganizationPage({ route }) {
               )}
             />
           </TouchableOpacity>
-          <TouchableOpacity onPress={closeModal} style={styles.modalButton}>
+          <TouchableOpacity onPress={() => {closeModal(), handleSaveMembers()}} style={styles.modalButton}>
             <Text style={styles.modalButtonText}>Close</Text>
           </TouchableOpacity>
         </View>
@@ -239,4 +303,3 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
-

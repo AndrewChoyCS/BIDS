@@ -52,7 +52,6 @@ const EditEventModel = ( {modalVisible,
   description,
   fee,
   eventID
-  
 }) => {
   // console.log(eventID)
 

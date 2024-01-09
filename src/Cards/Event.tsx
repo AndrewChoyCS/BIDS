@@ -14,17 +14,18 @@ import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import EventModel from "../components/EventModal";
 
 
-type Props = {
-  img: any;
-  location: string;
-  name: string;
-  ratings: number;
-  theme: string;
-  date: string
-  bid: boolean
-};
+// type Props = {
+//   img: any;
+//   location: string;
+//   name: string;
+//   ratings: number;
+//   theme: string;
+//   date: string
+//   bid: boolean
 
-const EventCard = ({ img, location, name, ratings, theme, date, bid }: Props) => {
+// };
+
+const EventCard = ({ img, location, name, ratings, theme, date, bid, eventID }) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const openModal = () => {
@@ -42,6 +43,7 @@ const EventCard = ({ img, location, name, ratings, theme, date, bid }: Props) =>
     date: date,
     theme: theme,
     bid: bid,
+    eventID: eventID
   };
 
 

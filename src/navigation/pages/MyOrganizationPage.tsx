@@ -230,7 +230,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#0A0A08",
     paddingTop: 10,
     paddingLeft: 10,
-    paddingRight:10,
+    paddingRight: 10,
   },
   createButton: {
     position: 'absolute',
@@ -244,7 +244,7 @@ const styles = StyleSheet.create({
   organizationContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    justifyContent: 'space-evenly', // Update this line
     marginTop: 60, // Adjust the top margin to create space for the button
   },
   modalContainer: {

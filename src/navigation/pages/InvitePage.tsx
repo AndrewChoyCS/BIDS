@@ -158,13 +158,15 @@ useEffect(() => {
   };
 
   const modalData = {
-    img: selectedEvent?.organizerProfilePic,
+    img: selectedEvent?.eventBanner,
     name: selectedEvent?.eventTitle,
     ratings: selectedEvent?.ratings,
     location: selectedEvent?.address,
     date: selectedEvent?.date,
     theme: selectedEvent?.theme,
+    fee: selectedEvent?.entryFee,
     bid: selectedEvent?.entryFee,
+    eventID: selectedEvent?.eventId
   };
 
   return (

@@ -1,37 +1,64 @@
 import React, { useState } from "react";
-import {
-  Image,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Modal,
-  Button,
-} from "react-native";
+import {Image, StyleSheet, Text, View, TouchableOpacity, Modal, Button} from "react-native";
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import { COLORS } from "../utils";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
-
-type Props = {
-    img: any;
-    location: string;
-    name: string;
-    ratings: number;
-    theme: string;
-    date: string
-    bid: boolean
-  };
+import { equalTo, get, orderByValue, push, query, ref, remove, set } from "firebase/database";
+import { db } from "../config/firebase";
+import { getAuth } from "firebase/auth";
   
-const EventModel = ( {modalVisible,
-  closeModal,
-  img,
-  name,
-  ratings,
-  location,
-  date,
-  theme,
-  bid,
-}) => {
+const EventModel = ( {modalVisible, closeModal, img, name, ratings, location, date, theme, fee, eventID }) => {
+  const [rsvpStatus, setRSVPStatus] = useState<{ [eventId: number]: number }>({});
+
+  const auth = getAuth()
+  const user = auth.currentUser
+  
+  const handleResponse = async (eventId: string, response: 'yes' | 'no') => {
+    const eventRef = ref(db, `Events/${eventId}/RSVPStatus/`);
+    
+    const oppositeResponse = response === 'yes' ? 'no' : 'yes';
+    const oppositeRef = ref(db, `Events/${eventId}/RSVPStatus/${oppositeResponse}`);
+  
+    const userUid = user.uid;
+  
+    // Check if user is already in the corresponding category
+    const currentResponseRef = ref(db, `Events/${eventId}/RSVPStatus/${response}`);
+    const currentResponseQuery = query(currentResponseRef, orderByValue(), equalTo(userUid));
+    const currentResponseSnapshot = await get(currentResponseQuery);
+  
+    if (currentResponseSnapshot.exists()) {
+      console.log(`User already in ${response} category for event ${eventId}`);
+      return; // User is already in the corresponding category, no need to make changes
+    }
+  
+    // Remove user from the opposite RSVP status if exists
+    const oppositeQuery = query(oppositeRef, orderByValue(), equalTo(userUid));
+    const oppositeSnapshot = await get(oppositeQuery);
+    oppositeSnapshot.forEach((childSnapshot) => {
+      const childRef = ref(db, `Events/${eventId}/RSVPStatus/${oppositeResponse}/${childSnapshot.key}`);
+      remove(childRef);
+    });
+  
+    // Add user to the new RSVP status
+    const newRef = ref(db, `Events/${eventId}/RSVPStatus/${response}`);
+    const newOrganizationRef = push(newRef);
+    set(newOrganizationRef, userUid);
+  
+    console.log(`User responded ${response} for event ${eventId}`);
+    setRSVPStatus((prevRSVPStatus) => ({
+      ...prevRSVPStatus,
+      [eventId]: response === 'yes' ? 1 : 2,
+    }));
+  };
+
+  const yesButtonClicked = () => {
+    handleResponse(eventID, 'yes')
+  }
+  const noButtonClicked = () => {
+    handleResponse(eventID, 'no')
+  }
+
+
   return (
     <Modal animationType="slide" transparent={false} visible={modalVisible}>
       <View style={styles.modalContainer}>
@@ -48,18 +75,14 @@ const EventModel = ( {modalVisible,
         </View>
         <Text style={styles.themeText}>Time: {date}</Text>
         <Text style={styles.themeText}>Theme: {theme}</Text>
-        {bid ? (
-          <Text style={styles.themeText}>Entry Fee: Yes</Text>
-        ) : (
-          <Text style={styles.themeText}>Entry Fee: No</Text>
-        )}
+        <Text style={styles.themeText}> Entry Fee: {fee}</Text>
         <Text style={styles.themeText}></Text>
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={[styles.button, { marginRight: 10 }]} onPress={closeModal}>
+          <TouchableOpacity style={[styles.button, { marginRight: 10 }]} onPress={() => {closeModal(), yesButtonClicked()}}>
             <MaterialCommunityIcons name="check" size={30} color="#4CAF50" />
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.button, { marginLeft: 10 }]} onPress={closeModal}>
+          <TouchableOpacity style={[styles.button, { marginLeft: 10 }]} onPress={() => {closeModal(), noButtonClicked()}}>
             <MaterialCommunityIcons name="close" size={30} color="#FF0000" />
           </TouchableOpacity>
         </View>

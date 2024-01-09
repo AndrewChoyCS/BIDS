@@ -63,8 +63,8 @@ const styles = StyleSheet.create({
     flexGrow: 0, // Avoid items from growing beyond flexBasis
     borderWidth: 2,
     borderColor: '#31304D',
-    maxHeight: 275,
-    maxWidth: 200
+    width: '100%',
+
   },
   imageContainer: {
     borderTopLeftRadius: 10,
@@ -81,7 +81,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   organizationName: {
-    // marginBottom: 5,
     color: '#B6BBC4',
     fontSize: 25,
     fontWeight: 'bold',
@@ -93,7 +92,6 @@ const styles = StyleSheet.create({
   remainingMembersContainer: {
     marginTop: 10,
     flexDirection: 'row',
-    flexWrap: 'wrap',
     justifyContent: 'center',
   },
   remainingMemberText: {

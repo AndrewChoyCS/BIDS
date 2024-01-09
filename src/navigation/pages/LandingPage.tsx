@@ -108,6 +108,7 @@ export default function LandingPage () {
               theme={event.theme}
               bid={true}
               date="10pm"
+              eventID={event.eventId}
             />
           ))}
         </View>
@@ -128,7 +129,8 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: "#F0EDEE",
     alignSelf: "center",
-    fontWeight: "bold"
+    fontWeight: "bold",
+    // fontFamily: 'customFont'
   },
   eventsContainer: {
     marginTop: 0,

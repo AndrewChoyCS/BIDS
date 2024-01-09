@@ -1,11 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import { getAuth } from 'firebase/auth';
+import { getAuth, signOut } from 'firebase/auth';
 import { ref as StorageRef, getDownloadURL, uploadBytes } from 'firebase/storage';
 import * as ImagePicker from 'expo-image-picker';
 import { onValue, ref, set, update } from 'firebase/database';
 import { db, storage } from '../../config/firebase';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { CommonActions, useNavigation } from '@react-navigation/native';
+import MyEventsPage from './MyEventsPage';
+
+const handleSignOut = async (navigation) => {
+  const auth = getAuth();
+
+  try {
+    await signOut(auth);
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: 'Welcome' }],
+      })
+    );    } catch (error) {
+    console.error('Error signing out:', error.message);
+  }
+};
+
 
 const EditProfile = () => {
   const [username, setUsername] = useState('');
@@ -13,6 +32,8 @@ const EditProfile = () => {
   const [profilePicture, setProfilePicture] = useState(null);
   const auth = getAuth();
   const user = auth.currentUser;
+  const navigation = useNavigation();
+
 
   useEffect(() => {
     const userRef = ref(db, `Users/${user.uid}`);
@@ -63,12 +84,24 @@ const EditProfile = () => {
         />
       </TouchableOpacity>
       <Text style={styles.username}>{username}</Text>
-      <Text style={styles.status}>{status}</Text>
+      <Text style={styles.status}>{status} "Merp Master"</Text>
       <TouchableOpacity style={styles.touchableContainer}>
         <Text style={styles.touchableText}>Edit Username</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.touchableContainer}>
         <Text style={styles.touchableText}>Edit Status</Text>
+      </TouchableOpacity>
+      <TouchableWithoutFeedback onPress={() => navigation.navigate('My Events')} style={styles.touchableContainer}>
+        <Text style={styles.touchableText}>My Events</Text> 
+      </TouchableWithoutFeedback>
+      <TouchableWithoutFeedback onPress={() => navigation.navigate('My Organizations')} style={styles.touchableContainer}>
+        <Text style={styles.touchableText}>My Organizations</Text> 
+      </TouchableWithoutFeedback>
+      <TouchableOpacity 
+        onPress={() => handleSignOut(navigation)}
+        style={styles.touchableContainerSignOut}
+        >
+        <Text style={styles.touchableText}>Sign Out</Text> 
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -120,6 +153,15 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         width: '85%',
         height: 40,
+    },
+    touchableContainerSignOut: {
+      backgroundColor: 'red', 
+      marginTop: 10,
+      padding: 10, 
+      borderRadius: 5,
+      width: '85%',
+      height: 40,
+      
     },
     touchableText: {
         color: '#94ECBE',

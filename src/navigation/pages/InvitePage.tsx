@@ -90,8 +90,9 @@ useEffect(() => {
   };
 
   const handleResponse = async (eventId: number, response: 'yes' | 'no') => {
+    console.log(`Handling response for event ${eventId}, response: ${response}`);
     const eventRef = ref(db, `Events/${eventId}/RSVPStatus/`);
-    
+  
     const oppositeResponse = response === 'yes' ? 'no' : 'yes';
     const oppositeRef = ref(db, `Events/${eventId}/RSVPStatus/${oppositeResponse}`);
   
@@ -165,8 +166,8 @@ useEffect(() => {
     date: selectedEvent?.date,
     theme: selectedEvent?.theme,
     fee: selectedEvent?.entryFee,
-    bid: selectedEvent?.entryFee,
     eventID: selectedEvent?.eventId
+
   };
 
   return (

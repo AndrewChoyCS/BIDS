@@ -2,25 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import EditEventModal from "../../components/EditEventModal";
 import { ScrollView } from 'react-native-gesture-handler';
-import { SafeAreaFrameContext, SafeAreaView } from 'react-native-safe-area-context';
-import { getAuth,} from 'firebase/auth';
+import { SafeAreaFrameContext, SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { getAuth } from 'firebase/auth';
 import { db } from '../../config/firebase';
 import { push, ref, set, onValue, remove, get } from 'firebase/database';
 import { Swipeable } from 'react-native-gesture-handler';
+import { MaterialIcons } from '@expo/vector-icons'; // Import the MaterialIcons icon
+import { useNavigation } from '@react-navigation/native';
 
-// interface Event {
-//   id: number;
-//   eventName: string;
-//   organizerName: string;
-//   organizerProfilePic: any; // Change the type to 'any' or the correct type based on your image handling library
-//   editMode: boolean;
-//   buttonPressed: number;
-//   location: string;
-//   ratings: number;
-//   theme: string;
-//   date: string;
-//   bid: boolean;
-// }
 
 const MyEventsPage: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
@@ -29,6 +18,8 @@ const MyEventsPage: React.FC = () => {
 
   const auth = getAuth();
   const user = auth.currentUser;
+  const navigation = useNavigation()
+  const insets = useSafeAreaInsets(); // Correct usage of useSafeAreaInsets
 
   useEffect(() => {
     const eventsRef = ref(db, 'Events');
@@ -45,15 +36,13 @@ const MyEventsPage: React.FC = () => {
         );
 
         setEvents(userEvents);
-        // console.log(userEvents);
       }
     });
   }, [user]);
-  
+
   const handleItemPress = (event: Event) => {
     // Set the selected event and open the modal
     setSelectedEvent(event);
-    console.log(event)
     setModalVisible(true);
   };
 
@@ -61,6 +50,7 @@ const MyEventsPage: React.FC = () => {
     // Close the modal
     setModalVisible(false);
   };
+
   const modalData = {
     img: selectedEvent?.organizerProfilePic,
     name: selectedEvent?.eventTitle,
@@ -76,7 +66,6 @@ const MyEventsPage: React.FC = () => {
   };
 
   const renderSwipeableEventItem = (event: Event) => {
-    console.log(event)
     const swipeRightActions = () => (
       <TouchableOpacity
         style={styles.deleteButton}
@@ -89,8 +78,8 @@ const MyEventsPage: React.FC = () => {
     return (
       <Swipeable renderRightActions={swipeRightActions}>
         <TouchableOpacity onPress={() => handleItemPress(event)}>
-          <View style={styles.cardContainer}>            
-            <Image source={{uri: event.eventBanner}} style={styles.profilePic} />
+          <View style={styles.cardContainer}>
+            <Image source={{ uri: event.eventBanner }} style={styles.profilePic} />
             <View style={styles.cardContent}>
               <Text style={styles.eventName}>{event.eventTitle}</Text>
               <Text style={styles.organizerName}>{event.organizationName}</Text>
@@ -106,21 +95,19 @@ const MyEventsPage: React.FC = () => {
     try {
       const eventRef = ref(db, `Events/${eventData.eventId}`);
       await remove(eventRef);
-  
+
       const orgRef = ref(db, `Organizations/${eventData.organizationID}/OngoingEvents`);
       const snapshot = await get(orgRef);
-  
+
       if (snapshot.exists()) {
         const allEvents = snapshot.val();
-  
+
         for (const event in allEvents) {
           if (allEvents[event] === eventData.eventId) {
             const lastRef = ref(db, `Organizations/${eventData.organizationID}/OngoingEvents/${event}`);
             await remove(lastRef);
           }
         }
-  
-        console.log(`Deleting event with ID ${eventData.eventId}`);
       } else {
         console.log("Organization's ongoing events not found");
       }
@@ -131,13 +118,21 @@ const MyEventsPage: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
+      <TouchableOpacity
+        style={styles.backButton}       
+        onPress={() => navigation.goBack()} // Use the navigation object to go back
+      >
+        <MaterialIcons name="arrow-back" size={24} color="#fff" />
+      </TouchableOpacity>
       <ScrollView style={styles.wholePageContainer}>
-        {events.map((item, index) => renderSwipeableEventItem(item))}
+        {/* Back button */}
+
+        {events.map((item) => renderSwipeableEventItem(item))}
         <EditEventModal
           modalVisible={modalVisible}
           closeModal={closeModal}
-          {...modalData}// Pass the entire event object// Pass the event ID
-        />      
+          {...modalData}
+        />
       </ScrollView>
     </SafeAreaView>
   );
@@ -151,7 +146,13 @@ const styles = StyleSheet.create({
   wholePageContainer: {
     flex: 1,
     backgroundColor: '#0A0A08', // Black
-    paddingTop: 50
+    paddingTop: 50,
+  },
+  backButton: {
+    position: 'absolute',
+    top: 50,
+    left: 16,
+    zIndex: 1,
   },
   cardContainer: {
     flexDirection: 'row',
@@ -165,7 +166,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.7,
     shadowRadius: 3,
-    width: "90%"
+    width: "90%",
   },
   profilePic: {
     width: 50,
@@ -183,7 +184,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   organizerName: {
-    fontWeight:'bold',
+    fontWeight: 'bold',
     fontSize: 14,
     color: '#6bd07b', // Dark Purple
     marginBottom: 2,
@@ -198,7 +199,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: 80, // Adjust the width as needed
-    // borderCurve: 100,
   },
   deleteButtonText: {
     color: '#fff',
@@ -206,6 +206,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
-
 
 export default MyEventsPage;

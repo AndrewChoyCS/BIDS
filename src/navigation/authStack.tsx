@@ -1,4 +1,4 @@
-import 'react-native-gesture-handler';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import React, { useState, useEffect } from 'react';
 import { Button, Image, StyleSheet } from 'react-native';
 import { CommonActions, NavigationContainer, useNavigation } from '@react-navigation/native';
@@ -30,7 +30,7 @@ import SignUpScreen from './pages/SignUpPage';
 import navigation from '.';
 import { child, getDatabase, ref , get} from 'firebase/database';
 
-const Drawer = createDrawerNavigator();
+
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
@@ -44,212 +44,106 @@ const handleSignOut = async (navigation) => {
         index: 0,
         routes: [{ name: 'Welcome' }],
       })
-    );    } catch (error) {
+    );
+  } catch (error) {
     console.error('Error signing out:', error.message);
   }
 };
 
-const LandingPageWithNavigation = () => {
-  return (
-    <Drawer.Navigator
-      initialRouteName="TabNavigator"
-      drawerContent={(props) => <CustomDrawerContent {...props} />}
-    >
-      <Drawer.Screen
-        name="TabNavigator"
-        component={TabNavigator}
-        options={({ navigation }) => ({
-          drawerLabel: ({ focused }) => (
-            <Text style={[styles.drawerItemLabel, focused ? { fontWeight: 'bold' } : null]}>
-              Home
-            </Text>
-          ),
-          headerTransparent: true,
-          headerTitle: "",
-        })}
-      />
-    <Drawer.Screen
-        name="My Events"
-        component={MyEventsPage}
-        options={({ navigation }) => ({
-          drawerLabel: ({ focused }) => (
-            <Text style={[styles.drawerItemLabel, focused ? { fontWeight: 'bold' } : null]}>
-              My Events
-            </Text>
-          ),
-          headerTransparent: true,
-          headerTitle: "",
-        })}
-      />
-      <Drawer.Screen
-        name="My Organizations"
-        component={MyOrganizationsPage}
-        options={{
-          drawerLabel: ({ focused }) => (
-            <Text style={[styles.drawerItemLabel, focused ? { fontWeight: 'bold' } : null]}>
-              My Organizations
-            </Text>
-          ),
-          headerTransparent: true,
-          headerTitle: "",
-        }}
-      />
-      <Drawer.Screen
-        name="Edit Profile"
-        component={EditProfile}
-        options={{
-          drawerLabel: ({ focused }) => (
-            <Text style={[styles.drawerItemLabel, focused ? { fontWeight: 'bold' } : null]}>
-              Edit Profile
-            </Text>
-          ),
-          headerTransparent: true,
-          headerTitle: "",
-        }}
-      />
-    </Drawer.Navigator>
-  );
-};
-const CustomDrawerContent = (props) => {
-  const [profilePicture, setProfilePicture] = useState(null);
-  const auth = getAuth();
-  const user = auth.currentUser;
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const dbRef = ref(getDatabase());
-
-      if (user) {
-        // Fetch profile picture
-        const profilePicPath = `Users/${user.uid}/profilePicture`;
-        const picture = await get(child(dbRef, profilePicPath)).then((snapshot) => {
-          if (snapshot.exists()) {
-            // Use snapshot.val() to get the actual value
-            console.log(snapshot.val());
-            setProfilePicture(snapshot.val());
-          }
-        }).catch((error) => {
-          console.error('Error fetching profile picture:', error.message);
-        });
-      }
-    };
-
-    fetchUserData();
-  }, [user]); // Include 'user' in the dependency array
-
-  return (
-    <DrawerContentScrollView {...props} style={styles.drawerContainer}>
-      <View style={styles.usernameContainer}>
-        <Text style={styles.usernameText}>{user.displayName}</Text>
-      </View>
-      <Image
-        source={{ uri: profilePicture }}
-        style={styles.profilePic}
-      />
-      <DrawerItemList {...props} />
-      <View style={styles.signOutButton}>
-        <Button
-          title="Sign Out"
-          onPress={() => handleSignOut(props.navigation)}
-        />
-      </View>
-    </DrawerContentScrollView>
-  );
-};
-
 const TabNavigator = () => (
-    <Tab.Navigator
-      screenOptions={{
-        headerShown: false,
-        tabBarStyle: {
-          backgroundColor: '#000', // Set the background color to black
-        },
-        tabBarLabelStyle: {
-          fontSize: 12,
-          fontWeight: 'bold',
-          marginBottom: 5,
-          color: '#fff', // Set the label color to white
-        },
-        tabBarIconStyle: {
-          marginTop: 5,
-        },
-        tabBarActiveTintColor: '#0F0', // Set the active tab color to neon green
-        tabBarInactiveTintColor: '#666', // Set the inactive tab color to gray
+  <Tab.Navigator
+    screenOptions={{
+      headerShown: false,
+      tabBarStyle: {
+        backgroundColor: '#000',
+      },
+      tabBarLabelStyle: {
+        fontSize: 12,
+        fontWeight: 'bold',
+        marginBottom: 5,
+        color: '#fff',
+      },
+      tabBarIconStyle: {
+        marginTop: 5,
+      },
+      tabBarActiveTintColor: '#0F0',
+      tabBarInactiveTintColor: '#666',
+    }}
+  >
+    <Tab.Screen
+      name="Events"
+      component={LandingPage}
+      options={{
+        tabBarLabel: 'Events',
+        tabBarIcon: ({ color, size }) => (
+          <MaterialCommunityIcons name="beer-outline" color={color} size={size} />
+        ),
       }}
-    >
-      <Tab.Screen
-        name="Events"
-        component={LandingPage}
-        options={{
-          tabBarLabel: 'Events',
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="beer-outline" color={color} size={size} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Friends"
-        component={FriendPage}
-        options={{
-          tabBarLabel: 'Friends',
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="account-multiple-plus-outline" color={color} size={size} />
-          ),
-          headerShown:false
-        }}
-      />
-      <Tab.Screen
-        name="Create"
-        component={CreatePage}
-        options={{
-          tabBarLabel: 'Create',
-          tabBarIcon: ({ color, size }) => (
-            <FontAwesome5 name="plus-circle" color={color} size={size} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Invites"
-        component={InvitePage}
-        options={{
-          tabBarLabel: 'Invites',
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="email-outline" color={color} size={size} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Photos"
-        component={PhotoPage}
-        options={{
-          tabBarLabel: 'Map',
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="google-maps" color={color} size={size} />
-          ),
-        }}
-      />
-    </Tab.Navigator>
-  );
-
+    />
+    <Tab.Screen
+      name="Friends"
+      component={FriendPage}
+      options={{
+        tabBarLabel: 'Friends',
+        tabBarIcon: ({ color, size }) => (
+          <MaterialCommunityIcons name="account-multiple-plus-outline" color={color} size={size} />
+        ),
+        headerShown: false
+      }}
+    />
+    <Tab.Screen
+      name="Create"
+      component={CreatePage}
+      options={{
+        tabBarLabel: 'Create',
+        tabBarIcon: ({ color, size }) => (
+          <FontAwesome5 name="plus-circle" color={color} size={size} />
+        ),
+      }}
+    />
+    <Tab.Screen
+      name="Invites"
+      component={InvitePage}
+      options={{
+        tabBarLabel: 'Invites',
+        tabBarIcon: ({ color, size }) => (
+          <MaterialCommunityIcons name="email-outline" color={color} size={size} />
+        ),
+      }}
+    />
+    <Tab.Screen
+      name="Profile"
+      component={EditProfile}
+      options={{
+        tabBarLabel: 'Profile',
+        tabBarIcon: ({ color, size }) => (
+          <MaterialCommunityIcons name="google-maps" color={color} size={size} />
+        ),
+      }}
+    />
+  </Tab.Navigator>
+);
 
 export default function AuthStack() {
   return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Welcome" screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Welcome" component={WelcomeScreen} />
           <Stack.Screen name="Sign In" component={SignInScreen} />
           <Stack.Screen name="Sign Up" component={SignUpScreen} />
-          <Stack.Screen name="LandingPage" component={LandingPageWithNavigation} />
-          <Stack.Screen name="MyOrganizationPage" component={MyOrganizationsPage} options={{headerShown: false}}/>
+          <Stack.Screen name="LandingPage" component={TabNavigator} />
+          <Stack.Screen name="MyOrganizationPage" component={MyOrganizationsPage} options={{ headerShown: false }} />
           <Stack.Screen name="CreateOrganization" component={CreateOrganizationPage} />
           <Stack.Screen name="AddFriendPage" component={AddFriendPage} />
-          {/* <Stack.Screen */}
-
-
+          <Stack.Screen name="My Events" component={MyEventsPage} />
+          <Stack.Screen name="My Organizations" component={MyOrganizationsPage} />
         </Stack.Navigator>
       </NavigationContainer>
+    </GestureHandlerRootView>
   );
 }
+
 
 const styles = StyleSheet.create({
     drawerContainer: {

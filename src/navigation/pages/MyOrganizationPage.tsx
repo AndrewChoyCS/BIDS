@@ -8,6 +8,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import getUserData from '../../components/getUserData';
 import OrganizationItem from "../../components/OrganizationItem";
 import FriendSelectorModal from "../../components/FriendSelectorModal";
+import { MaterialIcons } from '@expo/vector-icons'; // Import the MaterialIcons icon
 
 export default function MyOrganizationPage({ route }) {
   const navigation = useNavigation();
@@ -166,6 +167,12 @@ export default function MyOrganizationPage({ route }) {
   return (
     <View style={styles.container}>
       <TouchableOpacity
+        style={styles.backButton}       
+        onPress={() => navigation.goBack()} // Use the navigation object to go back
+      >
+        <MaterialIcons name="arrow-back" size={24} color="#fff" />
+      </TouchableOpacity>
+      <TouchableOpacity
         onPress={() => navigation.navigate("CreateOrganization")}
         style={styles.createButton}
       >
@@ -301,5 +308,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#ffffff', // White text
     fontWeight: 'bold',
+  },
+  backButton: {
+    position: 'absolute',
+    top: 50,
+    left: 16,
+    zIndex: 1,
   },
 });

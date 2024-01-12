@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {Image, StyleSheet, Text, View, TouchableOpacity, Modal, Button} from "react-native";
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import { COLORS } from "../utils";
@@ -6,9 +6,31 @@ import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { equalTo, get, orderByValue, push, query, ref, remove, set } from "firebase/database";
 import { db } from "../config/firebase";
 import { getAuth } from "firebase/auth";
+
   
-const EventModel = ( {modalVisible, closeModal, img, name, ratings, location, date, theme, fee, eventID }) => {
+const EventModel = ( {modalVisible, closeModal, img, name, ratings, location, startDate, startTime, theme, fee, eventID }) => {
   const [rsvpStatus, setRSVPStatus] = useState<{ [eventId: number]: number }>({});
+  const [formattedStartDate, setFormattedStartDate] = useState("");
+  const [formattedStartTime, setFormattedStartTime] = useState("");
+
+  useEffect(() => {
+    const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    setFormattedStartDate(
+      new Date(startDate).toLocaleDateString(undefined, {
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+        timeZone: userTimeZone,
+      })
+    );
+    setFormattedStartTime(
+      new Date(startTime).toLocaleTimeString(undefined, {
+        hour: "numeric",
+        minute: "numeric",
+        timeZone: userTimeZone,
+      })
+    );
+  }, [startDate, startTime]);
 
   const auth = getAuth()
   const user = auth.currentUser
@@ -65,15 +87,15 @@ const EventModel = ( {modalVisible, closeModal, img, name, ratings, location, da
         <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
           <MaterialCommunityIcons name="close" size={30} color="#FF0000" />
         </TouchableOpacity>
-        <Image source={{uri: img}} style={styles.modalImg} resizeMode="contain" />
         <Text style={styles.modalTitle}>{name}</Text>
+        <Image source={{uri: img}} style={styles.modalImg} resizeMode="contain" />
         <View style={styles.ratings}>
           <MaterialCommunityIcons name="star" size={20} color={COLORS.primary} />
           <Text style={styles.ratingsText}>{ratings}</Text>
           <Entypo name="dot-single" size={20} color={"#ffffff"} />
           <Text style={styles.locationTextInModel}>{location}</Text>
         </View>
-        <Text style={styles.themeText}>Time: {date}</Text>
+        <Text style={styles.themeText}>Date and Time: {formattedStartDate}, {formattedStartTime}</Text>
         <Text style={styles.themeText}>Theme: {theme}</Text>
         <Text style={styles.themeText}> Entry Fee: {fee}</Text>
         <Text style={styles.themeText}></Text>

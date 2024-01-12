@@ -170,15 +170,15 @@ export default function MyOrganizationPage({ route }) {
         style={styles.backButton}       
         onPress={() => navigation.goBack()} // Use the navigation object to go back
       >
-        <MaterialIcons name="arrow-back" size={24} color="#fff" />
+        <MaterialIcons name="arrow-back" size={28} color="#fff" />
       </TouchableOpacity>
+      <ScrollView style={{ ...styles.container }}>
       <TouchableOpacity
         onPress={() => navigation.navigate("CreateOrganization")}
         style={styles.createButton}
       >
         <Text style={{ color: 'white' }}>Create an Organization</Text>
       </TouchableOpacity>
-      <ScrollView style={{ ...styles.container }}>
         <View style={styles.organizationContainer}>
           {organizations.map((organization) => (
             <TouchableOpacity key={organization.id} onPress={() => openModal(organization)}>
@@ -235,18 +235,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#0A0A08",
-    paddingTop: 10,
+    paddingTop: 25,
     paddingLeft: 10,
     paddingRight: 10,
   },
   createButton: {
     position: 'absolute',
-    top:75,
+    top: 0,
     right: 20,
     backgroundColor: '#2C3E50',
     padding: 15,
     borderRadius: 5,
     zIndex: 1, // Ensure the button is on top
+    marginBottom: 20
   },
   organizationContainer: {
     flexDirection: 'row',
@@ -311,7 +312,7 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: 'absolute',
-    top: 50,
+    top: 55,
     left: 16,
     zIndex: 1,
   },

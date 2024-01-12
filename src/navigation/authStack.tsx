@@ -117,7 +117,7 @@ const TabNavigator = () => (
       options={{
         tabBarLabel: 'Profile',
         tabBarIcon: ({ color, size }) => (
-          <MaterialCommunityIcons name="google-maps" color={color} size={size} />
+          <MaterialCommunityIcons name="account" color={color} size={size} />
         ),
       }}
     />

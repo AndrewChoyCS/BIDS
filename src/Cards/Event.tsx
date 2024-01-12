@@ -25,8 +25,9 @@ import EventModel from "../components/EventModal";
 
 // };
 
-const EventCard = ({ img, location, name, ratings, theme, date, bid, eventID }) => {
+const EventCard = ({ img, location, name, ratings, theme, startDate, startTime, fee, eventID }) => {
   const [modalVisible, setModalVisible] = useState(false);
+
 
   const openModal = () => {
     setModalVisible(true);
@@ -40,9 +41,10 @@ const EventCard = ({ img, location, name, ratings, theme, date, bid, eventID }) 
     name: name,
     ratings: ratings,
     location: location,
-    date: date,
+    startDate: startDate,
+    startTime: startTime,
     theme: theme,
-    bid: bid,
+    fee: fee,
     eventID: eventID
   };
 

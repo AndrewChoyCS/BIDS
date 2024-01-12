@@ -83,11 +83,39 @@ export default function LandingPage () {
       return Promise.all(eventPromises);
     }).then((allEvents) => {
       const allUserEvents = [].concat(...allEvents);
-      setEvents(allUserEvents)
+
+      // Sort events based on startDate and startTime
+      const sortedEvents = allUserEvents.sort((a, b) => {
+        console.log("Event A:", a.startDate);
+        console.log("Event B:", b.startDate);
+      
+        const dateA = new Date(a.startDate);
+        const dateB = new Date(b.startDate);
+      
+        if (dateA > dateB) {
+          return 1; // return -1 here for DESC order
+        } else if (dateA < dateB) {
+          return -1;
+        } else {
+          const timeA = new Date(`1970-01-01T${a.startTime}`).getTime();
+          const timeB = new Date(`1970-01-01T${b.startTime}`).getTime();
+      
+          if (timeA > timeB) {
+            return 1;
+          } else {
+            return -1;
+          }
+        }
+      });
+
+    setEvents(sortedEvents);
+    console.log("Sorted Events:", sortedEvents);  
     }).catch((error) => {
       console.error(error);
     });
+    
   }, [db, user.uid, dbRef]);
+
 
 
 
@@ -106,8 +134,9 @@ export default function LandingPage () {
               // img={require("../../Images/tke.jpeg")}
               ratings={1.8}
               theme={event.theme}
-              bid={true}
-              date="10pm"
+              fee={event.entryFee}
+              startDate={event.startDate}
+              startTime={event.startTime}
               eventID={event.eventId}
             />
           ))}

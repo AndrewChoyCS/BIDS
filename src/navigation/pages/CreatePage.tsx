@@ -42,6 +42,7 @@ const TextInputBox = ({ placeholder, onChangeText }) => {
 };
 
 const DateTimeSection = ({ label, dateValue, onDateChange, timeValue, onTimeChange }) => {
+
   return (
     <View style={styles.dateTimeSection}>
       <View style={styles.sectionHeader}>
@@ -66,7 +67,6 @@ const DateTimeSection = ({ label, dateValue, onDateChange, timeValue, onTimeChan
     </View>
   );
 };
-
 export default function CreatePage() {
   const [eventTitle, setEventTitle] = useState('');
   const [organization, setOrganization] = useState([]);
@@ -118,6 +118,8 @@ export default function CreatePage() {
         const orgData = snapshot.val();
         const orgName = orgData.organizationName;
         const orgID = orgData.organizationID;
+        console.log("Start Date is: ", startDate)
+        console.log("Start Time is: ", startTime)
   
         const eventData = {
           eventId: eventId,
@@ -128,16 +130,19 @@ export default function CreatePage() {
           address: address,
           entryFee: entryFee,
           eventDescription: eventDescription,
-          startDate: startDate,
-          startTime: startTime,
-          endDate: endDate,
-          endTime: endTime,
+          startDate: startDate.toISOString(),
+          startTime: startTime.toISOString(),
+          endDate: endDate.toISOString(),
+          endTime: endTime.toISOString(),
           admin: adminUID,
           eventBanner: url,
           organizationID: orgID
         };
   
         set(newEventRef, eventData);
+        console.log("Start Date is: ", startDate.toISOString());
+        console.log("Start Time is: ", startTime.toISOString());
+        
         console.log("Event has been created with ID:", eventId);
         console.log("The organization that created this was: ", selectedOrganization);
   

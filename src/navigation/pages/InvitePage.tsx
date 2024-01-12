@@ -163,7 +163,8 @@ useEffect(() => {
     name: selectedEvent?.eventTitle,
     ratings: selectedEvent?.ratings,
     location: selectedEvent?.address,
-    date: selectedEvent?.date,
+    startDate: selectedEvent?.startDate,
+    startTime: selectedEvent?.startTime,
     theme: selectedEvent?.theme,
     fee: selectedEvent?.entryFee,
     eventID: selectedEvent?.eventId

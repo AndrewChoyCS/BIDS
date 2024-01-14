@@ -122,7 +122,7 @@ export default function LandingPage () {
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView style={styles.pageContainer}>
-        <Text style={styles.eventText}>Events</Text>
+        <Text style={styles.eventText}>Placeholder</Text>
         <View style={styles.eventsContainer}>
           {/* Header */}
           {events.map((event, index) => (

@@ -1,5 +1,5 @@
 import React, { useState, createContext, useContext, useEffect, } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Modal } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Modal, ViewStyle} from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import EventModel from '../../components/EventModal';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -21,6 +21,8 @@ const InvitePage: React.FC<InvitePageProps> = ({}) => {
   const [userOrganizations, setUserOrganizations] = useState([]);
   const [userEvents, setUserEvents] = useState([]);
   const [eventList, setEventList] = useState([]);
+  const [borderColor, setBorderColor] = useState<string | undefined>(undefined);
+
 
   const auth = getAuth()
   const user = auth.currentUser
@@ -73,7 +75,35 @@ useEffect(() => {
     return Promise.all(eventPromises);
   }).then((allEvents) => {
     const allUserEvents = [].concat(...allEvents);
+    console.log(allUserEvents)
     setUserEvents(allUserEvents)
+    // You should go through all the events here and then set is to RSVP Events 
+    const eventRSVPPromises = allUserEvents.map(async (currEvent) => {
+      const eventYesRef = ref(db, `Events/${currEvent.eventId}/RSVPStatus/yes`);
+      const eventNoRef = ref(db, `Events/${currEvent.eventId}/RSVPStatus/no`);
+
+      const yesQuery = query(eventYesRef, orderByValue(), equalTo(user.uid));
+      const yesSnapshot = await get(yesQuery);
+    
+      const noQuery = query(eventNoRef, orderByValue(), equalTo(user.uid));
+      const noSnapshot = await get(noQuery);
+      if (yesSnapshot.exists()) {
+        setRSVPStatus((prevRSVPStatus) => ({
+          ...prevRSVPStatus,
+          [currEvent.eventId]: 1
+          
+        }));
+        console.log("Event: ", currEvent.eventId, " has rsvp status of 1")
+      } else if (noSnapshot.exists()) {
+        setRSVPStatus((prevRSVPStatus) => ({
+          ...prevRSVPStatus,
+          [currEvent.eventId]: 2
+        }));
+        console.log("Event: ", currEvent.eventId, " has rsvp status of 2")
+
+      }
+    }) 
+    return Promise.all(eventRSVPPromises) 
   }).catch((error) => {
     console.error(error);
   });
@@ -231,6 +261,7 @@ const styles = StyleSheet.create({
     padding: 16,
     margin: 8,
     borderRadius: 16,
+    backgroundColor: "#7d12ff"
   },
   eventInfo: {
     flex: 1,

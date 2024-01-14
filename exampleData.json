@@ -1,226 +1,215 @@
 {
   "Events": {
-    "-NnJQpQND6lUTO7iDf0C": {
-      "address": "20100",
-      "admin": "zgsaOsKdk7gGPFBbjr736LaRBlI2",
-      "entryFee": "10",
-      "eventDescription": "This is a test event to see if the image uploads ",
-      "eventId": "-NnJQpQND6lUTO7iDf0C",
-      "eventTitle": "test",
-      "organizationName": "Love Wins",
-      "theme": "Merps"
+    "-Nnwk-sCVUXvBWhfjhoj": {
+      "RSVPStatus": {
+        "no": {
+          "-Nnx4iWyWnotIG4MiNK7": "gUaiZYeZYDcJQpiye49k7aDCr2D2"
+        }
+      },
+      "address": "CAL Esport Arena",
+      "admin": "gUaiZYeZYDcJQpiye49k7aDCr2D2",
+      "endDate": "2024-01-12T08:17:11.154Z",
+      "endTime": "2024-01-12T08:17:11.154Z",
+      "entryFee": "N/A",
+      "eventBanner": "https://firebasestorage.googleapis.com/v0/b/bids-408802.appspot.com/o/-Nnwk-sCVUXvBWhfjhoj-EventBanner?alt=media&token=88195bb8-dc56-435b-b3ef-38d37bf84309",
+      "eventDescription": "This is the first ever Lan Event ",
+      "eventId": "-Nnwk-sCVUXvBWhfjhoj",
+      "eventTitle": "Minecraft Lan Event",
+      "organizationID": "-NnwjYd_vYQG3ix07y1C",
+      "organizationName": "Real Love wnsi",
+      "startDate": "2024-01-19T08:17:00.000Z",
+      "startTime": "2024-01-12T21:10:00.000Z",
+      "theme": "Coldplay"
     },
-    "-NnODNwpsZaYsc9iw35c": {
-      "address": "38302",
-      "admin": "zgsaOsKdk7gGPFBbjr736LaRBlI2",
-      "entryFee": "10",
-      "eventDescription": "Derpy event ",
-      "eventId": "-NnODNwpsZaYsc9iw35c",
-      "eventTitle": "Merp",
-      "organizationName": "Love Wins",
-      "theme": "Derpy"
+    "-Nnwpb0z-hP5ErdKKVXT": {
+      "RSVPStatus": {
+        "yes": {
+          "-Nnx4h4mdeewCPkumdzb": "gUaiZYeZYDcJQpiye49k7aDCr2D2"
+        }
+      },
+      "address": "20100 Foothill Arena ",
+      "admin": "gUaiZYeZYDcJQpiye49k7aDCr2D2",
+      "endDate": "2024-01-12T08:40:34.926Z",
+      "endTime": "2024-01-12T08:40:34.926Z",
+      "entryFee": "$5",
+      "eventBanner": "https://firebasestorage.googleapis.com/v0/b/bids-408802.appspot.com/o/-Nnwpb0z-hP5ErdKKVXT-EventBanner?alt=media&token=afdb331a-a330-4195-8b40-3b71709f6867",
+      "eventDescription": "CAL Blue v. UCD Gold",
+      "eventId": "-Nnwpb0z-hP5ErdKKVXT",
+      "eventTitle": "Berkeley Legends Valorant LAN Event",
+      "organizationID": "-NnwjYd_vYQG3ix07y1C",
+      "organizationName": "Real Love wnsi",
+      "startDate": "2024-01-12T08:40:34.926Z",
+      "startTime": "2024-01-12T08:40:34.926Z",
+      "theme": "Valorant"
     },
-    "-NnOFOn8QDhoKBR95dzT": {
-      "address": "Gaja",
-      "admin": "zgsaOsKdk7gGPFBbjr736LaRBlI2",
-      "entryFee": "Dhjs",
-      "eventDescription": "S sm",
-      "eventId": "-NnOFOn8QDhoKBR95dzT",
-      "eventTitle": "Slurpy",
-      "organizationName": "Love Wins",
-      "theme": "Abba"
+    "-Nnwt1WIxALyQNTZw-lD": {
+      "RSVPStatus": {
+        "yes": {
+          "-Nnx4gG-gMbFKHnZ-bWd": "gUaiZYeZYDcJQpiye49k7aDCr2D2"
+        }
+      },
+      "address": "AjfksFJLK",
+      "admin": "gUaiZYeZYDcJQpiye49k7aDCr2D2",
+      "endDate": "2024-01-12T08:57:22.655Z",
+      "endTime": "2024-01-12T08:57:22.655Z",
+      "entryFee": "FKJS",
+      "eventBanner": "https://firebasestorage.googleapis.com/v0/b/bids-408802.appspot.com/o/-Nnwt1WIxALyQNTZw-lD-EventBanner?alt=media&token=7f3bd3d3-5d90-4d52-938c-b9f176e0c8fb",
+      "eventDescription": "FJLSKJFKLS",
+      "eventId": "-Nnwt1WIxALyQNTZw-lD",
+      "eventTitle": "Chalk",
+      "organizationID": "-NnwjYd_vYQG3ix07y1C",
+      "organizationName": "Real Love wnsi",
+      "startDate": "2024-01-31T08:57:00.000Z",
+      "startTime": "2024-01-12T08:57:22.655Z",
+      "theme": "JKFLSJLK"
     },
-    "-NnOGdNU5YekKb-FQV5n": {
-      "address": "Whe",
-      "admin": "zgsaOsKdk7gGPFBbjr736LaRBlI2",
-      "entryFee": "Behe",
-      "eventDescription": "When",
-      "eventId": "-NnOGdNU5YekKb-FQV5n",
-      "eventTitle": "Fortnite ",
-      "organizationName": "Love Wins",
-      "theme": "Hehe"
-    },
-    "-NnOHGJrVT_5ZMmvLok2": {
-      "address": "Whe",
-      "admin": "zgsaOsKdk7gGPFBbjr736LaRBlI2",
-      "entryFee": "Behe",
-      "eventBanner": "file:///var/mobile/Containers/Data/Application/441645C2-6BA6-48C4-9151-8F88CD695935/Library/Caches/ExponentExperienceData/%2540anonymous%252FBIDS-3f14381e-4911-49fc-ae75-2f7152a5948d/ImagePicker/AACE649E-AA34-43EA-A08B-CBB1F0A791AF.jpg",
-      "eventDescription": "When",
-      "eventId": "-NnOHGJrVT_5ZMmvLok2",
-      "eventTitle": "Valorant",
-      "organizationName": "Love Wins",
-      "theme": "Hehe"
-    },
-    "-NnOHmRtUlueMKUp8ydJ": {
-      "address": "32421 ",
-      "admin": "zgsaOsKdk7gGPFBbjr736LaRBlI2",
-      "entryFee": "Snaj",
-      "eventDescription": "Snna",
-      "eventId": "-NnOHmRtUlueMKUp8ydJ",
-      "eventTitle": "Minecraft LAN Event ",
-      "organizationName": "Love Wins",
-      "theme": "Sjaj"
-    },
-    "-NnOUO2U8YkAdO3yH80J": {
-      "address": "He",
-      "admin": "zgsaOsKdk7gGPFBbjr736LaRBlI2",
-      "entryFee": "Hes",
-      "eventDescription": "Nans",
-      "eventId": "-NnOUO2U8YkAdO3yH80J",
-      "eventTitle": "Me me me ",
-      "organizationName": "Love Wins",
-      "theme": "Dhe"
+    "-Nnx-TtIdMreM3XpXD8s": {
+      "RSVPStatus": {
+        "no": {
+          "-Nnx4gUz7lgZ3pA5dAme": "gUaiZYeZYDcJQpiye49k7aDCr2D2"
+        }
+      },
+      "address": "Fills",
+      "admin": "gUaiZYeZYDcJQpiye49k7aDCr2D2",
+      "endDate": "2024-01-12T09:29:50.762Z",
+      "endTime": "2024-01-12T09:29:50.762Z",
+      "entryFee": "Fjkl",
+      "eventBanner": "https://firebasestorage.googleapis.com/v0/b/bids-408802.appspot.com/o/-Nnx-TtIdMreM3XpXD8s-EventBanner?alt=media&token=43d3b8f8-3e7d-4967-9b4b-fc7a083f9277",
+      "eventDescription": "Fjksldfs",
+      "eventId": "-Nnx-TtIdMreM3XpXD8s",
+      "eventTitle": "Sdjsl",
+      "organizationID": "-NnwjYd_vYQG3ix07y1C",
+      "organizationName": "Real Love wnsi",
+      "startDate": "2024-01-17T09:29:00.000Z",
+      "startTime": "2024-01-12T09:29:50.762Z",
+      "theme": "Fjkl"
     }
   },
   "Organizations": {
-    "-Nn3R4uBLGJTwagyVqkW": {
+    "-NnwjYd_vYQG3ix07y1C": {
       "OngoingEvents": {
-        "-Nn3RE9oq1jbBOmoJgOO": "-Nn3RE9TEDM8PyNCCaWE",
-        "-Nn8_PC9ZuWkXKJWVO2u": "-Nn8_PBdY7fW1EJDjiUl",
-        "-Nn8_QzsgQuSmtffpW8A": "-Nn8_QzEWPQP-dLGnny7",
-        "-Nn8_Rmvx5aUW9T88h0s": "-Nn8_Rm8O5_zg672nvju",
-        "-Nn8_SipZymFkEqQ300C": "-Nn8_Si3d5_l3nvHX81H",
-        "-Nn8_Tw7rmS21QfNfanV": "-Nn8_TvCqRJxQyw8FGOD",
-        "-Nn8_VCNhrQ4wi6UaH2B": "-Nn8_VBMk_m-0afZy-H_",
-        "-Nn8_Yesetg00IeHtSB7": "-Nn8_YdjV_uJNg4F5SXr",
-        "-Nn8_ZjXWILrnoFTZkFH": "-Nn8_ZiMo_cWhWrpxnny",
-        "-Nn8__jS_Lno_CJHQ3Cx": "-Nn8__i8_TGxHS8dTNFE",
-        "-Nn8_aVxYf4cJYz5okoj": "-Nn8_aUUvn8RkTs6zPLh",
-        "-Nn8_bY5eXdCHEI9I92c": "-Nn8_bWa7OefkTcf6VZ5",
-        "-Nn8_cNSqpeFQxZV82L6": "-Nn8_cLw1obyupCYfD4G",
-        "-Nn8_dBUEZhcfu1yskXr": "-Nn8_d9pvsn2y16stj12",
-        "-Nn8_dtekURxzgOQAqel": "-Nn8_drxT_rq_EibckjE",
-        "-Nn8_efFV_Dd26FC0Y5p": "-Nn8_edVqy1ukhF2Gi4T",
-        "-Nn8_gquQxQoaPpS8wOx": "-Nn8_gp5VohJS0cKE6Tm",
-        "-Nn8tKT6UaR_so4Mp1B4": "-Nn8tKR6YF9ejJ0cMiwB",
-        "-Nn8tLbJbHQuKL8sP6gf": "-Nn8tL_IOjaSxPl31mMn",
-        "-Nn8tMe2L55QDUDjdtsR": "-Nn8tMbzpo8mx22jt6dm",
-        "-Nn8tNLFClBYjZJH1qlP": "-Nn8tNIy_OHl7HvkGExH",
-        "-Nn8tNvOtnP9MMZY1pM7": "-Nn8tNt5eoml9Xvr3dqY",
-        "-Nn8tOU27nMHLWVMYtjr": "-Nn8tORZ0I-pRH20Sggg",
-        "-Nn8tP22DBsOFYKWjtQ_": "-Nn8tP-aWXUz1eQgjW1p",
-        "-Nn8tP_sKZkveO97KQri": "-Nn8tPYJygRqQe3PX4t9",
-        "-Nn8tkGn7C7GVjh6LiZ8": "-Nn8tkE1EkJnDSI1GQRM",
-        "-Nn8tlCRmn638NI-95CI": "-Nn8tl9pF3xNlp4ZvT8F",
-        "-Nn8tmRInkDOo4mKItBv": "-Nn8tmOmw12pcrtfFale",
-        "-Nn8tnJ02H8ewz0ti8aJ": "-Nn8tnGCybMNdGbDT2gn",
-        "-Nn8to0Y5o41fpKT35z_": "-Nn8tnybWYqIbEMvlmFZ",
-        "-Nn8tp-djFiVWpbQYAcv": "-Nn8toxdXPJGWVSuvUPP",
-        "-Nn8tqrnqWERReH73bEQ": "-Nn8tqofnXRyW2ilZ2Cf",
-        "-Nn8trPwKzH_uQqgNVVc": "-Nn8trMnF-bHuQu4pYbp",
-        "-Nn8tsZucGzsxN_-TEhB": "-Nn8tsWdt2JwsA4rsJc9",
-        "-NnJQpR3gBr7SKZDjLUt": "-NnJQpQND6lUTO7iDf0C",
-        "-NnODOik83AiqjLM0nSh": "-NnODNwpsZaYsc9iw35c",
-        "-NnOFPWveZ4XF8EYCIzE": "-NnOFOn8QDhoKBR95dzT",
-        "-NnOGeC_gnUs9ylrh1qt": "-NnOGdNU5YekKb-FQV5n",
-        "-NnOHGtXaeOAnZx41JTC": "-NnOHGJrVT_5ZMmvLok2",
-        "-NnOHnBqi2PRY5a_K3qy": "-NnOHmRtUlueMKUp8ydJ",
-        "-NnOUONhmAnn6mIN5JJt": "-NnOUO2U8YkAdO3yH80J"
+        "-Nnwk3Te-TfIzLW0ZYuz": "-Nnwk-sCVUXvBWhfjhoj",
+        "-NnwpdqvqR5OH9rcKgAz": "-Nnwpb0z-hP5ErdKKVXT",
+        "-Nnwt4raqFSt4Fyph3Wq": "-Nnwt1WIxALyQNTZw-lD",
+        "-Nnx-WIpuoYOKCIcz0dM": "-Nnx-TtIdMreM3XpXD8s"
       },
-      "admin": "zgsaOsKdk7gGPFBbjr736LaRBlI2",
-      "organizationID": "-Nn3R4uBLGJTwagyVqkW",
+      "admin": "gUaiZYeZYDcJQpiye49k7aDCr2D2",
+      "organizationID": "-NnwjYd_vYQG3ix07y1C",
       "organizationMembers": [
-        "IBDZFv0XeeUl45Xn8p84GpODKO33",
-        "vThRZEJPdobbBBZ2lbO4kGVPzvC3",
-        "FbeURQF3IEWqfrwB7QtaMzYGsKJ2",
-        "zgsaOsKdk7gGPFBbjr736LaRBlI2"
+        "JFfTHAPFY3PnjgqGXF576J3KEny2",
+        "3WX1bOPT0sSkP03iHPvkQ0zqduD2",
+        "mSg3SF99u8Tdj26hgiJicCw6JWN2",
+        "JUh5IABgLLTibsohvA9kzlhBAo63",
+        "gUaiZYeZYDcJQpiye49k7aDCr2D2"
       ],
-      "organizationName": "Love Wins"
+      "organizationName": "Real Love wnsi"
     }
   },
   "Users": {
-    "49rc5hrTY1NweTDrtMC0jgKxR9l1": {
+    "3WX1bOPT0sSkP03iHPvkQ0zqduD2": {
       "Friends": {
-        "-NnI-RwnP24DAAXuy6Bl": "zgsaOsKdk7gGPFBbjr736LaRBlI2",
-        "-NnI-zEZPsJgdri7nHfx": "kDzE09G0OLSM222a2Ck0gNQ1Ukg1"
-      },
-      "email": "Test3@gmail.com",
-      "userId": "49rc5hrTY1NweTDrtMC0jgKxR9l1",
-      "username": "Test3"
-    },
-    "5TqKefAGFYcSLcTLMtVOn35aZPt2": {
-      "Friends": {
-        "-NnHnc62hEmGdLyRe1ux": "UO67PYM1f0Mdxv1eC9jhsT5lYfD3"
-      },
-      "email": "Sop@gmail.com",
-      "userId": "5TqKefAGFYcSLcTLMtVOn35aZPt2",
-      "username": "Sop"
-    },
-    "FbeURQF3IEWqfrwB7QtaMzYGsKJ2": {
-      "FriendRequest": {
-        "-NnEAGrzalyWabRrJTxZ": "FbeURQF3IEWqfrwB7QtaMzYGsKJ2"
+        "-NnbFx8Sf8iSpNY2MVMm": "gUaiZYeZYDcJQpiye49k7aDCr2D2"
       },
       "Organizations": {
-        "-Nn3R4xvlg0WG5b4A_Z1": "-Nn3R4uBLGJTwagyVqkW"
+        "-Nncm-T7AXkfnolLTtzp": "-Nnclz_YVqoZ25aWa8UR",
+        "-NncnHz-Jen7oZcgcRtB": "-NncnGpE9ElKCR6PQ2sf",
+        "-Nncpd5RuZC_qmhR9qgV": "-NncpbHsjoJZqvPEjjJm",
+        "-NnwjYgZ7LnJGXpq-xwd": "-NnwjYd_vYQG3ix07y1C"
       },
       "email": "Gustavo@gmail.com",
-      "userId": "FbeURQF3IEWqfrwB7QtaMzYGsKJ2",
+      "profilePicture": "https://firebasestorage.googleapis.com/v0/b/bids-408802.appspot.com/o/club_Penguin.jpeg?alt=media&token=7091609b-cfa6-4efb-ab4b-158f4dfaeabd",
+      "userId": "3WX1bOPT0sSkP03iHPvkQ0zqduD2",
       "username": "Gustavo"
     },
-    "IBDZFv0XeeUl45Xn8p84GpODKO33": {
-      "FriendRequest": {
-        "-NnDp6cPdNr5_Pw4AJdQ": "IBDZFv0XeeUl45Xn8p84GpODKO33",
-        "-NnHnBcN2HFCK27If8Z6": "IBDZFv0XeeUl45Xn8p84GpODKO33"
+    "JFfTHAPFY3PnjgqGXF576J3KEny2": {
+      "Friends": {
+        "-NnbG2fCJZ4ukDmwnjJb": "gUaiZYeZYDcJQpiye49k7aDCr2D2"
       },
       "Organizations": {
-        "-Nn3R4vV-b0GABp6ig-m": "-Nn3R4uBLGJTwagyVqkW"
+        "-Nncm-S5Wbi0W3j8iXEN": "-Nnclz_YVqoZ25aWa8UR",
+        "-NncnHy34HWU0hCHbE4U": "-NncnGpE9ElKCR6PQ2sf",
+        "-Nncpd4PuXB391UzTlm_": "-NncpbHsjoJZqvPEjjJm",
+        "-NnwjYfFOuuyaXqHSwMO": "-NnwjYd_vYQG3ix07y1C"
       },
-      "email": "Chirs@gmail.com",
-      "userId": "IBDZFv0XeeUl45Xn8p84GpODKO33",
+      "email": "Diego@gmail.com",
+      "profilePicture": "https://firebasestorage.googleapis.com/v0/b/bids-408802.appspot.com/o/club_Penguin.jpeg?alt=media&token=7091609b-cfa6-4efb-ab4b-158f4dfaeabd",
+      "userId": "JFfTHAPFY3PnjgqGXF576J3KEny2",
+      "username": "Diego"
+    },
+    "JUh5IABgLLTibsohvA9kzlhBAo63": {
+      "Friends": {
+        "-NnbFmrZAO0usb6oMkEN": "gUaiZYeZYDcJQpiye49k7aDCr2D2"
+      },
+      "Organizations": {
+        "-Nncm-V0UGanTa0tl8ia": "-Nnclz_YVqoZ25aWa8UR",
+        "-NncnI-oTTP4vXgPVlVE": "-NncnGpE9ElKCR6PQ2sf",
+        "-Nncpd7KcDFxj-RSFNfr": "-NncpbHsjoJZqvPEjjJm",
+        "-NnwjYjJtYk521nQ1IKd": "-NnwjYd_vYQG3ix07y1C"
+      },
+      "email": "Chris@gmail.com",
+      "profilePicture": "https://firebasestorage.googleapis.com/v0/b/bids-408802.appspot.com/o/club_Penguin.jpeg?alt=media&token=7091609b-cfa6-4efb-ab4b-158f4dfaeabd",
+      "userId": "JUh5IABgLLTibsohvA9kzlhBAo63",
       "username": "Chris"
     },
-    "PXOsSNcLZIOR4RcchzSpulaFguc2": {
+    "MPmbuwDuS9VPRd65Tf6HoSOvhq93": {
       "Friends": {
-        "-NnHySF80jwOjdW-sXhi": "kDzE09G0OLSM222a2Ck0gNQ1Ukg1",
-        "-NnI-aeubBkXKnCU38xi": "zgsaOsKdk7gGPFBbjr736LaRBlI2"
+        "-NnbG7qVV58T9BPwLw9M": "gUaiZYeZYDcJQpiye49k7aDCr2D2"
       },
-      "email": "Test1@gmail.com",
-      "userId": "PXOsSNcLZIOR4RcchzSpulaFguc2",
-      "username": "Test1"
+      "email": "Random@gmail.com",
+      "profilePicture": "https://firebasestorage.googleapis.com/v0/b/bids-408802.appspot.com/o/club_Penguin.jpeg?alt=media&token=7091609b-cfa6-4efb-ab4b-158f4dfaeabd",
+      "userId": "MPmbuwDuS9VPRd65Tf6HoSOvhq93",
+      "username": "Random"
     },
-    "UO67PYM1f0Mdxv1eC9jhsT5lYfD3": {
+    "gUaiZYeZYDcJQpiye49k7aDCr2D2": {
       "Friends": {
-        "-NnHjgPuL4XwusyO8CiP": "zgsaOsKdk7gGPFBbjr736LaRBlI2",
-        "-NnHnc4TFxM0G2Vj2ReR": "5TqKefAGFYcSLcTLMtVOn35aZPt2"
-      },
-      "email": "Chirsty@gmail.com",
-      "userId": "UO67PYM1f0Mdxv1eC9jhsT5lYfD3",
-      "username": "Chirsty"
-    },
-    "kDzE09G0OLSM222a2Ck0gNQ1Ukg1": {
-      "Friends": {
-        "-NnHySGh-IFBzLNKBrOE": "PXOsSNcLZIOR4RcchzSpulaFguc2",
-        "-NnI-zHCUCk3jwQREUw_": "49rc5hrTY1NweTDrtMC0jgKxR9l1"
-      },
-      "email": "Test2@gmail.com",
-      "userId": "kDzE09G0OLSM222a2Ck0gNQ1Ukg1",
-      "username": "Test2"
-    },
-    "vThRZEJPdobbBBZ2lbO4kGVPzvC3": {
-      "Organizations": {
-        "-Nn3R4wfYB3CO1ktJdv3": "-Nn3R4uBLGJTwagyVqkW"
-      },
-      "email": "Daniel@gmail.com",
-      "userId": "vThRZEJPdobbBBZ2lbO4kGVPzvC3",
-      "username": "Daniel"
-    },
-    "zgsaOsKdk7gGPFBbjr736LaRBlI2": {
-      "Friends": {
-        "-Nn3R-BBbqSioe9y6LWE": "FbeURQF3IEWqfrwB7QtaMzYGsKJ2",
-        "-Nn3R-wINMh5veLExBgN": "vThRZEJPdobbBBZ2lbO4kGVPzvC3",
-        "-Nn3R0gtIzxMhplsH5E9": "IBDZFv0XeeUl45Xn8p84GpODKO33",
-        "-NnHjgOGzzymbaxE-CDR": "UO67PYM1f0Mdxv1eC9jhsT5lYfD3",
-        "-NnI-RvC6xVjCBHN4Lgw": "49rc5hrTY1NweTDrtMC0jgKxR9l1",
-        "-NnI-SjUjxJbJiDlPVRF": "zgsaOsKdk7gGPFBbjr736LaRBlI2",
-        "-NnI-SlSoDIZmbwS7w7i": "zgsaOsKdk7gGPFBbjr736LaRBlI2",
-        "-NnI-agRu0MzCS1Kj3yU": "PXOsSNcLZIOR4RcchzSpulaFguc2"
+        "-NnbFmsoimaRH30t3w0o": "JUh5IABgLLTibsohvA9kzlhBAo63",
+        "-NnbFrQoaOruac_svyFz": "mSg3SF99u8Tdj26hgiJicCw6JWN2",
+        "-NnbFx9bY1ZPgVposA3x": "3WX1bOPT0sSkP03iHPvkQ0zqduD2",
+        "-NnbG2gOY_yvQ9-26D8E": "JFfTHAPFY3PnjgqGXF576J3KEny2",
+        "-NnbG7rmOQZAhgQL39BU": "MPmbuwDuS9VPRd65Tf6HoSOvhq93",
+        "-Nngl7yVipQprM2OFPSk": "lYndbJp8KuTXJCd4JJk5yxEawUi1"
       },
       "Organizations": {
-        "-Nn3R4z7baQCJQzYTTmG": "-Nn3R4uBLGJTwagyVqkW"
+        "-NnckoAA_iD2MZGf7mgu": "-NncknBY0cOticqGQDo3",
+        "-Nncm-W1LRMdQcTie6b9": "-Nnclz_YVqoZ25aWa8UR",
+        "-NncnI0j1LXB0ls5gxtW": "-NncnGpE9ElKCR6PQ2sf",
+        "-Nncpd8G-xuLnJ9vCBiV": "-NncpbHsjoJZqvPEjjJm",
+        "-NnwjYkbIo9f08lhHN8p": "-NnwjYd_vYQG3ix07y1C"
       },
       "email": "Andrew@gmail.com",
-      "userId": "zgsaOsKdk7gGPFBbjr736LaRBlI2",
-      "username": "Andrew"
+      "profilePicture": "https://firebasestorage.googleapis.com/v0/b/bids-408802.appspot.com/o/club_Penguin.jpeg?alt=media&token=7091609b-cfa6-4efb-ab4b-158f4dfaeabd",
+      "userId": "gUaiZYeZYDcJQpiye49k7aDCr2D2",
+      "username": "Daddy Andrew"
+    },
+    "lYndbJp8KuTXJCd4JJk5yxEawUi1": {
+      "Friends": {
+        "-Nngl8-SbXhH7Qx8Qn2e": "gUaiZYeZYDcJQpiye49k7aDCr2D2"
+      },
+      "Organizations": {
+        "-NngkHG761zFPtHFcgpb": "-NngkGkUefYCeGDgNKka",
+        "-NngkHhCnNAUQI4alP0u": "-NngkGwx1lxBdSt2KdkE",
+        "-NngkIEI971AdgzkYayx": "-NngkGzmJgaBixTV6KJG",
+        "-NngkIEY7JYt7iCJTqSj": "-NngkH0bTdI_i_Y-9JQP"
+      },
+      "email": "sophiaprakasa@berkeley.edu",
+      "profilePicture": "https://firebasestorage.googleapis.com/v0/b/bids-408802.appspot.com/o/club_Penguin.jpeg?alt=media&token=7091609b-cfa6-4efb-ab4b-158f4dfaeabd",
+      "userId": "lYndbJp8KuTXJCd4JJk5yxEawUi1",
+      "username": "sophiaprakasa"
+    },
+    "mSg3SF99u8Tdj26hgiJicCw6JWN2": {
+      "Friends": {
+        "-NnbFrPTYsgemPqIyyb0": "gUaiZYeZYDcJQpiye49k7aDCr2D2"
+      },
+      "Organizations": {
+        "-Nncm-U2fNqJGA7EVTZb": "-Nnclz_YVqoZ25aWa8UR",
+        "-NncnHzvwzRRB4qsjiaG": "-NncnGpE9ElKCR6PQ2sf",
+        "-Nncpd6Nu5LtGd1PvvcS": "-NncpbHsjoJZqvPEjjJm",
+        "-NnwjYhxmlHFm32iF03B": "-NnwjYd_vYQG3ix07y1C"
+      },
+      "email": "Daniel@gmail.com",
+      "profilePicture": "https://firebasestorage.googleapis.com/v0/b/bids-408802.appspot.com/o/club_Penguin.jpeg?alt=media&token=7091609b-cfa6-4efb-ab4b-158f4dfaeabd",
+      "userId": "mSg3SF99u8Tdj26hgiJicCw6JWN2",
+      "username": "Daniel"
     }
   }
 }

@@ -9,12 +9,16 @@ import { push, ref, set, onValue, remove, get } from 'firebase/database';
 import { Swipeable } from 'react-native-gesture-handler';
 import { MaterialIcons } from '@expo/vector-icons'; // Import the MaterialIcons icon
 import { useNavigation } from '@react-navigation/native';
+import EventDetailsModal from '../../components/EventDetailsModal'; // Import EventDetailsModal
+
 
 
 const MyEventsPage: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+  const [editEventClicked, setEditEventClicked] = useState(false);
+  const [eventDetailsModalVisible, setEventDetailsModalVisible] = useState(false);
 
   const auth = getAuth();
   const user = auth.currentUser;
@@ -40,15 +44,29 @@ const MyEventsPage: React.FC = () => {
     });
   }, [user]);
 
+  const handleEditEventClick = () => {
+    // Set the state when the "Edit Event" button is clicked
+    setEditEventClicked(true);
+  };
+
   const handleItemPress = (event: Event) => {
-    // Set the selected event and open the modal
-    setSelectedEvent(event);
-    setModalVisible(true);
+    // Check if the "Edit Event" button has been clicked
+    if (editEventClicked) {
+      // Set the selected event and open the edit event modal only if "Edit Event" button was clicked
+      setSelectedEvent(event);
+      setModalVisible(true);
+    } else {
+      // If "Edit Event" is not clicked, open the event details modal
+      setSelectedEvent(event);
+      setEventDetailsModalVisible(true);
+    }
   };
 
   const closeModal = () => {
-    // Close the modal
+    // Close both modals and reset the "Edit Event" button state
     setModalVisible(false);
+    setEventDetailsModalVisible(false);
+    setEditEventClicked(false);
   };
 
   const modalData = {
@@ -65,7 +83,7 @@ const MyEventsPage: React.FC = () => {
     eventID: selectedEvent?.eventId
   };
 
-  const renderSwipeableEventItem = (event: Event) => {
+  const renderSwipeableEventItem = (event: Event, key: string) => {
     const swipeRightActions = () => (
       <TouchableOpacity
         style={styles.deleteButton}
@@ -76,7 +94,7 @@ const MyEventsPage: React.FC = () => {
     );
 
     return (
-      <Swipeable renderRightActions={swipeRightActions}>
+      <Swipeable key={key} renderRightActions={swipeRightActions}>
         <TouchableOpacity onPress={() => handleItemPress(event)}>
           <View style={styles.cardContainer}>
             <Image source={{ uri: event.eventBanner }} style={styles.profilePic} />
@@ -119,19 +137,29 @@ const MyEventsPage: React.FC = () => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <TouchableOpacity
-        style={styles.backButton}       
-        onPress={() => navigation.goBack()} // Use the navigation object to go back
+        style={styles.backButton}
+        onPress={() => navigation.goBack()}
       >
         <MaterialIcons name="arrow-back" size={24} color="#fff" />
       </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.editEventButton}
+        onPress={handleEditEventClick}
+      >
+        <Text style={styles.editEventButtonText}>Edit Event</Text>
+      </TouchableOpacity>
       <ScrollView style={styles.wholePageContainer}>
-        {/* Back button */}
-
-        {events.map((item) => renderSwipeableEventItem(item))}
+      {events.map((item) => renderSwipeableEventItem(item, item.eventId))}
         <EditEventModal
           modalVisible={modalVisible}
           closeModal={closeModal}
           {...modalData}
+        />
+        {/* Render the new event details modal */}
+        <EventDetailsModal
+          modalVisible={eventDetailsModalVisible}
+          closeModal={closeModal}
+          eventData={selectedEvent}
         />
       </ScrollView>
     </SafeAreaView>
@@ -204,6 +232,17 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  editEventButton: {
+    position: 'absolute',
+    top:  65,
+    right: 16,
+    zIndex: 1,
+  },
+  editEventButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: "bold"
   },
 });
 

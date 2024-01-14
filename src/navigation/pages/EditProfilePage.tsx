@@ -178,14 +178,16 @@ const styles = StyleSheet.create({
     fontSize: 24, // Increased font size for a more prominent display
     fontWeight: 'bold',
     marginBottom: 10,
+    paddingRight: 10,
   },
   status: {
     color: '#5DFDCB',
     fontSize: 18, // Increased font size for a more prominent display
     marginBottom: 10,
+    paddingRight: 10,
   },
   touchableContainer: {
-    backgroundColor: '#7CC6FE',
+    backgroundColor: '#008a6c',
     marginTop: 10,
     padding: 15, // Increased padding for a larger touchable area
     borderRadius: 8,

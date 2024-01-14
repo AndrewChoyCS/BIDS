@@ -1,43 +1,22 @@
-const CustomDrawerContent = (props) => {
-  const [user, setUser] = useState(null)
-  const [profilePicture, setProfilePicture] = useState(null);
-  const auth = getAuth();
-  const user = auth.currentUser
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const dbRef = ref(getDatabase());
-
-      if (user) {
-        const profilePicPath = `Users/${user.uid}/profilePicture`;
-        const picture = get(child(dbRef, profilePicPath)).then((snapshot) => {
-          if (snapshot.exists()){
-            setProfilePicture(picture);
-          }
-        })
-      }
-    };
-    fetchUserData();
-  }, []); // Empty dependency array to run the effect only once on component mount
-
-  return (
-    <DrawerContentScrollView {...props} style={styles.drawerContainer}>
-      <View style={styles.usernameContainer}>
-        <Text style={styles.usernameText}>{user.displayName}</Text>
-      </View>
-      <Image
-        source={{ uri: profilePicture }}
-        style={styles.profilePic}
-      />
-
-      <DrawerItemList {...props} />
-      <View style={styles.signOutButton}>
-        <Button
-          title="Sign Out"
-          onPress={() => handleSignOut(props.navigation)}
-        />
-      </View>
-    </DrawerContentScrollView>
-  );
+return (
+  <Modal
+    visible={modalVisible}
+    animationType="slide"
+    transparent={true}
+    onRequestClose={closeModal}
+  >
+    <View style={styles.eventDetailsModalContainer}>
+      <Image source={{ uri: eventData.eventBanner }} style={styles.eventDetailsBanner} />
+      <Text style={styles.eventDetailsName}>{eventData.eventTitle}</Text>
+      <Text style={styles.eventDetailsAddress}>{eventData.address}</Text>
+      {/* <Text style={styles.eventDetailsRSVP}>RSVP List: {eventData.RSVPStatus.yes.join(', ')}</Text> */}
+      
+      {/* Add more futuristic styling as needed */}
+      
+      <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
+        <Text style={styles.closeButtonText}>Close</Text>
+      </TouchableOpacity>
+    </View>
+  </Modal>
+);
 };
-  

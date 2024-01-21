@@ -26,6 +26,6 @@
 
 ## Screenshots:
 
-<img src="./assets/ReadMeImages/img1.png" width="250" height="300">
-<img src="./assets/ReadMeImages/img2.png" width="250" height="300">
-<img src="./assets/ReadMeImages/img3.png" width="250" height="300">
+<img src="./assets/ReadMeImages/img1.png" width="250" height="400">
+<img src="./assets/ReadMeImages/img2.png" width="250" height="400">
+<img src="./assets/ReadMeImages/img3.png" width="250" height="400">

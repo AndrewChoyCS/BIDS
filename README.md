@@ -1,6 +1,7 @@
 # RSVP Now
 
-![Logo](./Logo/png/logo-color.png)
+<!-- ![Logo](./Logo/png/logo-color.png) -->
+<img src="./Logo/png/logo-color.png" width=400>
 
 ## Key Features:
 
@@ -25,6 +26,6 @@
 
 ## Screenshots:
 
-![Screenshot 1](./assets/ReadMeImages/img1.png)
-![Screenshot 2](./assets/ReadMeImages/img2.png)
-![Screenshot 3](./assets/ReadMeImages/img3.png)
+<img src="./assets/ReadMeImages/img1.png" width="400">
+<img src="./assets/ReadMeImages/img2.png" width="400">
+<img src="./assets/ReadMeImages/img3.png" width="400">

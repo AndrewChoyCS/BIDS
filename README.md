@@ -26,6 +26,8 @@
 
 ## Screenshots:
 
-<img src="./assets/ReadMeImages/img1.png" width="250" height="600">
-<img src="./assets/ReadMeImages/img2.png" width="250" height="600">
-<img src="./assets/ReadMeImages/img3.png" width="250" height="600">
+<div style="display: flex; justify-content: space-between;">
+  <img src="./assets/ReadMeImages/img1.png" width="250" height="500">
+  <img src="./assets/ReadMeImages/img2.png" width="250" height="500">
+  <img src="./assets/ReadMeImages/img3.png" width="250" height="500">
+</div>

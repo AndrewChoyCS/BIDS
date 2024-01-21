@@ -37,6 +37,7 @@
     "react-native-datepicker": "^1.7.2",
     "react-native-dropdown": "^0.0.6",
     "react-native-dropdown-picker": "^5.4.6",
+    "react-native-element-dropdown": "^2.10.1",
     "react-native-elements": "^3.4.3",
     "react-native-gesture-handler": "~2.12.0",
     "react-native-google-places-autocomplete": "^2.5.6",

@@ -18,6 +18,7 @@ import { signOut, getAuth } from "firebase/auth";
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { db } from "../../config/firebase";
 import { getDatabase, ref, onValue, get, child } from "firebase/database";
+import { deleteExpiredEvents } from "../../services/eventservice";
 
 
 
@@ -35,6 +36,9 @@ export default function LandingPage () {
   const db = getDatabase();
   const dbRef = ref(getDatabase());
 
+  useEffect(() => {
+    deleteExpiredEvents(user.uid);
+  }, [user.uid]);
   // TODO: this is the same function as invite page. Find way to optimize
   useEffect(() => {
     const userRef = ref(db, `Users/${user.uid}/Organizations`);
@@ -114,7 +118,7 @@ export default function LandingPage () {
       console.error(error);
     });
     
-  }, [db, user.uid, dbRef]);
+  }, [db, user.uid, dbRef, ]);
 
 
 
@@ -122,7 +126,7 @@ export default function LandingPage () {
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView style={styles.pageContainer}>
-        <Text style={styles.eventText}>Placeholder</Text>
+        {/* <Text style={styles.eventText}>Placeholder</Text> */}
         <View style={styles.eventsContainer}>
           {/* Header */}
           {events.map((event, index) => (

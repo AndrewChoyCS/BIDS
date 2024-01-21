@@ -513,5 +513,3 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
   },
 });
-
-

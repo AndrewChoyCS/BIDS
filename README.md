@@ -27,7 +27,7 @@
 ## Screenshots:
 
 <div style="display: flex; justify-content: space-between;">
-  <img src="./assets/ReadMeImages/img1.png" width="250" height="500" style="margin-right: 30px;">
-  <img src="./assets/ReadMeImages/img2.png" width="250" height="500" style="margin-right: 30px;">
+  <img src="./assets/ReadMeImages/img1.png" width="250" height="500" style="margin-right: 100px;">
+  <img src="./assets/ReadMeImages/img2.png" width="250" height="500" style="margin-right: 100px;">
   <img src="./assets/ReadMeImages/img3.png" width="250" height="500">
 </div>

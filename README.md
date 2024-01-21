@@ -1,7 +1,7 @@
 # RSVP Now
 
 <!-- ![Logo](./Logo/png/logo-color.png) -->
-<img src="./Logo/png/logo-color.png" width=400>
+<img src="./Logo/png/logo-no-background.png" width=400>
 
 ## Key Features:
 

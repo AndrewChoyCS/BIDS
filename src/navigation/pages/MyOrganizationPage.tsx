@@ -223,6 +223,9 @@ export default function MyOrganizationPage({ route }) {
               )}
             />
           </TouchableOpacity>
+          <TouchableOpacity onPress={() => {closeModal(), handleSaveMembers()}} style={styles.modalDeleteButton}>
+            <Text style={styles.modalButtonText}>Delete Organization</Text>
+          </TouchableOpacity>
           <TouchableOpacity onPress={() => {closeModal(), handleSaveMembers()}} style={styles.modalButton}>
             <Text style={styles.modalButtonText}>Close</Text>
           </TouchableOpacity>
@@ -256,28 +259,29 @@ const styles = StyleSheet.create({
     marginTop: 60, // Adjust the top margin to create space for the button
   },
   modalContainer: {
-    backgroundColor: '#A4BEF3',
+    backgroundColor: '#92817A',
     marginTop: 150,
     // margin: 20,
     marginHorizontal:20,
-    padding: 100,
+    padding: 50,
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 999
   },
   modalImage: {
-    width: 200,
-    height: 200,
+    width: 300,
+    height: 250,
     borderRadius: 10,
     marginBottom: 20,
+    // marginTop: -50
   },
   modalOrganizationName: {
-    color: '#F5EDF0',
+    color: '#FFFBFF',
     fontSize: 25,
     fontWeight: 'bold',
     textAlign: 'center',
-    marginBottom: 20,
+    marginBottom: 0,
   },
   modalLabel: {
     fontSize: 18,
@@ -299,11 +303,11 @@ const styles = StyleSheet.create({
     color: '#ffffff', // White text
   },
   modalButton: {
-    backgroundColor: '#6528F7', // Neon green
+    backgroundColor: '#98B06F', // Neon green
     padding: 15,
     borderRadius: 5,
     alignItems: 'center',
-    marginTop: 20,
+    marginTop: 10,
   },
   modalButtonText: {
     fontSize: 16,
@@ -316,4 +320,11 @@ const styles = StyleSheet.create({
     left: 16,
     zIndex: 1,
   },
+  modalDeleteButton: {
+    backgroundColor: '#ff0000', // Neon green
+    padding: 15,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginTop: 10,
+  }
 });

@@ -135,7 +135,7 @@ const EditProfile = () => {
               onBlur={handleEditStatus}
             />
           ) : (
-            <Text style={styles.status}>{status} "Merp Master"</Text>
+            <Text style={styles.status}>{status}</Text>
           )}
           <TouchableOpacity onPress={handleEditStatus}>
             <FontAwesome name="pencil" size={20} color="#00bfff" />

@@ -21,6 +21,7 @@ import CustomHeader from '../components/CustomHeader';
 import AddFriendPage from './pages/AddFriendPage';
 import EditProfile from './pages/EditProfilePage';
 import {getAuth, signOut, updateCurrentUser} from "firebase/auth";
+import MapPage from './pages/MapPage';
 
 
 import { Entypo, MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
@@ -138,6 +139,7 @@ export default function AuthStack() {
           <Stack.Screen name="AddFriendPage" component={AddFriendPage} />
           <Stack.Screen name="My Events" component={MyEventsPage} />
           <Stack.Screen name="My Organizations" component={MyOrganizationsPage} />
+          <Stack.Screen name="Map Page" component={MapPage} />
         </Stack.Navigator>
       </NavigationContainer>
     </GestureHandlerRootView>
